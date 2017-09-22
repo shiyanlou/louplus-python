@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Index{% endblock %}
+
+{% block content %}
+<ul class="list-group">
+  {% for file in files %}
+  <li class="list-group-item">
+    <a href="{{ url_for('file', file_id=file.id) }}" target="_blank">
+      <h2>{{ file.title }}</h2>
+    </a>
+    {% for tag in file.tags %}
+      <span class="label label-success">{{ tag }}</span>
+    {% endfor %}
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}
