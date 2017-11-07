@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{%block title %}Home{% endblock %}
+
+{%block body %}
+{% for course in courses %}
+<h1>{{ course.name }} - {{ course.author.username }}</h1>
+{% endfor %}
+{% endblock %}

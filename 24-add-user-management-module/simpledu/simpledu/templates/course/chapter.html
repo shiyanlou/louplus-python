@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ chapter.name }}
+{% endblock %}
+
+{% block head_css %}
+{{ super() }}
+<link href="http://vjs.zencdn.net/6.2.7/video-js.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+<video class="video-js vjs-16-9 vjs-big-play-centered" data-setup='{"fluid":true, "controls": true}'>
+  <source src="{{ chapter.vedio_url }}" type='video/mp4'>
+</video>
+
+{% endblock %}
+
+{% block tail_js %}
+{{ super() }}
+<script src="http://vjs.zencdn.net/6.2.8/video.js"></script>
+{% endblock %}
