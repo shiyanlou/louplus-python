@@ -1,0 +1,47 @@
+{% macro render_form(form, url) %}
+<form method="POST" action="{{ url }}">
+  {{ form.csrf_token }}
+  {% for field in form %}
+    {% if field.type == 'CSRFTokenField' %}
+    {{ '' }}
+    {% elif field.type == 'SubmitField' %}
+    {{ form.submit(class='btn btn-primary', type='submit') }}
+    {% elif field.type == 'BooleanField' %}
+    <div class="checkbox">
+      <label>{{ field() }} {{ field.label.text }}</label>
+    </div>
+    {% else %}
+    <div class="form-group {% if field.errors %}has-error{% endif %}">
+      {{ field.label }} {{ field(class='form-control') }}
+      {% if field.errors %}
+        {% for error in field.errors %}
+        <span class="help-block">{{ error }}</span>
+        {% endfor %}
+      {% endif %}
+    </div>
+    {% endif %}
+  {% endfor %}
+</form>
+{% endmacro %}
+
+
+{% macro render_pagination(pagination, endpoint) %}
+<nav class="nav-pagination" aria-label="Page navigation">
+  <ul class=pagination>
+  <li{% if not pagination.has_prev %} class="disabled"{% endif %}><a href="{{url_for(endpoint, page=pagination.prev_num) if pagination.has_prev else '#'}}">&laquo;</a></li>
+  {% for page in pagination.iter_pages() %}
+    {% if page %}
+      {% if page != pagination.page %}
+      <li><a href="{{ url_for(endpoint, page=page) }}">{{ page }}</a></li>
+      {% else %}
+      <li class="active"><a href="#">{{page}} <span class="sr-only">(current)</span></a></li>
+      {% endif %}
+    {% else %}
+      <span class=ellipsis>?</span>
+    {% endif %}
+  {% endfor %}
+  <li{% if not pagination.has_next %} class="disabled"{% endif %}><a href="{{url_for(endpoint, page=pagination.next_num) if pagination.has_next else '#'}}">&raquo;</a></li>
+  </ul>
+</nav>
+{% endmacro %}
+

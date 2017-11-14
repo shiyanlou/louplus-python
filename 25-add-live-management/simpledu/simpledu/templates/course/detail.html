@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}
+Course - {{ course.name }}
+{% endblock %}
+
+{% block body %}
+   <div class="jumbotron">
+     <h2>{{ course.name }}</h2>
+      <p>{{ course.description }}</p>
+   </div>
+   <div class="row">
+     <div class="col-md-8">
+        <div class="list-group">
+          {% for chapter in course.chapters %}
+          <a class="list-group-item" href="{{ chapter.url }}">
+            <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+            <span class="course__chapter__name">{{ chapter.name }}?{{ chapter.vedio_duration }}?</span>
+          </a>
+          {% endfor %}
+        </div>
+     </div>
+      <div class="col-md-4">
+        <h4>课程教师</h4>
+        <div class="media">
+          <div class="media-left">
+            <a href="#">
+              <img class="media-object" src="" alt="64x64">
+            </a>
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">{{ course.author.username }}</h4>
+            {{ course.author.job }}
+          </div>
+        </div>
+      </div>
+   </div>
+{% endblock %}
