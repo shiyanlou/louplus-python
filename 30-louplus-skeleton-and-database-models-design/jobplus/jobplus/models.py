@@ -30,7 +30,7 @@ class User(Base, UserMixin):
     __tablename__ = 'user'
 
     ROLE_USER = 10
-    ROLE_COAMPANY = 20
+    ROLE_COMPANY = 20
     ROLE_ADMIN = 30
 
     id = db.Column(db.Integer, primary_key=True)
@@ -61,8 +61,8 @@ class User(Base, UserMixin):
         return self.role == self.ROLE_ADMIN
 
     @property
-    def is_staff(self):
-        return self.role == self.ROLE_STAFF
+    def is_company(self):
+        return self.role == self.ROLE_COMPANY
 
 
 class Resume(Base):
