@@ -3,7 +3,7 @@ import sys
 import csv
 import queue
 import configparser
-from getopt import getopt
+from getopt import getopt, GetoptError
 from datetime import datetime
 from multiprocessing import Process, Queue
 from collections import namedtuple
@@ -33,8 +33,19 @@ q_result = Queue()
 class Args(object):
 
     def __init__(self):
-        options, _ = getopt(sys.argv[1:], 'C:c:d:o:')
-        self.options = dict(options)
+        self.options = self._options()
+
+    def _options(self):
+        try:
+            opts, _ = getopt(sys.argv[1:], 'hC:c:d:o:', ['help'])
+        except GetoptError:
+            print('Parameter Error')
+            exit()
+        options = dict(opts)
+        if len(options) == 1 and ('-h' in options or '--help' in options):
+            print('Usage: calculator.py -C cityname -c configfile -d userdata -o resultdata')
+            exit()
+        return options
 
     def _value_after_option(self, option):
         value = self.options.get(option)
