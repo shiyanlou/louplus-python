@@ -48,7 +48,8 @@ class File(db.Model):
         if file_item:
             tags = file_item['tags']
             try:
-                new_tags = tags.remove(tag_name)
+                tags.remove(tag_name)
+                new_tags = tags
             except ValueError:
                 return tags
             mongo.files.update_one({'file_id': self.id}, {'$set', {'tags': new_tags}})
