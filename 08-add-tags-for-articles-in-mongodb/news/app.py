@@ -52,7 +52,7 @@ class File(db.Model):
                 new_tags = tags
             except ValueError:
                 return tags
-            mongo.files.update_one({'file_id': self.id}, {'$set', {'tags': new_tags}})
+            mongo.files.update_one({'file_id': self.id}, {'$set' : {'tags': new_tags}})
             return new_tags
         return []
 
