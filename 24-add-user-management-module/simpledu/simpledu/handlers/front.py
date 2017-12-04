@@ -17,7 +17,6 @@ def index():
     return render_template('index.html', pagination=pagination)
 
 
-
 @front.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
