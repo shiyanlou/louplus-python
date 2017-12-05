@@ -1,0 +1,66 @@
+.form {
+  width: 400px;
+  margin: 0 auto;
+}
+
+a,
+a:hover,
+a:visited {
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+
+.course__name,
+.course__description {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.nav-pagination {
+  text-align: center;
+}
+
+.newest-job-list,
+.newest-company-list {
+  margin-top: 15px;
+}
+
+.job-box {
+    padding: 13px;
+    border: solid 1px #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.list-title {
+  margin: 0 15px;
+}
+
+.company-item {
+  text-align: center;
+}
+
+.header {
+    padding: 0;
+}
+
+.list-more {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.list-more-btn {
+    padding: 10px 138px;
+	color: #5cb85c;
+    background-color: #fff;
+}
+
+.footer {
+  border-top: 1px solid #eee;
+    padding: 16px 0 24px;
+  margin-top: 15px;
+    color: #999;
+  font-size: 14px;
+ }

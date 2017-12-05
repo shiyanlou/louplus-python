@@ -1,0 +1,61 @@
+{% extends "admin/index.html" %}
+{% from "macros.html" import render_pagination %}
+
+{% block title %}
+Admin - users
+{% endblock %}
+
+{% block operation %}
+<a href="{{ url_for('admin.create_user') }}" type="button" class="btn btn-primary">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+      添加用户
+</a>
+
+<a href="{{ url_for('admin.create_company') }}" type="button" class="btn btn-primary">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+      添加企业
+</a>
+
+
+{% endblock %}
+
+{% block admin %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>用户名/企业名称</th>
+      <th>类型</th>
+      <th>邮箱</th>
+      <th>手机号</th>
+      <th>姓名</th>
+      <th>企业网站</th>
+      <th>操作</th>
+    </tr>
+    <tbody>
+      {% for user in pagination.items %}
+      <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{% if user.is_company %}企业{% else %}求职者{% endif %}</td>
+        <td>{{ user.email }}</td>
+        <td>{% if user.phone %}{{ user.phone }}{% else %}{% endif %}</td>
+        <td>{% if user.real_name %}{{ user.real_name }}{% else %}{% endif %}</td>
+        <td>{% if user.is_company %}{{ user.detail.site }}{% endif %}</td>
+        <td>
+          <div class="btn-group" role="group">
+            <a href="{{ url_for('admin.edit_user', user_id=user.id) }}" type="button" class="btn btn-default" title＝"编辑">
+                编辑
+            </a>
+            <a href="{{ url_for('admin.disable_user', user_id=user.id) }}" type="button" class="btn btn-default">
+                {% if user.is_disable %}启用{% else %}禁用{% endif %}
+            </a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </thead>
+</table>
+{{ render_pagination(pagination, 'admin.users') }}
+{% endblock %}
