@@ -1,0 +1,47 @@
+{% extends "admin/index.html" %}
+{% from "macros.html" import render_pagination %}
+
+{% block title %}
+Admin - jobs
+{% endblock %}
+
+{% block operation %}
+{% endblock %}
+
+{% block admin %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>职位名称</th>
+      <th>企业名称</th>
+      <th>发布时间</th>
+      <th>状态</th>
+    </tr>
+    <tbody>
+      {% for job in pagination.items %}
+      <tr>
+        <td>{{ job.id }}</td>
+        <td>{{ job.name }}</td>
+        <td>{{ job.company.name }}</td>
+        <td>{{ job.created_at }}</td>
+        <td>
+          <div class="btn-group" role="group">
+            {% if not job.is_disable %}
+            <a href="{{ url_for('job.disable', job_id=job.id) }}" type="button" class="btn btn-default">
+              下线
+            </a>
+            {% else %}
+            <a href="{{ url_for('job.enable', job_id=job.id) }}" type="button" class="btn btn-default">
+              上线
+            </a>
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </thead>
+</table>
+{{ render_pagination(pagination, 'admin.jobs') }}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "macros.html" import render_pagination, render_company %}
+
+{% block title %}公司{% endblock %}
+
+
+{% block body %}
+<div class="jumbotron">
+  <h1>Todo: 公司过滤</h1>
+</div>
+
+
+<div class="company-list">
+{% for company in pagination.items %}
+  {{ render_company(company) }}
+{% endfor %}
+</div>
+
+{{ render_pagination(pagination, 'company.index') }}
+{% endblock %}

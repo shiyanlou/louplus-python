@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}{% endblock %}</title>
+        {% block head_css %}
+        <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+        {% endblock %}
+    </head>
+    <body>
+       <nav class="navbar navbar-inverse">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Jobplus</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            <li class="{% if active == 'job' %}active{% endif %}"><a href="{{ url_for('job.index') }}">职位<span class="sr-only">(current)</span></a></li>
+            <li class="{% if active == 'company' %}active{% endif %}"><a href="{{ url_for('company.index') }}">公司<span class="sr-only">(current)</span></a></li>
+            {% if current_user.is_authenticated and current_user.is_admin %}
+            <li><a href="{{ url_for('admin.index') }}">控制台</a></li>
+            {% endif %}
+            {% if current_user.is_authenticated and current_user.is_company %}
+            <li class="{% if active == 'admin' %}active{% endif %}"><a href="{{ url_for('company.admin_index', company_id=current_user.id) }}">管理<span class="sr-only">(current)</span></a></li>
+            {% endif %}
+
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            {% if not current_user.is_authenticated %}
+            <li><a href="{{ url_for('front.userregister') }}">用户注册</a></li>
+            <li><a href="{{ url_for('front.companyregister') }}">企业注册</a></li>
+            <li><a href="{{ url_for('front.login') }}">登录</a></li>
+            {% else %}
+            <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span id="username">{{ current_user.name }}</span><span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">我的主页</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="{{ url_for('front.logout') }}">退出登录</a></li> </ul>
+            </li>
+            {% endif %}
+        </ul>
+
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+    </nav>
+
+      <div class="container-fluid header">
+        {% block head %}{% endblock %}
+      </div>
+
+      <div class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+          {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            {{ message }}
+          </div>
+          {% endfor %}
+          {% endif %}
+      {% endwith %}
+
+      {% block body %}{% endblock %}
+
+      {% block footer %}
+        <div class="footer">Copyright © 2017 By 实验楼</div>
+      {% endblock %}
+
+      </div>
+      {% block tail_js %}
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script src="static/main.js"></script>
+      {% endblock %}
+    </body>
+</html>

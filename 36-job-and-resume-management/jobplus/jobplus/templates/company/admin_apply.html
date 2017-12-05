@@ -1,0 +1,51 @@
+{% extends "company/admin_base.html" %}
+
+{% block operation %}
+<a href="{{ url_for('company.admin_apply', company_id=company_id, status=1) }}" type="button" class="btn btn-primary">
+  未处理
+</a>
+
+<a href="{{ url_for('company.admin_apply', company_id=company_id, status=2) }}" type="button" class="btn btn-primary">
+  面试
+</a>
+
+<a href="{{ url_for('company.admin_apply', company_id=company_id, status=3) }}" type="button" class="btn btn-primary">
+  不适合
+</a>
+{% endblock %}
+
+{% block admin %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>职位名称</th>
+      <th>求职者名称</th>
+      <th>简历链接</th>
+      <th>投递时间</th>
+      <th>操作</th>
+    </tr>
+    <tbody>
+      {% for delivery in pagination.items %}
+      <tr>
+        <td>{{ delivery.id }}</td>
+        <td>{{ delivery.job.name }}</td>
+        <td>{{ delivery.user.name }}</td>
+        <td>{{ delivery.user.resume_url }}</td>
+        <td>{{ delivery.created_at }}</td>
+        <td>
+          <div class="btn-group" role="group">
+            <a href="{{ url_for('company.admin_apply_reject', company_id=company_id, delivery_id=delivery.id) }}" type="button" class="btn btn-default" title＝"编辑">
+               面试
+            </a>
+            <a href="{{ url_for('company.admin_apply_accept', company_id=company_id, delivery_id=delivery.id) }}" type="button" class="btn btn-default">
+               拒绝
+            </a>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </thead>
+</table>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% from "macros.html" import render_pagination, render_company, render_job %}
+
+{% block title %}Home{% endblock %}
+
+{% block head %}
+<div class="jumbotron">
+  <div class="container">
+    <h1>JOBPLUS</h1>
+    <p>领先的互联网求职、招聘平台</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block body %}
+<ul class="nav nav-tabs list-title">
+  <li role="presentation" class="active"><a href="#">最新职位</a></li>
+</ul>
+
+<div class="job-list">
+  {% for job in newest_jobs %}
+    {{ render_job(job) }}
+  {% endfor %}
+</div>
+
+<p class="list-more">
+<a href="{{ url_for('job.index') }}" class="btn btn-success btn-lg list-more-btn">查看更多</a>
+</p>
+
+<ul class="nav nav-tabs list-title">
+<li role="presentation" class="active"><a href="#">最新公司</a></li>
+</ul>
+
+<div class="company-list">
+  {% for company in newest_companies %}
+  {{ render_company(company) }}
+  {% endfor %}
+</div>
+
+<p class="list-more">
+<a href="{{ url_for('company.index') }}" class="btn btn-success btn-lg list-more-btn">查看更多</a>
+</p>
+{% endblock %}

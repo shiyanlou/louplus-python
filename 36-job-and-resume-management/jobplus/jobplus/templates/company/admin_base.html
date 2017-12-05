@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+Admin
+{% endblock %}
+
+{% block body %}
+<div class="row">
+  <div class="col-md-3">
+    <div class="list-group">
+      <a href="{{ url_for('company.admin_index', company_id=company_id) }}" class="list-group-item">职位管理</a>
+      <a href="{{ url_for('company.admin_apply', company_id=company_id) }}" class="list-group-item">投递管理</a>
+    </div>
+
+    {% block operation %}{% endblock %}
+  </div>
+  <div class="col-md-9">
+    {% block admin %}{% endblock %}
+  </div>
+</div>
+{% endblock %}
