@@ -87,13 +87,14 @@ def admin_apply(company_id):
     return render_template('company/admin_apply.html', pagination=pagination, company_id=company_id)
 
 
-@company.route('/<int:company_id>/admin/apply/<int:delivery_id>/reject')
+@company.route('/<int:company_id>/admin/apply/<int:delivery_id>/reject/')
 @login_required
 def admin_apply_reject(company_id, delivery_id):
     d = Delivery.query.get_or_404(delivery_id)
     if current_user.id != company_id:
         abort(404)
     d.status = Delivery.STATUS_REJECT
+    flash('已经拒绝该投递', 'success')
     db.session.add(d)
     db.session.commit()
     return redirect(url_for('company.admin_apply', company_id=company_id))
@@ -106,6 +107,7 @@ def admin_apply_accept(company_id, delivery_id):
     if current_user.id != company_id:
         abort(404)
     d.status = Delivery.STATUS_ACCEPT
+    flash('已经接受该投递, 可以安排面试了', 'success')
     db.session.add(d)
     db.session.commit()
     return redirect(url_for('company.admin_apply', company_id=company_id))

@@ -1,9 +1,9 @@
 {% extends "company/admin_base.html" %}
 
 {% block operation %}
-<a href="{{ url_for('company.admin_apply', company_id=company_id, status=1) }}" type="button" class="btn btn-success btn-admin">未处理</a>
-<a href="{{ url_for('company.admin_apply', company_id=company_id, status=2) }}" type="button" class="btn btn-success btn-admin">面试</a>
-<a href="{{ url_for('company.admin_apply', company_id=company_id, status=3) }}" type="button" class="btn btn-success btn-admin">不适合</a>
+<a href="{{ url_for('company.admin_apply', company_id=company_id, status='waiting') }}" type="button" class="btn btn-success btn-admin">未处理</a>
+<a href="{{ url_for('company.admin_apply', company_id=company_id, status='accept') }}" type="button" class="btn btn-success btn-admin">面试</a>
+<a href="{{ url_for('company.admin_apply', company_id=company_id, status='reject') }}" type="button" class="btn btn-success btn-admin">不适合</a>
 {% endblock %}
 
 {% block admin %}
@@ -27,10 +27,10 @@
         <td>{{ delivery.created_at }}</td>
         <td>
           <div class="btn-group" role="group">
-            <a href="{{ url_for('company.admin_apply_reject', company_id=company_id, delivery_id=delivery.id) }}" type="button" class="btn btn-default" title＝"编辑">
+            <a href="{{ url_for('company.admin_apply_accept', company_id=company_id, delivery_id=delivery.id) }}" type="button" class="btn btn-default" title＝"编辑">
                面试
             </a>
-            <a href="{{ url_for('company.admin_apply_accept', company_id=company_id, delivery_id=delivery.id) }}" type="button" class="btn btn-default">
+            <a href="{{ url_for('company.admin_apply_reject', company_id=company_id, delivery_id=delivery.id) }}" type="button" class="btn btn-default">
                拒绝
             </a>
           </div>
