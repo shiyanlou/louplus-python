@@ -86,8 +86,13 @@ a.list-more-btn {
   color: #fd5f39;
 }
 
-.job-meta {
+.job-meta,
+.timesince {
   color: #999;
+}
+
+.timesince {
+    font-size: 12px;
 }
 
 a.dilivery-btn {

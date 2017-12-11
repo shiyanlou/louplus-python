@@ -9,6 +9,7 @@
   <div class="container">
     <div class="col-md-8">
       <h2>{{ job.name }}</h2>
+      <span class="timesince">{{ job.created_at | timesince }}发布</span>
       <p><span class="job-salary">{{ job.salary_low }}-{{ job.salary_high }}</span>&nbsp;经验{{ job.experience_requirement }} {% if job.experience_requirement != '不限' %}年{% endif %} 学历{{ job.degree_requirement }}</p>
     </div>
     <div class="col-md-4">

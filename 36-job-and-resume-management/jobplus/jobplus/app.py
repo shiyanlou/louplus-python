@@ -1,3 +1,4 @@
+import datetime
 from flask import Flask
 from flask_migrate import Migrate
 from jobplus.config import configs
@@ -18,6 +19,25 @@ def register_extensions(app):
     login_manager.login_view = 'front.login'
 
 
+def register_filters(app):
+
+    @app.template_filter()
+    def timesince(value):
+        now = datetime.datetime.utcnow()
+        delta = now - value
+        if delta.days > 365:
+            return '{}年前'.format(delta.days // 365)
+        if delta.days > 30:
+            return '{}月前'.format(delta.days // 30)
+        if delta.days > 0:
+            return '{}天前'.format(delta.days)
+        if delta.seconds > 3600:
+            return '{}小时前'.format(delta.seconds // 3600)
+        if delta.seconds > 60:
+            return '{}分钟前'.format(delta.seconds // 60)
+        return '刚刚'
+
+
 def register_blueprints(app):
     from .handlers import front, admin, user, company, job
     app.register_blueprint(front)
@@ -33,5 +53,6 @@ def create_app(config):
 
     register_extensions(app)
     register_blueprints(app)
+    register_filters(app)
 
     return app

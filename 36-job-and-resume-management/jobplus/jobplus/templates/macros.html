@@ -71,7 +71,7 @@
   <div class="job-box">
       <div class="caption">
         <a href="{{ url_for('job.detail', job_id=job.id) }}">
-        <b>{{ job.name }}</b>
+        <b>{{ job.name }}</b> <span class="timesince">[{{ job.created_at | timesince }}]</span>
         <p>经验{{ job.experience_requirement }} {% if job.experience_requirement != '不限' %}年{% endif %} 学历{{ job.degree_requirement }}</p>
         {% for tag in job.tag_list %}
         <span class="label label-default">{{ tag }}</span>
