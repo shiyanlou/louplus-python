@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, ValidationError, IntegerField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, ValidationError, IntegerField, TextAreaField, SelectField
 from wtforms.validators import Length, Email, EqualTo, Required
-from jobplus.models import db, User, CompanyDetail
+from jobplus.models import db, User, CompanyDetail, Job
 
 
 class LoginForm(FlaskForm):
@@ -144,3 +144,49 @@ class CompanyEditForm(FlaskForm):
         db.session.add(company)
         db.session.add(detail)
         db.session.commit()
+
+
+class JobForm(FlaskForm):
+    name = StringField('职位名称')
+    salary_low = IntegerField('最低薪酬')
+    salary_high = IntegerField('最高薪酬')
+    location = StringField('工作地点')
+    tags = StringField('职位标签（多个用,隔开）')
+    experience_requirement = SelectField(
+        '经验要求(年)',
+        choices=[
+            ('不限', '不限'),
+            ('1', '1'),
+            ('2', '2'),
+            ('3', '3'),
+            ('1-3', '1-3'),
+            ('3-5', '3-5'),
+            ('5+', '5+')
+        ]
+    )
+    degree_requirement = SelectField(
+        '学历要求',
+        choices=[
+            ('不限', '不限'),
+            ('专科', '专科'),
+            ('本科', '本科'),
+            ('硕士', '硕士'),
+            ('博士', '博士')
+        ]
+    )
+    description = TextAreaField('职位描述', validators=[Length(0, 1500)])
+    submit = SubmitField('发布')
+
+    def create_job(self, company):
+        job = Job()
+        self.populate_obj(job)
+        job.company_id = company.id
+        db.session.add(job)
+        db.session.commit()
+        return job
+
+    def update_job(self, job):
+        self.populate_obj(job)
+        db.session.add(job)
+        db.session.commit()
+        return job

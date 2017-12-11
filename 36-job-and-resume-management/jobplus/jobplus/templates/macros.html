@@ -54,7 +54,7 @@
     </a>
   <hr>
   <a href="{{ url_for('company.company_jobs', company_id=company.id) }}">
-    <p>在招职位：{{ company.jobs.count() }}</p>
+    <p>在招职位：{{ company.enable_jobs.count() }}</p>
   </a>
   </div>
 </div>

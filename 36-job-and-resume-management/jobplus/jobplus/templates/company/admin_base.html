@@ -7,6 +7,7 @@ Admin
 {% block body %}
 <div class="row">
   <div class="col-md-3">
+    <h4>公司管理</h4>
     <div class="list-group">
       <a href="{{ url_for('company.admin_index', company_id=company_id) }}" class="list-group-item">职位管理</a>
       <a href="{{ url_for('company.admin_apply', company_id=company_id) }}" class="list-group-item">投递管理</a>

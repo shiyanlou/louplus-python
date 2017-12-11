@@ -1,17 +1,9 @@
 {% extends "company/admin_base.html" %}
 
 {% block operation %}
-<a href="{{ url_for('company.admin_apply', company_id=company_id, status=1) }}" type="button" class="btn btn-primary">
-  未处理
-</a>
-
-<a href="{{ url_for('company.admin_apply', company_id=company_id, status=2) }}" type="button" class="btn btn-primary">
-  面试
-</a>
-
-<a href="{{ url_for('company.admin_apply', company_id=company_id, status=3) }}" type="button" class="btn btn-primary">
-  不适合
-</a>
+<a href="{{ url_for('company.admin_apply', company_id=company_id, status=1) }}" type="button" class="btn btn-success btn-admin">未处理</a>
+<a href="{{ url_for('company.admin_apply', company_id=company_id, status=2) }}" type="button" class="btn btn-success btn-admin">面试</a>
+<a href="{{ url_for('company.admin_apply', company_id=company_id, status=3) }}" type="button" class="btn btn-success btn-admin">不适合</a>
 {% endblock %}
 
 {% block admin %}

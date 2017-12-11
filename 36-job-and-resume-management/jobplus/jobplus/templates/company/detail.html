@@ -25,13 +25,13 @@
 <div class="col-md-8">
   <ul class="nav nav-tabs">
       <li role="presentation" class="{% if panel == 'about' %}active{% endif %}"><a href="{{ url_for('company.detail', company_id=company.id) }}">公司介绍</a></li>
-      <li role="presentation" class="{% if panel == 'job' %}active{% endif %}"><a href="{{ url_for('company.company_jobs', company_id=company.id) }}">在招职位({{ company.jobs.count() }})</a></li>
+      <li role="presentation" class="{% if panel == 'job' %}active{% endif %}"><a href="{{ url_for('company.company_jobs', company_id=company.id) }}">在招职位({{ company.enable_jobs.count() }})</a></li>
   </ul>
     <div class="company-detail">
       {% if panel == 'about' %}
       {{ company.detail.about }}
       {% else %}
-      {% for job in company.jobs %}
+      {% for job in company.enable_jobs %}
       <div class="job-item">
         <a href="{{ url_for('job.detail', job_id=job.id) }}">
         <h4>{{ job.name }}</h4>

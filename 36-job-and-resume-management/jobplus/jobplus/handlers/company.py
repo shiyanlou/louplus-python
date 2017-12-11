@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request, abort, current_app
 from flask_login import login_required, current_user
-from jobplus.forms import CompanyProfileForm
+from jobplus.forms import CompanyProfileForm, JobForm
 from jobplus.models import User, Job, Delivery, db
 
 company = Blueprint('company', __name__, url_prefix='/company')
@@ -99,7 +99,7 @@ def admin_apply_reject(company_id, delivery_id):
     return redirect(url_for('company.admin_apply', company_id=company_id))
 
 
-@company.route('/<int:company_id>/admin/apply/<int:delivery_id>/accept')
+@company.route('/<int:company_id>/admin/apply/<int:delivery_id>/accept/')
 @login_required
 def admin_apply_accept(company_id, delivery_id):
     d = Delivery.query.get_or_404(delivery_id)
@@ -109,3 +109,46 @@ def admin_apply_accept(company_id, delivery_id):
     db.session.add(d)
     db.session.commit()
     return redirect(url_for('company.admin_apply', company_id=company_id))
+
+
+@company.route('/<int:company_id>/admin/publish_job/', methods=['GET', 'POST'])
+@login_required
+def admin_publish_job(company_id):
+    if current_user.id != company_id:
+        abort(404)
+    form = JobForm()
+    if form.validate_on_submit():
+        form.create_job(current_user)
+        flash('职位创建成功', 'success')
+        return redirect(url_for('company.admin_index', company_id=current_user.id))
+    return render_template('company/publish_job.html', form=form, company_id=company_id)
+
+
+@company.route('/<int:company_id>/admin/edit_job/<int:job_id>/', methods=['GET', 'POST'])
+@login_required
+def admin_edit_job(company_id, job_id):
+    if current_user.id != company_id:
+        abort(404)
+    job = Job.query.get_or_404(job_id)
+    if job.company_id != current_user.id:
+        abort(404)
+    form = JobForm(obj=job)
+    if form.validate_on_submit():
+        form.update_job(job)
+        flash('职位更新成功', 'success')
+        return redirect(url_for('company.admin_index', company_id=current_user.id))
+    return render_template('company/edit_job.html', form=form, company_id=company_id, job=job)
+
+
+@company.route('/<int:company_id>/admin/jobs/<int:job_id>/delete')
+@login_required
+def admin_delete_job(company_id, job_id):
+    if current_user.id != company_id:
+        abort(404)
+    job = Job.query.get_or_404(job_id)
+    if job.company_id != current_user.id:
+        abort(404)
+    db.session.delete(job)
+    db.session.commit()
+    flash('职位更新成功', 'success')
+    return redirect(url_for('company.admin_index', company_id=current_user.id))

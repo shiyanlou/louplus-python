@@ -95,3 +95,13 @@ a.dilivery-btn {
 	color: #5cb85c;
     background-color: #eee;
 }
+
+.btn-admin {
+	width: 100%;
+    background-color: #ffffff;
+    margin-bottom: 5px;
+}
+
+a.btn-admin {
+    color: #5cb85c;
+}
