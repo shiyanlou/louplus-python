@@ -3,5 +3,5 @@
 
 {% block body %}
 <h3>编辑个人信息</h3>
-{{ render_form(form, url_for('user.profile')) }}
+{{ render_form(form, url_for('user.profile'), upload_file='yes') }}
 {% endblock %}

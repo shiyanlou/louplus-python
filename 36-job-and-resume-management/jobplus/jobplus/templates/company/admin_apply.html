@@ -12,8 +12,8 @@
     <tr>
       <th>ID</th>
       <th>职位名称</th>
-      <th>求职者名称</th>
-      <th>简历链接</th>
+      <th>求职者姓名</th>
+      <th>简历</th>
       <th>投递时间</th>
       <th>操作</th>
     </tr>
@@ -22,8 +22,8 @@
       <tr>
         <td>{{ delivery.id }}</td>
         <td>{{ delivery.job.name }}</td>
-        <td>{{ delivery.user.name }}</td>
-        <td>{{ delivery.user.resume_url }}</td>
+        <td>{{ delivery.user.real_name }}</td>
+        <td><a href="{{ delivery.user.resume_url }}" type="button" class="btn btn-default btn-sm" target="_blank">查看</a></td>
         <td>{{ delivery.created_at }}</td>
         <td>
           <div class="btn-group" role="group">

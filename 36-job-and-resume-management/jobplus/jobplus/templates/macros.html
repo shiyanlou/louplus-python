@@ -1,5 +1,9 @@
-{% macro render_form(form, url) %}
+{% macro render_form(form, url, upload_file=False) %}
+{% if not upload_file %}
 <form method="POST" action="{{ url }}">
+{% else %}
+<form method="POST" enctype="multipart/form-data" action="{{ url }}">
+{% endif %}
   {{ form.csrf_token }}
   {% for field in form %}
     {% if field.type == 'CSRFTokenField' %}

@@ -1,5 +1,8 @@
+import os
+from flask import url_for
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, ValidationError, IntegerField, TextAreaField, SelectField
+from flask_wtf.file import FileField, FileRequired
 from wtforms.validators import Length, Email, EqualTo, Required
 from jobplus.models import db, User, CompanyDetail, Job
 
@@ -45,12 +48,12 @@ class RegisterForm(FlaskForm):
 
 
 class UserProfileForm(FlaskForm):
-    real_name = StringField('姓名')
+    real_name = StringField('姓名', [Required()])
     email = StringField('邮箱', validators=[Required(), Email()])
     password = PasswordField('密码(不填写保持不变)')
     phone = StringField('手机号')
     work_years = IntegerField('工作年限')
-    resume_url = StringField('简历地址')
+    resume = FileField('上传简历', validators=[FileRequired()])
     submit = SubmitField('提交')
 
     def validate_phone(self, field):
@@ -58,14 +61,26 @@ class UserProfileForm(FlaskForm):
         if phone[:2] not in ('13', '15', '18') and len(phone) != 11:
             raise ValidationError('请输入有效的手机号')
 
-    def updated_profile(self, user):
+    def upload_resume(self):
+        f = self.resume.data
+        filename = self.real_name.data + '.pdf'
+        f.save(os.path.join(
+            os.path.abspath(os.path.dirname(__file__)),
+            'static',
+            'resumes',
+            filename
+        ))
+        return filename
+
+    def update_profile(self, user):
         user.real_name = self.real_name.data
         user.email = self.email.data
         if self.password.data:
             user.password = self.password.data
         user.phone = self.phone.data
         user.work_years = self.work_years.data
-        user.resume_url = self.resume_url.data
+        filename = self.upload_resume()
+        user.resume_url = url_for('static', filename=os.path.join('resumes', filename))
         db.session.add(user)
         db.session.commit()
 

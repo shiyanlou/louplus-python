@@ -232,4 +232,4 @@ class Delivery(Base):
 
     @property
     def job(self):
-        return Job.query.get(self.Job_id)
+        return Job.query.get(self.job_id)
