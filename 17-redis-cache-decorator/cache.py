@@ -11,7 +11,7 @@ class RedisCache:
         def decorator(f):
             @wraps(f)
             def wrapped(*args, **kwargs):
-                if timeout == 0:
+                if timeout <= 0:
                     return f(*args, **kwargs)
                 key = f.__name__
                 raw = self._redis.get(key)
@@ -20,7 +20,7 @@ class RedisCache:
                     self._redis.setex(key, timeout, json.dumps(value))
                     return value
                 else:
-                    return json.loads(raw)
+                    return json.loads(raw.decode())
             return wrapped
         return decorator
 
