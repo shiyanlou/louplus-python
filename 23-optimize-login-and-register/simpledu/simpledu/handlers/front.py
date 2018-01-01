@@ -36,6 +36,7 @@ def register():
     if form.validate_on_submit():
         if not form.username.data.isalnum():
             flash('用户名只能由字母和数字组成')
+            return redirect(url_for('.register'))
         form.create_user()
         flash('register success', 'success')
         return redirect(url_for('.login'))
