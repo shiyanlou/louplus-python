@@ -34,9 +34,10 @@ def logout():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        if not form.username.data.isalnum():
-            flash('用户名只能由字母和数字组成')
         form.create_user()
         flash('register success', 'success')
         return redirect(url_for('.login'))
-    return render_template('register.html', form=form)
+    else:
+        if not form.username.data.isalnum():
+            flash('用户名只能由字母和数字组成', 'warning')
+        return render_template('register.html', form=form)
