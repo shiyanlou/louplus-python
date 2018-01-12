@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, current_app, redirect, url_for, flash
+from flask_login import current_user
 from simpledu.decorators import admin_required
 from simpledu.models import db, Course, User
 from simpledu.forms import CourseForm, RegisterForm
@@ -92,6 +93,9 @@ def edit_user(user_id):
 @admin.route('/users/<int:user_id>/delete', methods=['GET', 'POST'])
 @admin_required
 def delete_user(user_id):
+    if current_user.id == user_id:
+        flash("用户不能自我删除", "error")
+        return redirect(url_for('admin.users'))
     user = User.query.get_or_404(user_id)
     db.session.delete(user)
     db.session.commit()
