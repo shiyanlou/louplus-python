@@ -29,4 +29,3 @@ def create_app(config):
     register_blueprints(app)
 
     return app
-

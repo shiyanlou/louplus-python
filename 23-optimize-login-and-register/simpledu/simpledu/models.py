@@ -59,4 +59,3 @@ class Course(Base):
     name = db.Column(db.String(128), unique=True, index=True, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'))
     author= db.relationship('User', uselist=False)
-

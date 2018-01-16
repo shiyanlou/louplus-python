@@ -39,10 +39,10 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Submit')
 
     def validate_username(self, field):
-        if field.data and not User.query.filter_by(name=field.data).first():
+        if field.data and not User.query.filter_by(username=field.data).first():
             raise ValidationError('username not register')
 
     def validate_password(self, field):
-        user = User.query.filter_by(email=self.email.data).first()
+        user = User.query.filter_by(username=self.username.data).first()
         if user and not user.check_password(field.data):
             raise ValidationError('Password error')
