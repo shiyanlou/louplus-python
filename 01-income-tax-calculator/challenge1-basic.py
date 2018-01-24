@@ -27,7 +27,7 @@ def main():
     elif 55000 < value <= 80000:
         result = value * 0.35 - 5505
     else:
-        result = income * 0.45 - 13505
+        result = value * 0.45 - 13505
     print('{:.2f}'.format(result))
 
 
