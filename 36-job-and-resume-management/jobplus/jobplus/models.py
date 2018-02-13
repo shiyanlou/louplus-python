@@ -82,7 +82,7 @@ class User(Base, UserMixin):
 
     @property
     def is_staff(self):
-        return self.role == self.ROLE_STAFF
+        return self.role == self.ROLE_USER
 
 
 class Resume(Base):

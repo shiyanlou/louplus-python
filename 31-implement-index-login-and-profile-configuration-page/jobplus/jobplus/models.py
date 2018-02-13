@@ -51,7 +51,7 @@ class User(Base, UserMixin):
     detail = db.relationship('CompanyDetail', uselist=False)
 
     def __repr__(self):
-        return '<User:{}>'.format(self.username)
+        return '<User:{}>'.format(self.name)
 
     @property
     def password(self):
@@ -74,7 +74,7 @@ class User(Base, UserMixin):
 
     @property
     def is_staff(self):
-        return self.role == self.ROLE_STAFF
+        return self.role == self.ROLE_USER
 
 
 class Resume(Base):
