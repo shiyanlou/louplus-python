@@ -5,7 +5,7 @@ from pymongo import MongoClient
 def get_rank(user_id):
     # 读取数据
     client = MongoClient()
-    db = client.shi
+    db = client.shiyanlou
 
     # 统计指定用户的总分数和总提交时间
     pipeline = [
