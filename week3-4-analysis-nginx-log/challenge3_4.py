@@ -34,7 +34,7 @@ def logs_count():
         if int(dt.strftime("%d")) == 11:
             ip_list.append(log[0])
         # 获取状态码为 404 的数据，返回满足条件的请求地址
-        elif int(log[3]) == 404:
+        if int(log[3]) == 404:
             request404_list.append(log[2])
     return ip_list, request404_list
 
