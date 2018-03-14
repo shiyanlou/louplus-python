@@ -18,6 +18,7 @@ def data_plot():
     ax.set_title('StudyData')
     ax.plot(data.index, data.minutes)
     plt.show()
+    return ax
 
 if __name__ == '__main__':
     data_plot()
