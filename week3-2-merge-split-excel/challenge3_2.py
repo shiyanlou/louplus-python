@@ -49,7 +49,7 @@ def split():
                 if item_by_year[0].strftime("%Y") == name:
                     ws.append(item_by_year)
         # 存储相应年份的数据文件
-        wb_temp.save(f'{name}.xlsx')
+        wb_temp.save('{}.xlsx'.fromat(name))
 
 # 执行
 if __name__ == '__main__':
