@@ -71,10 +71,10 @@ def disable_user(user_id):
     user = User.query.get_or_404(user_id)
     if user.is_disable:
         user.is_disable = False
-        flash('已经成功禁用用户', 'success')
-    else:
-        user.is_disable = False
         flash('已经成功启用用户', 'success')
+    else:
+        user.is_disable = True
+        flash('已经成功禁用用户', 'success')
     db.session.add(user)
     db.session.commit()
     return redirect(url_for('admin.users'))
