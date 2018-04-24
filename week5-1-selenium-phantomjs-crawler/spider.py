@@ -50,7 +50,7 @@ def spider():
         if not has_next_page(response):
             break
         page += 1
-        goto_next_page()
+        goto_next_page(driver)
     with open('comments.json', 'w') as f:
         f.write(json.dumps(results))
 
