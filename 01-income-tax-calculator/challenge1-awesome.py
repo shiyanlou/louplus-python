@@ -38,6 +38,7 @@ def main():
         income = int(sys.argv[1])
     except ValueError:
         print('Parameter Error')
+        
     print(calc_income_tax(income))
 
 
