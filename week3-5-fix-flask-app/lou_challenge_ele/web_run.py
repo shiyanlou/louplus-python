@@ -1,15 +1,13 @@
-from flask import Flask, request, render_template
+from flask import Flask, render_template, request
 from ele import ele_red_packet
 
 app = Flask(__name__)
-
 
 @app.route('/')
 def form():
     return render_template('index.html')
 
-
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['post'])
 def phone_number_form():
     phone_number = request.form['phone']
     get_red_packet = ele_red_packet(phone_number)
@@ -17,4 +15,4 @@ def phone_number_form():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='127.0.0.1', port=5000)
