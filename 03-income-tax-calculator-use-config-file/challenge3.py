@@ -26,6 +26,8 @@ INCOME_TAX_QUICK_LOOKUP_TABLE = [
 ]
 
 # 命令行参数处理类
+
+
 class Args(object):
 
     # 初始化的时候读取命令行中输入的所有参数到 self.args 列表
@@ -59,11 +61,14 @@ class Args(object):
     def export_path(self):
         return self._value_after_option('-o')
 
+
 # 创建命令行参数处理的对象 args
 # 在此处创建的原因是后续的 class Config 的代码定义中需要用到这个对象
 args = Args()
 
 # 配置文件读取处理类
+
+
 class Config(object):
 
     # 初始化的时候调用内部接口 self._read_config() 读取配置文件中的所有内容
@@ -124,12 +129,15 @@ class Config(object):
             self._get_config('GongJiJin')
         ])
 
+
 # 创建配置文件处理的对象 config
 # 在此处创建的原因是后续的 class IncomeTaxCalculator
 # 的代码定义中需要用到这个对象
 config = Config()
 
 # 用户工资文件处理类
+
+
 class UserData(object):
 
     # 初始化过程，读取用户工资文件并将数据存入到 userdata 列表中
@@ -166,6 +174,8 @@ class UserData(object):
         return iter(self.userdata)
 
 # 税后工资计算类
+
+
 class IncomeTaxCalculator(object):
 
     # 初始化的时候传入 UserData 对象，传进来后赋值给 self.userdata
@@ -218,7 +228,8 @@ class IncomeTaxCalculator(object):
             # 初始化返回的数据结果，包含工号和税前工资
             data = [employee_id, income]
             # 计算需要缴纳的社保，注意需要保留两位小数
-            social_insurance_money = '{:.2f}'.format(self.calc_social_insurance_money(income))
+            social_insurance_money = '{:.2f}'.format(
+                self.calc_social_insurance_money(income))
             # 计算个税及税后工资，注意需要保留两位小数
             tax, remain = self.calc_income_tax_and_remain(income)
             # 将社保、个税及税后工资补充到返回的数据列表中

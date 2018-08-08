@@ -50,6 +50,7 @@ def main():
             income = int(income_string)
         except ValueError:
             print('Parameter Error')
+            continue
         _, remain = calc_income_tax_and_remain(income)
         print('{}:{}'.format(employee_id, remain))
 
