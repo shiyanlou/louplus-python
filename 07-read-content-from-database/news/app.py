@@ -7,7 +7,8 @@ app = Flask(__name__)
 
 
 app.config.update(dict(
-    SQLALCHEMY_DATABASE_URI='mysql://root@localhost/shiyanlou'
+    SQLALCHEMY_DATABASE_URI='mysql://root@localhost/shiyanlou',
+    SQLALCHEMY_TRACK_MODIFICATIONS=False
 ))
 
 db = SQLAlchemy(app)
@@ -44,8 +45,10 @@ class Category(db.Model):
 def insert_datas():
     java = Category('Java')
     python = Category('Python')
-    file1 = File('Hello Java', datetime.utcnow(), java, 'File Content - Java is cool!')
-    file2 = File('Hello Python', datetime.utcnow(), python, 'File Content - Python is cool!')
+    file1 = File('Hello Java', datetime.utcnow(),
+                 java, 'File Content - Java is cool!')
+    file2 = File('Hello Python', datetime.utcnow(),
+                 python, 'File Content - Python is cool!')
     db.session.add(java)
     db.session.add(python)
     db.session.add(file1)

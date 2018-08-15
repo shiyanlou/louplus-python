@@ -8,7 +8,8 @@ app = Flask(__name__)
 
 
 app.config.update(dict(
-    SQLALCHEMY_DATABASE_URI='mysql://root@localhost/shiyanlou'
+    SQLALCHEMY_DATABASE_URI='mysql://root@localhost/shiyanlou',
+    SQLALCHEMY_TRACK_MODIFICATIONS=False
 ))
 
 db = SQLAlchemy(app)
@@ -37,7 +38,8 @@ class File(db.Model):
             tags = file_item['tags']
             if tag_name not in tags:
                 tags.append(tag_name)
-            mongo.files.update_one({'file_id': self.id}, {'$set': {'tags': tags}})
+            mongo.files.update_one({'file_id': self.id}, {
+                                   '$set': {'tags': tags}})
         else:
             tags = [tag_name]
             mongo.files.insert_one({'file_id': self.id, 'tags': tags})
@@ -52,7 +54,8 @@ class File(db.Model):
                 new_tags = tags
             except ValueError:
                 return tags
-            mongo.files.update_one({'file_id': self.id}, {'$set' : {'tags': new_tags}})
+            mongo.files.update_one({'file_id': self.id}, {
+                                   '$set': {'tags': new_tags}})
             return new_tags
         return []
 
@@ -60,7 +63,6 @@ class File(db.Model):
     def tags(self):
         file_item = mongo.files.find_one({'file_id': self.id})
         if file_item:
-            print(file_item)
             return file_item['tags']
         else:
             return []
@@ -80,8 +82,10 @@ class Category(db.Model):
 def insert_datas():
     java = Category('Java')
     python = Category('Python')
-    file1 = File('Hello Java', datetime.utcnow(), java, 'File Content - Java is cool!')
-    file2 = File('Hello Python', datetime.utcnow(), python, 'File Content - Python is cool!')
+    file1 = File('Hello Java', datetime.utcnow(),
+                 java, 'File Content - Java is cool!')
+    file2 = File('Hello Python', datetime.utcnow(),
+                 python, 'File Content - Python is cool!')
     db.session.add(java)
     db.session.add(python)
     db.session.add(file1)

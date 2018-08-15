@@ -12,7 +12,8 @@ db = SQLAlchemy()
 app = Flask(__name__)
 
 app.config.update({
-    'SQLALCHEMY_DATABASE_URI': 'mysql://root@127.0.0.1/news'
+    'SQLALCHEMY_DATABASE_URI': 'mysql://root@127.0.0.1/news',
+    'SQLALCHEMY_TRACK_MODIFICATIONS': False
 })
 
 db.init_app(app)
@@ -74,6 +75,7 @@ class Category(db.Model):
     def __init__(self, name):
         self.name = name
 
+
 @app.route('/')
 @app.route('/files/')
 def index():
@@ -94,8 +96,10 @@ def not_found(error):
 def insert_datas():
     java = Category('Java')
     python = Category('Python')
-    file1 = File(title='Hello Java', category=java, content='File Content - Java is cool!')
-    file2 = File(title='Hello Python', category=python, content='File Content - Python is cool!')
+    file1 = File(title='Hello Java', category=java,
+                 content='File Content - Java is cool!')
+    file2 = File(title='Hello Python', category=python,
+                 content='File Content - Python is cool!')
     db.session.add(java)
     db.session.add(python)
     db.session.add(file1)
