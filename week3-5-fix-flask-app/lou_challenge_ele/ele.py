@@ -1,6 +1,7 @@
 import re
 import requests
 
+
 def ele_red_packet(number):
     s = requests.session()
     url = "http://m.quanmama.com/mzdm/2111914.html"
@@ -9,21 +10,21 @@ def ele_red_packet(number):
     s1 = r"group_sn=\w{32}"
     s2 = re.findall(s1, s.get(url, headers=headers).text)
     headers = {'User-Agent': user_agent,
-            'Accept': '*/*',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6',
-            'Cache-Control': 'no-cache',
-            'Connection': 'keep-alive',
-            'Content-Type': 'text/plain;charset=UTF-8',
-            "Host": "restapi.ele.me",
-            "Origin": "https://h5.ele.me",
-            "Pragma": "no-cache",
-            "Referer": "https://h5.ele.me/baida/"
-            }
+               'Accept': '*/*',
+               'Accept-Encoding': 'gzip, deflate, br',
+               'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6',
+               'Cache-Control': 'no-cache',
+               'Connection': 'keep-alive',
+               'Content-Type': 'text/plain;charset=UTF-8',
+               "Host": "restapi.ele.me",
+               "Origin": "https://h5.ele.me",
+               "Pragma": "no-cache",
+               "Referer": "https://h5.ele.me/baida/"
+               }
 
     phone = number
 
-    sn='10db3582b00f00a1'
+    sn = '10db3582b00f00a1'
 
     s3_list = []
     for url in s2:

@@ -7,13 +7,13 @@ def open_parser(filename):
     with open(filename) as logfile:
         # 使用正则表达式解析日志文件
         pattern = (r''
-                   '(\d+.\d+.\d+.\d+)\s-\s-\s'  # IP 地址
-                   '\[(.+)\]\s'  # 时间
-                   '"GET\s(.+)\s\w+/.+"\s'  # 请求路径
-                   '(\d+)\s'  # 状态码
-                   '(\d+)\s'  # 数据大小
-                   '"(.+)"\s'  # 请求头
-                   '"(.+)"'  # 客户端信息
+                   r'(\d+.\d+.\d+.\d+)\s-\s-\s'  # IP 地址
+                   r'\[(.+)\]\s'  # 时间
+                   r'"GET\s(.+)\s\w+/.+"\s'  # 请求路径
+                   r'(\d+)\s'  # 状态码
+                   r'(\d+)\s'  # 数据大小
+                   r'"(.+)"\s'  # 请求头
+                   r'"(.+)"'  # 客户端信息
                    )
         parsers = re.findall(pattern, logfile.read())
     return parsers
