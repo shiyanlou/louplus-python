@@ -3,7 +3,7 @@ import pandas as pd
 
 
 def data_clean():
-    data = pd.read_excel("ClimateChange.xlsx", sheet_name='Data')
+    data = pd.read_excel("ClimateChange.xlsx", sheetname='Data')
 
     # 处理 data 数据表 # 选取 EN.ATM.CO2E.KT 数据，并将国家代码设置为索引
     data = data[data['Series code'] ==
@@ -22,7 +22,7 @@ def data_clean():
 
     # 处理 Country 数据表
     # 将国家代码设置为索引
-    countries = pd.read_excel("ClimateChange.xlsx", sheet_name='Country')
+    countries = pd.read_excel("ClimateChange.xlsx", sheetname='Country')
     countries.set_index('Country code', inplace=True)
     # 剔除不必要的数据列
     countries.drop(labels=['Capital city', 'Region',
@@ -30,7 +30,7 @@ def data_clean():
 
     # 合并数据表
     # 对 Data 和 Country 表按照索引进行合并
-    return pd.concat([data, countries], axis=1, sort=True)
+    return pd.concat([data, countries], axis=1)
     # return pd.merge(pd.DataFrame(data), countries, left_index=True, right_index=True)
 
 
@@ -60,6 +60,6 @@ def co2():
     df_min = df_min.reindex(
         columns=['Lowest emission country', 'Lowest emissions'])
 
-    result = pd.concat([df_sum, df_max, df_min], axis=1, sort=True)
+    result = pd.concat([df_sum, df_max, df_min], axis=1)
 
     return result
