@@ -23,19 +23,21 @@ def data_clean():
         ['EN.ATM.CO2E.KT', 'EN.ATM.METH.KT.CE', 'EN.ATM.NOXE.KT.CE', 'EN.ATM.GHGO.KT.CE', 'EN.CLC.GHGR.MT.CE'])]
 
     df_ghg_nan = df_ghg.replace({'..': pd.np.NaN})
-    df_ghg_fill = df_ghg_nan.iloc[:, 6:].fillna(method='ffill', axis=1).fillna(method='bfill', axis=1)
+    df_ghg_fill = df_ghg_nan.iloc[:, 6:].fillna(
+        method='ffill', axis=1).fillna(method='bfill', axis=1)
 
-    df_ghg_fill.loc['Total'] = df_ghg_fill[df_ghg_fill.columns.values].sum()
+    df_ghg_clean = df_ghg_fill.sum()
 
-    df_ghg_clean = df_ghg_fill.loc['Total'].T
+    df_ghg_clean.index = pd.to_datetime(df_ghg_clean.index, format='%Y')
 
     # 全球气温数据清洁
     time_index = pd.to_datetime(df_gt['Date'])
 
     df_gt_reindex = pd.DataFrame(df_gt.iloc[:, [1, 4]].values,
-        index=time_index,
-        columns=[['Land Average Temperature', 'Land And Ocean Average Temperature']]
-        )
+                                 index=time_index,
+                                 columns=[['Land Average Temperature',
+                                           'Land And Ocean Average Temperature']]
+                                 )
 
     df_gt_resample_A = df_gt_reindex.resample('A').mean()
     df_gt_resample_Q = df_gt_reindex.resample('Q').mean()
@@ -43,14 +45,17 @@ def data_clean():
     df_gt_clean = df_gt_resample_A.loc['1990-12-31':'2010-12-31']
 
     # 合并 DataFrame 并整理
-    df_merge_temp = pd.concat([df_gt_clean.reset_index(), df_ghg_clean.loc['1990':'2010'].reset_index()], axis=1)
+    df_merge_temp = pd.concat([df_gt_clean.reset_index(
+    ), df_ghg_clean.loc['1990':'2010'].reset_index()], axis=1)
 
     df_merge = pd.DataFrame(df_merge_temp.iloc[:, [1, 2, 4]].values,
-        index=df_merge_temp['index'],
-        columns=['Land Average Temperature', 'Land And Ocean Average Temperature', 'Total GHG']
-        )
+                            index=df_merge_temp['index'],
+                            columns=['Land Average Temperature',
+                                     'Land And Ocean Average Temperature', 'Total GHG']
+                            )
 
-    df_merge_max_min = (df_merge - df_merge.min()) / (df_merge.max() - df_merge.min())
+    df_merge_max_min = (df_merge - df_merge.min()) / \
+        (df_merge.max() - df_merge.min())
 
     return df_merge_max_min, df_gt_resample_Q
 
@@ -71,7 +76,6 @@ def climate_plot():
     )
     ax1.set_xlabel('Years')
     ax1.set_ylabel('Values')
-    ax1.xaxis.set_major_formatter(ticker.FormatStrFormatter("%d"))
 
     ax2 = df_merge_max_min.plot(
         kind='bar',
@@ -100,4 +104,3 @@ def climate_plot():
     plt.show()
 
     return fig
-

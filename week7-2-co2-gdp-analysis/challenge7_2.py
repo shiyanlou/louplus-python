@@ -36,7 +36,8 @@ def data_clean():
     # 数据合并
     df_co2_fill['CO2-SUM'] = df_co2_fill.sum(axis=1)
     df_gdp_fill['GDP-SUM'] = df_gdp_fill.sum(axis=1)
-    df_merge = pd.concat([df_co2_fill['CO2-SUM'], df_gdp_fill['GDP-SUM']], axis=1)
+    df_merge = pd.concat(
+        [df_co2_fill['CO2-SUM'], df_gdp_fill['GDP-SUM']], axis=1)
 
     # 缺失数据填充为 0
     df_merge_fill = df_merge.fillna(value=0)
@@ -54,7 +55,8 @@ def co2_gdp_plot():
     df_clean = data_clean()
 
     # 数据归一化处理
-    df_max_min = (df_clean - df_clean.min()) / (df_clean.max() - df_clean.min())
+    df_max_min = (df_clean - df_clean.min()) / \
+        (df_clean.max() - df_clean.min())
 
     # 获取中国归一化后的 CO2 和 GDP 数据
     china = []
@@ -87,4 +89,3 @@ def co2_gdp_plot():
     plt.show()
 
     return fig, china
-
