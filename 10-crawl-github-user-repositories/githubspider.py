@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 
+
 class GithubSpider(scrapy.Spider):
     name = 'shiyanlou-github'
 
@@ -13,6 +14,5 @@ class GithubSpider(scrapy.Spider):
         for repository in response.css('li.public'):
             yield {
                 'name': repository.xpath('.//a[@itemprop="name codeRepository"]/text()').re_first("\n\s*(.*)"),
-                'update_time': repository.xpath('.//relative-time/@datetime').extract_first() 
+                'update_time': repository.xpath('.//relative-time/@datetime').extract_first()
             }
-
