@@ -22,12 +22,32 @@ def job_index():
 
 @app.route('/job/count-top10')
 def job_count_top10():
-    return render_template('job/count-top10.html', jobs=job.count_top10())
+    return render_template('job/count-top10.html', rows=job.count_top10())
 
 
 @app.route('/job/count-top10.json')
 def job_count_top10_json():
     return jsonify(job.count_top10())
+
+
+@app.route('/job/salary-top10')
+def job_salary_top10():
+    return render_template('job/salary-top10.html', rows=job.salary_top10())
+
+
+@app.route('/job/salary-top10.json')
+def job_salary_top10_json():
+    return jsonify(job.salary_top10())
+
+
+@app.route('/job/hot-tags')
+def job_hot_tags():
+    return render_template('job/hot-tags.html', rows=job.hot_tags())
+
+
+@app.route('/job/hot-tags.json')
+def job_hot_tags_json():
+    return jsonify(job.hot_tags())
 
 
 if __name__ == '__main__':

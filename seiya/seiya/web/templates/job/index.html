@@ -8,6 +8,13 @@
 {% block title %}Seiya 数据分析系统 - 拉勾网职位数据分析{% endblock %}
 
 {% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">首页</a></li>
+        <li class="breadcrumb-item active" aria-current="page">拉勾网职位数据分析</li>
+    </ol>
+</nav>
+
 <div class="row">
     <div class="col">
         <div class="card m-5">
@@ -30,9 +37,9 @@
     <div class="col">
         <div class="card m-5">
             <div class="card-body">
-                <h5 class="card-title">标签 Top10</h5>
-                <p class="card-text">所有发布职位里出现次数排名前十的标签</p>
-                <a href="/job/tag-top10" class="btn btn-primary">详情</a>
+                <h5 class="card-title">热门职位标签</h5>
+                <p class="card-text">所有发布职位里出现的热门职位标签</p>
+                <a href="/job/hot-tags" class="btn btn-primary">详情</a>
             </div>
         </div>
     </div>
