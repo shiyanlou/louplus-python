@@ -50,5 +50,25 @@ def job_hot_tags_json():
     return jsonify(job.hot_tags())
 
 
+@app.route('/job/experience-stat')
+def job_experience_stat():
+    return render_template('job/experience-stat.html', rows=job.experience_stat())
+
+
+@app.route('/job/experience-stat.json')
+def job_experience_stat_json():
+    return jsonify(job.experience_stat())
+
+
+@app.route('/job/education-stat')
+def job_education_stat():
+    return render_template('job/education-stat.html', rows=job.education_stat())
+
+
+@app.route('/job/education-stat.json')
+def job_education_stat_json():
+    return jsonify(job.education_stat())
+
+
 if __name__ == '__main__':
     app.run()

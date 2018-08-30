@@ -7,7 +7,8 @@ from seiya.db import engine, Session, JobModel
 def count_top10():
     session = Session()
     rows = session.query(
-        func.count(JobModel.city).label('count'), JobModel.city
+        JobModel.city,
+        func.count(JobModel.city).label('count')
     ).group_by(JobModel.city).order_by('count desc').limit(10)
     return [row._asdict() for row in rows]
 
@@ -15,10 +16,10 @@ def count_top10():
 def salary_top10():
     session = Session()
     rows = session.query(
+        JobModel.city,
         func.avg(
             (JobModel.salary_lower + JobModel.salary_upper) / 2
-        ).cast(Float).label('salary'),
-        JobModel.city
+        ).cast(Float).label('salary')
     ).group_by(JobModel.city).order_by('salary desc').limit(10)
     return [row._asdict() for row in rows]
 
@@ -41,3 +42,23 @@ def hot_tags():
         rows.append({'tag': item[0], 'count': item[1]})
 
     return rows
+
+
+def experience_stat():
+    session = Session()
+    rows = session.query(
+        func.concat(
+            JobModel.experience_lower, '-', JobModel.experience_upper, '年'
+        ).label('experience'),
+        func.count('experience').label('count')
+    ).group_by('experience').order_by('count desc')
+    return [row._asdict() for row in rows]
+
+
+def education_stat():
+    session = Session()
+    rows = session.query(
+        JobModel.education,
+        func.count(JobModel.education).label('count')
+    ).group_by('education').order_by('count desc')
+    return [row._asdict() for row in rows]
