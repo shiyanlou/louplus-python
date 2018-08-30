@@ -11,15 +11,15 @@
 
 BOT_NAME = 'spider'
 
-SPIDER_MODULES = ['spider.spiders']
-NEWSPIDER_MODULE = 'spider.spiders'
+SPIDER_MODULES = ['seiya.spider.spiders']
+NEWSPIDER_MODULE = 'seiya.spider.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'spider (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -47,13 +47,13 @@ DOWNLOAD_DELAY = 30
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 # SPIDER_MIDDLEWARES = {
-#    'spider.middlewares.SpiderSpiderMiddleware': 543,
+#    'seiya.spider.middlewares.SpiderSpiderMiddleware': 543,
 # }
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 # DOWNLOADER_MIDDLEWARES = {
-#    'spider.middlewares.SpiderDownloaderMiddleware': 543,
+#    'seiya.spider.middlewares.SpiderDownloaderMiddleware': 543,
 # }
 
 # Enable or disable extensions
@@ -65,7 +65,7 @@ DOWNLOAD_DELAY = 30
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'spider.pipelines.PersistentPipeline': 300,
+    'seiya.spider.pipelines.PersistentPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

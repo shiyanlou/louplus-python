@@ -1,9 +1,6 @@
-from sqlalchemy import create_engine, Column, String, Integer
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, String, Integer
 
-engine = create_engine(
-    'mysql://root@localhost:3306/data-analysis-project?charset=utf8')
-Base = declarative_base()
+from seiya.db.base import Base
 
 
 class JobModel(Base):

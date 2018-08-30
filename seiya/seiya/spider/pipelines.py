@@ -2,7 +2,7 @@ import re
 
 from sqlalchemy.orm import sessionmaker
 
-from seiya.models import engine, JobModel
+from seiya.db.models import engine, JobModel
 from seiya.spider.items import JobItem
 
 

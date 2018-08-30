@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block js %}
+<script>
+$.getJSON('/job/count-top10.json', function (data) {
+    data = data.map((v) => { 
+        return {'city': v[1], 'count': v[0]}; 
+    });
+    var chart = new G2.Chart({
+        container: 'chart',
+        forceFit: true,
+        height: 500
+    });
+    chart.source(data);
+    chart.interval().position('city*count');
+    chart.render();
+});
+</script>
+{% endblock %}
+
+{% block title %}Seiya 数据分析系统 - 职位数 Top10 城市{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col my-5">
+        <div id="chart"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col my-5">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">排名</th>
+                    <th scope="col">城市</th>
+                    <th scope="col">职位数</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for job in jobs %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ job[1] }}</td>
+                    <td>{{ job[0] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

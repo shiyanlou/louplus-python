@@ -31,9 +31,10 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="/job/count-top10">职位数 Top10 城市</a>
                             <a class="dropdown-item" href="/job/salary-top10">薪资 Top10 城市</a>
+                            <a class="dropdown-item" href="/job/tag-top10">标签 Top10</a>
                             <a class="dropdown-item" href="/job/experience-distribution">工作经验分布</a>
                             <a class="dropdown-item" href="/job/education-distribution">学历分布</a>
-                            <a class="dropdown-item" href="/job/tag-top10">热门 Top10 标签</a>
+                            <a class="dropdown-item" href="/job/education-city-salary">同等学历各城市之间薪资对比</a>
                         </div>
                     </li>
                 </ul>
@@ -43,10 +44,9 @@
         {% block content %}{% endblock %}
     </div>
     
-    <script src="{{ url_for('static', filename='jquery-3.3.1.slim.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='jquery-3.3.1.min.js') }}"></script>
     <script src="{{ url_for('static', filename='popper-1.14.3.min.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap-4.1.3.min.js') }}"></script>
-    
     <script src="{{ url_for('static', filename='g2-3.2.7.min.js') }}"></script>
 
     {% block js %}{% endblock %}
