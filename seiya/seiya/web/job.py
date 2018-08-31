@@ -1,4 +1,4 @@
-from sqlalchemy import func, Float, select
+from sqlalchemy import func, Float, select, and_
 import pandas as pd
 
 from seiya.db import engine, Session, JobModel
@@ -61,4 +61,18 @@ def education_stat():
         JobModel.education,
         func.count(JobModel.education).label('count')
     ).group_by('education').order_by('count desc')
+    return [row._asdict() for row in rows]
+
+
+def salary_by_city_and_education():
+    session = Session()
+    rows = session.query(
+        JobModel.city,
+        JobModel.education,
+        func.avg(
+            (JobModel.salary_lower + JobModel.salary_upper) / 2
+        ).cast(Float).label('salary')
+    ).filter(
+        and_(JobModel.salary_lower > 0, JobModel.salary_upper > 0)
+    ).group_by(JobModel.city, JobModel.education).order_by(JobModel.city.desc())
     return [row._asdict() for row in rows]

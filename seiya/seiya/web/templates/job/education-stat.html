@@ -1,5 +1,19 @@
 {% extends "base.html" %}
 
+{% block title %}Seiya 数据分析系统 - 学历要求统计{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">首页</a></li>
+        <li class="breadcrumb-item"><a href="/job">拉勾网职位数据分析</a></li>
+        <li class="breadcrumb-item active" aria-current="page">学历要求统计</li>
+    </ol>
+</nav>
+
+<div class="my-5" id="chart"></div>
+{% endblock %}
+
 {% block js %}
 <script>
 $.getJSON('/job/education-stat.json', function (data) {
@@ -37,21 +51,8 @@ $.getJSON('/job/education-stat.json', function (data) {
         lineWidth: 1,
         stroke: '#fff'
     });
+    
     chart.render();
 });
 </script>
-{% endblock %}
-
-{% block title %}Seiya 数据分析系统 - 学历统计{% endblock %}
-
-{% block content %}
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/">首页</a></li>
-        <li class="breadcrumb-item"><a href="/job">拉勾网职位数据分析</a></li>
-        <li class="breadcrumb-item active" aria-current="page">学历统计</li>
-    </ol>
-</nav>
-
-<div class="my-5" id="chart"></div>
 {% endblock %}

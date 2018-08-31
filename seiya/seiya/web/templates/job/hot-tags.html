@@ -1,20 +1,5 @@
 {% extends "base.html" %}
 
-{% block js %}
-<script>
-$.getJSON('/job/hot-tags.json', function (data) {
-    var chart = new G2.Chart({
-        container: 'chart',
-        forceFit: true,
-        height: 500
-    });
-    chart.source(data.slice(0, 10));
-    chart.interval().position('tag*count');
-    chart.render();
-});
-</script>
-{% endblock %}
-
 {% block title %}Seiya 数据分析系统 - 热门职位标签{% endblock %}
 
 {% block content %}
@@ -46,4 +31,21 @@ $.getJSON('/job/hot-tags.json', function (data) {
         {% endfor %}
     </tbody>
 </table>
+{% endblock %}
+
+{% block js %}
+<script>
+$.getJSON('/job/hot-tags.json', function (data) {
+    var chart = new G2.Chart({
+        container: 'chart',
+        forceFit: true,
+        height: 500
+    });
+
+    chart.source(data.slice(0, 10));
+    chart.interval().position('tag*count');
+    
+    chart.render();
+});
+</script>
 {% endblock %}

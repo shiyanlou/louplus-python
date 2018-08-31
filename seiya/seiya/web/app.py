@@ -70,5 +70,16 @@ def job_education_stat_json():
     return jsonify(job.education_stat())
 
 
+@app.route('/job/salary-by-city-and-education')
+def job_salary_by_city_and_education():
+    return render_template('job/salary-by-city-and-education.html',
+                           rows=job.salary_by_city_and_education())
+
+
+@app.route('/job/salary-by-city-and-education.json')
+def job_salary_by_city_and_education_json():
+    return jsonify(job.salary_by_city_and_education())
+
+
 if __name__ == '__main__':
     app.run()

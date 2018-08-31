@@ -33,8 +33,8 @@
                             <a class="dropdown-item" href="/job/salary-top10">薪资 Top10 城市</a>
                             <a class="dropdown-item" href="/job/hot-tags">热门职位标签</a>
                             <a class="dropdown-item" href="/job/experience-stat">工作经验统计</a>
-                            <a class="dropdown-item" href="/job/education-stat">学历统计</a>
-                            <a class="dropdown-item" href="/job/education-city-salary">同等学历各城市之间薪资对比</a>
+                            <a class="dropdown-item" href="/job/education-stat">学历要求统计</a>
+                            <a class="dropdown-item" href="/job/salary-by-city-and-education">同等学历不同城市薪资对比</a>
                         </div>
                     </li>
                 </ul>
@@ -48,8 +48,6 @@
     <script src="{{ url_for('static', filename='popper-1.14.3.min.js') }}"></script>
     <script src="{{ url_for('static', filename='bootstrap-4.1.3.min.js') }}"></script>
     <script src="{{ url_for('static', filename='g2-3.2.7.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='data-set-0.8.9.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='lodash-4.17.4.min.js') }}"></script>
 
     {% block js %}{% endblock %}
 </body>
