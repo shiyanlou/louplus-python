@@ -1,5 +1,9 @@
+from io import BytesIO
+
 from sqlalchemy import func, Float, select, and_
 import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 
 from seiya.db import engine, Session, JobModel
 
@@ -24,7 +28,7 @@ def salary_top10():
     return [row._asdict() for row in rows]
 
 
-def hot_tags():
+def _hot_tags():
     df = pd.read_sql(select([JobModel.tags]), engine)
 
     df = pd.concat([pd.Series(row['tags'].split(' '))
@@ -35,13 +39,30 @@ def hot_tags():
     df = df[df['tag'] != '""']
     df = df[df['tag'] != '']
 
-    s = df.groupby(['tag']).size().sort_values(ascending=False)
+    return df.groupby(['tag']).size().sort_values(ascending=False)
 
+
+def hot_tags():
     rows = []
-    for item in s.items():
+    for item in _hot_tags().items():
         rows.append({'tag': item[0], 'count': item[1]})
 
     return rows
+
+
+def hot_tags_plot(format='png'):
+    mpl.rcParams['font.sans-serif'] = ['SimHei']
+    mpl.rcParams['axes.unicode_minus'] = False
+    mpl.rcParams['figure.figsize'] = 10, 5
+
+    s = _hot_tags()
+
+    plt.bar(s.index[:10], s.values[:10])
+
+    img = BytesIO()
+    plt.savefig(img, format=format)
+
+    return img.getvalue()
 
 
 def experience_stat():

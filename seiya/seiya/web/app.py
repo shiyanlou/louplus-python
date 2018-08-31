@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, Response
 
 import seiya.web.job as job
 
@@ -48,6 +48,11 @@ def job_hot_tags():
 @app.route('/job/hot-tags.json')
 def job_hot_tags_json():
     return jsonify(job.hot_tags())
+
+
+@app.route('/job/hot-tags.png')
+def job_hot_tags_plot():
+    return Response(job.hot_tags_plot(format='png'), content_type='image/png')
 
 
 @app.route('/job/experience-stat')

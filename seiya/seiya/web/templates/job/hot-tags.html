@@ -11,7 +11,11 @@
     </ol>
 </nav>
 
-<div class="my-5" id="chart"></div>
+<div class="text-center my-5">
+    <img src="/job/hot-tags.png" >
+</div>
+
+<!-- <div class="my-5" id="chart"></div> -->
 
 <table class="table table-striped my-5">
     <thead>
@@ -35,17 +39,17 @@
 
 {% block js %}
 <script>
-$.getJSON('/job/hot-tags.json', function (data) {
-    var chart = new G2.Chart({
-        container: 'chart',
-        forceFit: true,
-        height: 500
-    });
+// $.getJSON('/job/hot-tags.json', function (data) {
+//     var chart = new G2.Chart({
+//         container: 'chart',
+//         forceFit: true,
+//         height: 500
+//     });
 
-    chart.source(data.slice(0, 10));
-    chart.interval().position('tag*count');
+//     chart.source(data.slice(0, 10));
+//     chart.interval().position('tag*count');
     
-    chart.render();
-});
+//     chart.render();
+// });
 </script>
 {% endblock %}
