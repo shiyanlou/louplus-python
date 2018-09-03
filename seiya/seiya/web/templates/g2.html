@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Seiya 数据分析系统 - G2 图表示例{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">首页</a></li>
+        <li class="breadcrumb-item active" aria-current="page">G2 图表示例</li>
+    </ol>
+</nav>
+
+<div class="my-5" id="chart"></div>
+{% endblock %}
+
+{% block js %}
+<script>
+var data = [{
+  year: '1951 年',
+  sales: 38
+}, {
+  year: '1952 年',
+  sales: 52
+}, {
+  year: '1956 年',
+  sales: 61
+}, {
+  year: '1957 年',
+  sales: 145
+}, {
+  year: '1958 年',
+  sales: 48
+}, {
+  year: '1959 年',
+  sales: 38
+}, {
+  year: '1960 年',
+  sales: 38
+}, {
+  year: '1962 年',
+  sales: 38
+}];
+
+var chart = new G2.Chart({
+  container: 'chart',
+  forceFit: true,
+  height: 500
+});
+chart.source(data);
+chart.scale('sales', {
+  tickInterval: 20
+});
+chart.interval().position('year*sales');
+
+chart.render();
+</script>
+{% endblock %}

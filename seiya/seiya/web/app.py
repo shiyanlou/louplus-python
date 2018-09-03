@@ -15,6 +15,11 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/g2')
+def g2():
+    return render_template('g2.html')
+
+
 @app.route('/job')
 def job_index():
     return render_template('job/index.html')
