@@ -24,6 +24,8 @@ def salary_top10():
         func.avg(
             (JobModel.salary_lower + JobModel.salary_upper) / 2
         ).cast(Float).label('salary')
+    ).filter(
+        and_(JobModel.salary_lower > 0, JobModel.salary_upper > 0)
     ).group_by(JobModel.city).order_by('salary desc').limit(10)
     return [row._asdict() for row in rows]
 
