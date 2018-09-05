@@ -11,7 +11,7 @@ import json
 
 class FlaskDocPipeline(object):
     def process_item(self, item, spider):
-        item['text'] = re.sub('\s+', ' ', item['text'])
+        item['text'] = re.sub(r'\s+', ' ', item['text'])
         self.redis.lpush('flask_doc:items', json.dumps(dict(item)))
         return item
 

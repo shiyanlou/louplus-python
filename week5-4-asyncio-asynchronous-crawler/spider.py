@@ -17,8 +17,10 @@ async def fetch(session, url):
 def parse(url, body):
     response = HtmlResponse(url=url, body=body)
     for repository in response.css('li.public'):
-        name = repository.xpath('.//a[@itemprop="name codeRepository"]/text()').re_first("\n\s*(.*)")
-        update_time = repository.xpath('.//relative-time/@datetime').extract_first()
+        name = repository.xpath(
+            './/a[@itemprop="name codeRepository"]/text()').re_first(r"\n\s*(.*)")
+        update_time = repository.xpath(
+            './/relative-time/@datetime').extract_first()
         results.append((name, update_time))
 
 

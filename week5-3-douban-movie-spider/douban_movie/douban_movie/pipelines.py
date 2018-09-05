@@ -12,7 +12,7 @@ from scrapy.exceptions import DropItem
 
 class DoubanMoviePipeline(object):
     def process_item(self, item, spider):
-        item['summary'] = re.sub('\s+', ' ', item['summary'])
+        item['summary'] = re.sub(r'\s+', ' ', item['summary'])
         if not float(item['score']) >= 8.0:
             raise DropItem('score less than 8.0')
         self.redis.lpush('douban_movie:items', json.dumps(dict(item)))
