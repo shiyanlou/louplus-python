@@ -4,6 +4,9 @@ from seiya.db.base import Base
 
 
 class JobModel(Base):
+    """职位 Model
+
+    """
     __tablename__ = 'job'
 
     id = Column(Integer, primary_key=True)

@@ -9,6 +9,9 @@ from seiya.db import engine, Session, JobModel
 
 
 def count_top10():
+    """职位数排名前十的城市
+
+    """
     session = Session()
     rows = session.query(
         JobModel.city,
@@ -18,6 +21,9 @@ def count_top10():
 
 
 def salary_top10():
+    """薪资排名前十的城市
+
+    """
     session = Session()
     rows = session.query(
         JobModel.city,
@@ -31,6 +37,11 @@ def salary_top10():
 
 
 def _hot_tags():
+    """热门职位标签
+    使用 Pandas 从数据库表读取数据并进行分析
+
+    返回结果类型为 [pandas.Series]
+    """
     df = pd.read_sql(select([JobModel.tags]), engine)
 
     df = pd.concat([pd.Series(row['tags'].split(' '))
@@ -45,6 +56,10 @@ def _hot_tags():
 
 
 def hot_tags():
+    """热门职位标签
+
+    返回结果类型为 [list]
+    """
     rows = []
     for item in _hot_tags().items():
         rows.append({'tag': item[0], 'count': item[1]})
@@ -53,6 +68,10 @@ def hot_tags():
 
 
 def hot_tags_plot(format='png'):
+    """热门职位标签
+
+    返回结果类型为图片
+    """
     mpl.rcParams['font.sans-serif'] = ['SimHei']
     mpl.rcParams['axes.unicode_minus'] = False
     mpl.rcParams['figure.figsize'] = 10, 5
@@ -68,6 +87,9 @@ def hot_tags_plot(format='png'):
 
 
 def experience_stat():
+    """工作经验统计
+
+    """
     session = Session()
     rows = session.query(
         func.concat(
@@ -79,6 +101,9 @@ def experience_stat():
 
 
 def education_stat():
+    """学历要求统计
+
+    """
     session = Session()
     rows = session.query(
         JobModel.education,
@@ -88,6 +113,9 @@ def education_stat():
 
 
 def salary_by_city_and_education():
+    """同等学历不同城市薪资对比
+
+    """
     session = Session()
     rows = session.query(
         JobModel.city,

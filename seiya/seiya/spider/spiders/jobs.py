@@ -6,6 +6,9 @@ from seiya.spider.items import JobItem
 
 
 class JobsSpider(scrapy.Spider):
+    """拉勾网职位数据爬虫
+
+    """
     name = 'jobs'
     allowed_domains = ['lagou.com']
     headers = {

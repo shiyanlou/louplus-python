@@ -7,6 +7,10 @@ from seiya.spider.items import JobItem
 
 
 class PersistentPipeline(object):
+    """持久化数据 Pipeline
+
+    """
+
     def open_spider(self, spider):
         self.session = sessionmaker(bind=engine)()
 

@@ -2,6 +2,9 @@ import scrapy
 
 
 class JobItem(scrapy.Item):
+    """职位 Item
+
+    """
     title = scrapy.Field()
     city = scrapy.Field()
     salary = scrapy.Field()
