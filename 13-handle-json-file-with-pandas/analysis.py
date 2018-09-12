@@ -42,4 +42,3 @@ def analysis_raw(file, user_id):
     except:
         pass
     return times, minutes
-

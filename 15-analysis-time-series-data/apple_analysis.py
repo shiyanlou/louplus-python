@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 def quarter_volume():
     """ 计算苹果股票季度第二高交易量
     """
@@ -11,4 +12,3 @@ def quarter_volume():
     second_volumn = s.resample('Q').sum().sort_values()[-2]
 
     return second_volumn
-

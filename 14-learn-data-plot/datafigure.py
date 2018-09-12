@@ -20,6 +20,6 @@ def data_plot():
     plt.show()
     return ax
 
+
 if __name__ == '__main__':
     data_plot()
-
