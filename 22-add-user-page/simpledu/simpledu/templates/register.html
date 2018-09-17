@@ -5,9 +5,8 @@ Register
 {% endblock %}
 
 {% block body %}
-  <h2>Register</h2>
-  <div class="form">
-      {{render_form(form, url_for('front.register')) }}
-  </form>
-  </div>
+<h2>Register</h2>
+<div class="form">
+  {{ render_form(form, url_for('front.register')) }}
+</div>
 {% endblock %}

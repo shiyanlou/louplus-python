@@ -8,8 +8,10 @@ from wtforms import ValidationError
 class RegisterForm(FlaskForm):
     username = StringField('Username', validators=[Required(), Length(3, 24)])
     email = StringField('Email', validators=[Required(), Email()])
-    password = PasswordField('Password', validators=[Required(), Length(6, 24)])
-    repeat_password = PasswordField('Password again', validators=[Required(), EqualTo('password')])
+    password = PasswordField('Password', validators=[
+                             Required(), Length(6, 24)])
+    repeat_password = PasswordField('Password again', validators=[
+                                    Required(), EqualTo('password')])
     submit = SubmitField('Submit')
 
     def validate_username(self, field):
@@ -32,7 +34,8 @@ class RegisterForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[Required()])
-    password = PasswordField('Password', validators=[Required(), Length(6, 24)])
+    password = PasswordField('Password', validators=[
+                             Required(), Length(6, 24)])
     remember_me = BooleanField('Remember me')
     submit = SubmitField('Submit')
 
