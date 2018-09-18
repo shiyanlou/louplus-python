@@ -1,5 +1,6 @@
 class BaseConfig(object):
     SECRET_KEY = 'makesure to set a very secret key'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class DevelopmentConfig(BaseConfig):

@@ -1,9 +1,8 @@
 {% macro render_form(form, url) %}
 <form method="POST" action="{{ url }}">
-  {{ form.csrf_token }}
   {% for field in form %}
     {% if field.type == 'CSRFTokenField' %}
-    {{ '' }}
+    {{ field() }}
     {% elif field.type == 'SubmitField' %}
     {{ form.submit(class='btn btn-primary', type='submit') }}
     {% elif field.type == 'BooleanField' %}
