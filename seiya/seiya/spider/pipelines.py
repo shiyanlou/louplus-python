@@ -2,7 +2,7 @@ import re
 
 from sqlalchemy.orm import sessionmaker
 
-from seiya.db import engine, JobModel
+from seiya.db import engine, Session, JobModel
 from seiya.spider.items import JobItem
 
 
@@ -12,7 +12,7 @@ class PersistentPipeline(object):
     """
 
     def open_spider(self, spider):
-        self.session = sessionmaker(bind=engine)()
+        self.session = Session()
 
     def close_spider(self, spider):
         self.session.commit()

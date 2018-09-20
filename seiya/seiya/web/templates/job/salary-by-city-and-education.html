@@ -27,11 +27,7 @@ $.getJSON('/job/salary-by-city-and-education.json', function (data) {
         v.salary = +v.salary.toFixed(3);
     });
 
-    chart.source(data, {
-        city: {
-            range: [0, 1]
-        }
-    });
+    chart.source(data);
     chart.tooltip({
         crosshairs: {
             type: 'line'
