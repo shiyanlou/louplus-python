@@ -1,5 +1,6 @@
 import scrapy
 
+
 class CoursesSpider(scrapy.Spider):
     name = 'courses'
 

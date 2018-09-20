@@ -24,7 +24,8 @@ class RegisterForm(FlaskForm):
     username = StringField('用户名', validators=[Required(), Length(3, 24)])
     email = StringField('邮箱', validators=[Required(), Email()])
     password = PasswordField('密码', validators=[Required(), Length(6, 24)])
-    repeat_password = PasswordField('重复密码', validators=[Required(), EqualTo('password')])
+    repeat_password = PasswordField(
+        '重复密码', validators=[Required(), EqualTo('password')])
     submit = SubmitField('提交')
 
     def validate_username(self, field):
@@ -46,9 +47,11 @@ class RegisterForm(FlaskForm):
 
 class CourseForm(FlaskForm):
     name = StringField('课程名称', validators=[Required(), Length(5, 32)])
-    description = TextAreaField('课程简介', validators=[Required(), Length(20, 256)])
+    description = TextAreaField(
+        '课程简介', validators=[Required(), Length(20, 256)])
     image_url = StringField('封面图片地址', validators=[Required(), URL()])
-    author_id = IntegerField('作者ID', validators=[Required(), NumberRange(min=1, message='无效的用户ID')])
+    author_id = IntegerField(
+        '作者ID', validators=[Required(), NumberRange(min=1, message='无效的用户ID')])
     submit = SubmitField('提交')
 
     def validate_author_id(self, field):

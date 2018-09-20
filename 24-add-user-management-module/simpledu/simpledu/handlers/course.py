@@ -16,5 +16,3 @@ def index(course_id):
 def chapter(course_id, chapter_id):
     chapter = Chapter.query.get_or_404(chapter_id)
     return render_template('course/chapter.html', chapter=chapter)
-
-
