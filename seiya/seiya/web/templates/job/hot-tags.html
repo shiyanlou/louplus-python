@@ -4,40 +4,41 @@
 
 {% block content %}
 <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/">首页</a></li>
-        <li class="breadcrumb-item"><a href="/job">拉勾网职位数据分析</a></li>
-        <li class="breadcrumb-item active" aria-current="page">热门职位标签</li>
-    </ol>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">首页</a></li>
+    <li class="breadcrumb-item"><a href="/job">拉勾网职位数据分析</a></li>
+    <li class="breadcrumb-item active" aria-current="page">热门职位标签</li>
+  </ol>
 </nav>
 
 <div class="text-center my-5">
-    <img src="/job/hot-tags.png" >
+  <img src="/job/hot-tags.png" >
 </div>
 
 <!-- <div class="my-5" id="chart"></div> -->
 
 <table class="table table-striped my-5">
-    <thead>
-        <tr>
-            <th scope="col">排名</th>
-            <th scope="col">职位标签</th>
-            <th scope="col">出现次数</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for row in rows %}
-        <tr>
-            <th scope="row">{{ loop.index }}</th>
-            <td>{{ row.tag }}</td>
-            <td>{{ row.count }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
+  <thead>
+    <tr>
+      <th scope="col">排名</th>
+      <th scope="col">职位标签</th>
+      <th scope="col">出现次数</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+    <tr>
+      <th scope="row">{{ loop.index }}</th>
+      <td>{{ row.tag }}</td>
+      <td>{{ row.count }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 {% endblock %}
 
 {% block js %}
+{{ super() }}
 <script>
 // $.getJSON('/job/hot-tags.json', function (data) {
 //     var chart = new G2.Chart({
@@ -48,7 +49,7 @@
 
 //     chart.source(data.slice(0, 10));
 //     chart.interval().position('tag*count');
-    
+  
 //     chart.render();
 // });
 </script>

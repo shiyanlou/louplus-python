@@ -1,68 +1,64 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <title>{% block title %}Seiya 数据分析系统{% endblock %}</title>
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-4.1.3.min.css') }}">
-
-    {% block css %}{% endblock %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>{% block title %}Seiya 数据分析系统{% endblock %}</title>
+  {% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-4.1.3.min.css') }}">
+  {% endblock %}
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">Seiya</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
-            aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="jobAnalysisDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
-                        拉勾网职位数据分析
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="jobAnalysisDropdown">
-                        <a class="dropdown-item" href="/job/count-top10">职位数 Top10 城市</a>
-                        <a class="dropdown-item" href="/job/salary-top10">薪资 Top10 城市</a>
-                        <a class="dropdown-item" href="/job/hot-tags">热门职位标签</a>
-                        <a class="dropdown-item" href="/job/experience-stat">工作经验统计</a>
-                        <a class="dropdown-item" href="/job/education-stat">学历要求统计</a>
-                        <a class="dropdown-item" href="/job/salary-by-city-and-education">同等学历不同城市薪资对比</a>
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="houseAnalysisDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
-                        链家网租房数据分析
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="houseAnalysisDropdown">
-                    </div>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="restaurantAnalysisDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
-                        点评网餐馆数据分析
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="restaurantAnalysisDropdown">
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Seiya</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="jobAnalysisDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            拉勾网职位数据分析
+          </a>
+          <div class="dropdown-menu" aria-labelledby="jobAnalysisDropdown">
+            <a class="dropdown-item" href="/job/count-top10">职位数 Top10 城市</a>
+            <a class="dropdown-item" href="/job/salary-top10">薪资 Top10 城市</a>
+            <a class="dropdown-item" href="/job/hot-tags">热门职位标签</a>
+            <a class="dropdown-item" href="/job/experience-stat">工作经验统计</a>
+            <a class="dropdown-item" href="/job/education-stat">学历要求统计</a>
+            <a class="dropdown-item" href="/job/salary-by-city-and-education">同等学历不同城市薪资对比</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="houseAnalysisDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            链家网租房数据分析
+          </a>
+          <div class="dropdown-menu" aria-labelledby="houseAnalysisDropdown">
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="restaurantAnalysisDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            点评网餐馆数据分析
+          </a>
+          <div class="dropdown-menu" aria-labelledby="restaurantAnalysisDropdown">
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
-    <div class="container">{% block content %}{% endblock %}</div>
-    
-    <script src="{{ url_for('static', filename='jquery-3.3.1.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='popper-1.14.3.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap-4.1.3.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='g2-3.2.7.min.js') }}"></script>
-
-    {% block js %}{% endblock %}
+  <div class="container">{% block content %}{% endblock %}</div>
+  
+  {% block js %}
+  <script src="{{ url_for('static', filename='jquery-3.3.1.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='popper-1.14.3.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='bootstrap-4.1.3.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='g2-3.2.7.min.js') }}"></script>
+  {% endblock %}
 </body>
-
 </html>
