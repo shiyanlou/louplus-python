@@ -41,17 +41,19 @@ def iter_chapters():
 
 
 def run():
-    for user in iter_users():
-        db.session.add(user)
-
-    for course in iter_courses():
-        db.session.add(course)
-
-    for chapter in iter_chapters():
-        db.session.add(chapter)
-
     try:
+        for user in iter_users():
+            db.session.add(user)
+
+        for course in iter_courses():
+            db.session.add(course)
+
+        for chapter in iter_chapters():
+            db.session.add(chapter)
+
         db.session.commit()
     except Exception as e:
-        print(e)
         db.session.rollback()
+        print(e)
+    finally:
+        db.session.close()
