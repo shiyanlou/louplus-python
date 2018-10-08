@@ -17,7 +17,6 @@ def index():
     return render_template('index.html', pagination=pagination)
 
 
-
 @front.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -44,4 +43,3 @@ def logout():
     logout_user()
     flash('您已经退出登录', 'success')
     return redirect(url_for('.index'))
-

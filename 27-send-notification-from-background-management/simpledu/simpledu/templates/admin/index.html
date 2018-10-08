@@ -9,8 +9,9 @@ Admin
   <div class="col-md-3">
     <h4>管理</h4>
     <div class="list-group">
-      <a href="" class="list-group-item">用户</a>
+      <a href="{{ url_for('admin.users') }}" class="list-group-item">用户</a>
       <a href="{{ url_for('admin.courses') }}" class="list-group-item">课程</a>
+      <a href="{{ url_for('admin.lives') }}" class="list-group-item">直播</a>
       <a href="{{ url_for('admin.send_message') }}" class="list-group-item">系统消息</a>
     </div>
 

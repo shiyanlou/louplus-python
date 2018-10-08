@@ -23,7 +23,8 @@ class User(Base, UserMixin):
     ROLE_ADMIN = 30
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(32), unique=True, index=True, nullable=False)
+    username = db.Column(db.String(32), unique=True,
+                         index=True, nullable=False)
     email = db.Column(db.String(64), unique=True, index=True, nullable=False)
     _password = db.Column('password', db.String(256), nullable=False)
     role = db.Column(db.SmallInteger, default=ROLE_USER)
@@ -60,7 +61,8 @@ class Course(Base):
     name = db.Column(db.String(128), unique=True, index=True, nullable=False)
     description = db.Column(db.String(256))
     image_url = db.Column(db.String(256))
-    author_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='SET NULL'))
+    author_id = db.Column(db.Integer, db.ForeignKey(
+        'user.id', ondelete='SET NULL'))
     author = db.relationship('User', uselist=False)
     chapters = db.relationship('Chapter')
 
@@ -80,7 +82,8 @@ class Chapter(Base):
     description = db.Column(db.String(256))
     vedio_url = db.Column(db.String(256))
     vedio_duration = db.Column(db.String(24))
-    course_id = db.Column(db.Integer, db.ForeignKey('course.id', ondelete="CASCADE"))
+    course_id = db.Column(db.Integer, db.ForeignKey(
+        'course.id', ondelete="CASCADE"))
     course = db.relationship('Course', uselist=False)
 
     def __repr__(self):
@@ -90,3 +93,10 @@ class Chapter(Base):
     def url(self):
         return url_for('course.chapter', course_id=self.course.id, chapter_id=self.id)
 
+
+class Live(Base):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128), unique=True, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        'user.id', ondelete='SET NULL'))
+    user = db.relationship('User', uselist=False)

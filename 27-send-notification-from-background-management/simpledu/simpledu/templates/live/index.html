@@ -1,24 +1,22 @@
 {% extends "base.html" %}
 
-
 {% block title %}Live{% endblock %}
 
 {% block head_css %}
 {{ super() }}
 <style>
 #message-box {
-    background-color: #eee;
-    font-size: 15px;
-    padding: 3px 0 0 5px;
-    width: 100%;
-    height: 455px;
-    border-radius: 3px;
-    margin-bottom: 10px;
-    overflow: scroll;
+  background-color: #eee;
+  font-size: 15px;
+  padding: 3px 0 0 5px;
+  width: 100%;
+  height: 455px;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  overflow: scroll;
 }
 </style>
 {% endblock %}
-
 
 {% block body %}
 <div class="row">
@@ -55,28 +53,22 @@ if (flvjs.isSupported()) {
 }
 </script>
 <script>
-  var inbox = new WebSocket('ws://'+ location.host + "/ws/recv");
-  var outbox = new WebSocket('ws://'+ location.host + "/ws/send");
+  var chat = new WebSocket('ws://'+ location.host + "/ws/chat");
 
-  inbox.onmessage = function(message) {
+  chat.onmessage = function(message) {
     var data = JSON.parse(message.data);
     $("#message-box").append('<p><b>' + data.username + '</b>' + ': ' + data.text + '</p>');
   };
 
-inbox.onclose = function(){
-    console.log('inbox closed');
-    this.inbox = new WebSocket('ws://'+ location.host + "/ws/recv");
-};
-
-outbox.onclose = function(){
-    console.log('outbox closed');
-    this.outbox = new WebSocket('ws://'+ location.host + "/ws/send");
+chat.onclose = function(){
+  console.log('chat closed');
+  this.chat = new WebSocket('ws://'+ location.host + "/ws/chat");
 };
 
 $("#message-form button").on("click", function(event) {
   text = $('#message-form input').val();
   username = $('#username').text()
-  outbox.send(JSON.stringify({ username: username, text: text }));
+  chat.send(JSON.stringify({ username: username, text: text }));
   $('#message-form input').val('');
 });
 </script>

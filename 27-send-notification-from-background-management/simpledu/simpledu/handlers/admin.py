@@ -1,8 +1,8 @@
 import json
 from flask import Blueprint, render_template, request, current_app, redirect, url_for, flash
 from simpledu.decorators import admin_required
-from simpledu.models import Course
-from simpledu.forms import CourseForm, MessageForm
+from simpledu.models import User, Course, Live
+from simpledu.forms import RegisterForm, CourseForm, LiveForm, MessageForm
 from .ws import redis
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
@@ -12,6 +12,61 @@ admin = Blueprint('admin', __name__, url_prefix='/admin')
 @admin_required
 def index():
     return render_template('admin/index.html')
+
+
+@admin.route('/users')
+@admin_required
+def users():
+    page = request.args.get('page', default=1, type=int)
+    pagination = User.query.paginate(
+        page=page,
+        per_page=current_app.config['ADMIN_PER_PAGE'],
+        error_out=False
+    )
+    return render_template('admin/users.html', pagination=pagination)
+
+
+@admin.route('/users/create', methods=['GET', 'POST'])
+@admin_required
+def create_user():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        form.create_user()
+        flash('用户创建成功', 'success')
+        return redirect(url_for('admin.users'))
+    return render_template('admin/create_user.html', form=form)
+
+
+@admin.route('/users/<int:user_id>/edit', methods=['GET', 'POST'])
+@admin_required
+def edit_user(user_id):
+    user = User.query.get_or_404(user_id)
+    form = RegisterForm(obj=user)
+    if form.is_submitted():
+        form.populate_obj(user)
+        db.session.add(user)
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+            flash('用户名或邮箱已经存在', 'error')
+        else:
+            flash('用户信息更新成功', 'success')
+            return redirect(url_for('admin.users'))
+    return render_template('admin/edit_user.html', form=form, user=user)
+
+
+@admin.route('/users/<int:user_id>/delete', methods=['GET', 'POST'])
+@admin_required
+def delete_user(user_id):
+    if current_user.id == user_id:
+        flash("用户不能自我删除", "error")
+        return redirect(url_for('admin.users'))
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    flash('用户已经被删除', 'success')
+    return redirect(url_for('admin.users'))
 
 
 @admin.route('/courses')
@@ -47,6 +102,29 @@ def edit_course(course_id):
         flash('课程更新成功', 'success')
         return redirect(url_for('admin.courses'))
     return render_template('admin/edit_course.html', form=form, course=course)
+
+
+@admin.route('/lives')
+@admin_required
+def lives():
+    page = request.args.get('page', default=1, type=int)
+    pagination = Live.query.paginate(
+        page=page,
+        per_page=current_app.config['ADMIN_PER_PAGE'],
+        error_out=False
+    )
+    return render_template('admin/lives.html', pagination=pagination)
+
+
+@admin.route('/lives/create', methods=['GET', 'POST'])
+@admin_required
+def create_live():
+    form = LiveForm()
+    if form.validate_on_submit():
+        form.create_live()
+        flash('直播创建成功', 'success')
+        return redirect(url_for('admin.lives'))
+    return render_template('admin/create_live.html', form=form)
 
 
 @admin.route('/message', methods=['GET', 'POST'])
