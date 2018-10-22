@@ -2,6 +2,8 @@
 import sys
 import csv
 from collections import namedtuple
+import queue
+from multiprocessing import Queue, Process
 
 # 税率表条目类，该类由 namedtuple 动态创建，代表一个命名元组
 IncomeTaxQuickLookupItem = namedtuple(
@@ -151,14 +153,16 @@ class Config(object):
 config = Config()
 
 
-class UserData(object):
+class UserData(Process):
     """
-    用户工资文件处理类
+    用户工资文件处理进程
     """
 
-    def __init__(self):
-        # 读取用户工资文件
-        self.userdata = self._read_users_data()
+    def __init__(self, userdata_queue):
+        super().__init__()
+
+        # 用户数据队列
+        self.userdata_queue = userdata_queue
 
     def _read_users_data(self):
         """
@@ -179,23 +183,28 @@ class UserData(object):
 
         return userdata
 
-    def __iter__(self):
+    def run(self):
         """
-        实现 __iter__ 方法，使得 UserData 对象成为可迭代对象。
+        进程入口方法
         """
 
-        # 直接返回属性 userdata 列表对象的迭代器
-        return iter(self.userdata)
+        # 从用户数据文件依次读取每条用户数据并写入到队列
+        for item in self._read_users_data():
+            self.userdata_queue.put(item)
 
 
-class IncomeTaxCalculator(object):
+class IncomeTaxCalculator(Process):
     """
-    税后工资计算类
+    税后工资计算进程
     """
 
-    def __init__(self, userdata):
-        # 初始化时接收一个 UserData 对象
-        self.userdata = userdata
+    def __init__(self, userdata_queue, export_queue):
+        super().__init__()
+
+        # 用户数据队列
+        self.userdata_queue = userdata_queue
+        # 导出数据队列
+        self.export_queue = export_queue
 
     @staticmethod
     def calc_social_insurance_money(income):
@@ -234,45 +243,94 @@ class IncomeTaxCalculator(object):
         # 如果没有落入任何区间，则返回 0
         return '0.00', '{:.2f}'.format(real_income)
 
-    def calc_for_all_userdata(self):
+    def calculate(self, employee_id, income):
         """
-        计算所有用户的税后工资
+        计算单个用户的税后工资
         """
 
-        result = []
-        # 循环计算每一个用户的税后工资，并将结果汇总到结果集中
-        for employee_id, income in self.userdata:
-            # 计算社保金额
-            social_insurance_money = '{:.2f}'.format(
-                self.calc_social_insurance_money(income))
+        # 计算社保金额
+        social_insurance_money = '{:.2f}'.format(
+            self.calc_social_insurance_money(income))
+
+        # 计算税后工资
+        tax, remain = self.calc_income_tax_and_remain(income)
+
+        return [employee_id, income, social_insurance_money, tax, remain]
+
+    def run(self):
+        """
+        进程入口方法
+        """
+
+        # 从用户数据队列读取用户数据，计算用户税后工资，然后写入到导出数据队列
+        while True:
+            # 获取下一个用户数据
+            try:
+                # 超时时间为 1 秒，如果超时则认为没有需要处理的数据，退出进程
+                employee_id, income = self.userdata_queue.get(timeout=1)
+            except queue.Empty:
+                return
 
             # 计算税后工资
-            tax, remain = self.calc_income_tax_and_remain(income)
+            result = self.calculate(employee_id, income)
 
-            # 添加到结果集
-            result.append(
-                [employee_id, income, social_insurance_money, tax, remain])
+            # 将结果写入到导出数据队列
+            self.export_queue.put(result)
 
-        return result
 
-    def export(self):
+class IncomeTaxExporter(Process):
+    """
+    税后工资导出进程
+    """
+
+    def __init__(self, export_queue):
+        super().__init__()
+
+        # 导出数据队列
+        self.export_queue = export_queue
+
+        # 创建 CSV 写入器
+        self.file = open(args.export_path, 'w', newline='')
+        self.writer = csv.writer(self.file)
+
+    def run(self):
         """
-        导出所有用户的税后工资到文件
+        进程入口方法
         """
 
-        # 计算所有用户的税后工资
-        result = self.calc_for_all_userdata()
+        # 从导出数据队列读取导出数据，写入到导出文件中
+        while True:
+            # 获取下一个导出数据
+            try:
+                # 超时时间为 1 秒，如果超时则认为没有需要处理的数据，退出进程
+                item = self.export_queue.get(timeout=1)
+            except queue.Empty:
+                # 退出时关闭文件
+                self.file.close()
+                return
 
-        with open(args.export_path, 'w', newline='') as f:
-            # 创建 csv 文件写入对象
-            writer = csv.writer(f)
-            # 写入多行数据
-            writer.writerows(result)
+            # 写入到导出文件
+            self.writer.writerow(item)
 
 
 if __name__ == '__main__':
-    # 创建税后工资计算器
-    calculator = IncomeTaxCalculator(UserData())
+    # 创建进程之间通信的队列
+    userdata_queue = Queue()
+    export_queue = Queue()
 
-    # 调用 export 方法导出税后工资到文件
-    calculator.export()
+    # 用户数据进程
+    userdata = UserData(userdata_queue)
+    # 税后工资计算进程
+    calculator = IncomeTaxCalculator(userdata_queue, export_queue)
+    # 税后工资导出进程
+    exporter = IncomeTaxExporter(export_queue)
+
+    # 启动进程
+    userdata.start()
+    calculator.start()
+    exporter.start()
+
+    # 等待所有进程结束
+    userdata.join()
+    calculator.join()
+    exporter.join()

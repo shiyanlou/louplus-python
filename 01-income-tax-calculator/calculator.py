@@ -3,6 +3,7 @@ import sys
 
 
 def main():
+    # 检查命令行参数合法性，并转换为正确类型
     if len(sys.argv) != 2:
         print('Parameter Error')
         exit()
@@ -11,7 +12,10 @@ def main():
     except ValueError:
         print('Parameter Error')
         exit()
+
+    # 扣除起征点
     value = income - 3500
+    # 依据落入的税率区间，按照相应的税率参数计算税费
     if value <= 0:
         result = 0
     elif 0 < value <= 1500:
@@ -27,7 +31,9 @@ def main():
     elif 55000 < value <= 80000:
         result = value * 0.35 - 5505
     else:
-        result = value * 0.45 - 13505
+        result = income * 0.45 - 13505
+
+    # 打印结果
     print('{:.2f}'.format(result))
 
 
