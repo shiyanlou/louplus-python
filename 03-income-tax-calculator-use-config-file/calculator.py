@@ -200,7 +200,7 @@ class IncomeTaxCalculator(object):
     @staticmethod
     def calc_social_insurance_money(income):
         """
-        计算应纳税额
+        计算社保金额
         """
 
         if income < config.social_insurance_baseline_low:
