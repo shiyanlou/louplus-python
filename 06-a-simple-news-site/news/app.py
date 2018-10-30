@@ -2,14 +2,13 @@ import os
 import json
 from flask import Flask, render_template, abort
 
-
 app = Flask(__name__)
 
 
 class Files(object):
 
-    directory = os.path.join(os.path.abspath(
-        os.path.dirname(__name__)), '..', 'files')
+    directory = os.path.normpath(os.path.join(
+        os.path.dirname(__file__), '..', 'files'))
 
     def __init__(self):
         self._files = self._read_all_files()
