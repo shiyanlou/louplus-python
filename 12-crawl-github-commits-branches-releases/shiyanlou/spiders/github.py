@@ -9,8 +9,7 @@ class GithubSpider(scrapy.Spider):
 
     @property
     def start_urls(self):
-        url_tmpl = 'https://github.com/shiyanlou?page={}&tab=repositories'
-        return (url_tmpl.format(i) for i in range(1, 5))
+        return ('https://github.com/shiyanlou?tab=repositories', )
 
     def parse(self, response):
         for repository in response.css('li.public'):
@@ -24,6 +23,14 @@ class GithubSpider(scrapy.Spider):
             request = scrapy.Request(repo_url, callback=self.parse_repo)
             request.meta['item'] = item
             yield request
+
+        # 如果 Next 按钮没被禁用，那么表示有下一页
+        # Scrapy 不支持 CSS :last-child 选择器
+        spans = response.css('div.pagination span.disabled::text')
+        if len(spans) == 0 or spans[-1].extract() != 'Next':
+            next_url = response.css(
+                'div.pagination a:last-child::attr(href)').extract_first()
+            yield response.follow(next_url, callback=self.parse)
 
     def parse_repo(self, response):
         item = response.meta['item']
