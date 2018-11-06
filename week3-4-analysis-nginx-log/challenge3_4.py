@@ -6,15 +6,15 @@ from collections import Counter
 def open_parser(filename):
     with open(filename) as logfile:
         # 使用正则表达式解析日志文件
-        pattern = (r''
-                   r'(\d+.\d+.\d+.\d+)\s-\s-\s'  # IP 地址
-                   r'\[(.+)\]\s'  # 时间
-                   r'"GET\s(.+)\s\w+/.+"\s'  # 请求路径
-                   r'(\d+)\s'  # 状态码
-                   r'(\d+)\s'  # 数据大小
-                   r'"(.+)"\s'  # 请求头
-                   r'"(.+)"'  # 客户端信息
-                   )
+        pattern = (
+            r'(\d+.\d+.\d+.\d+)\s-\s-\s'  # IP 地址
+            r'\[(.+)\]\s'  # 时间
+            r'"GET\s(.+)\s\w+/.+"\s'  # 请求路径
+            r'(\d+)\s'  # 状态码
+            r'(\d+)\s'  # 数据大小
+            r'"(.+)"\s'  # 请求头
+            r'"(.+)"'  # 客户端信息
+        )
         parsers = re.findall(pattern, logfile.read())
     return parsers
 
@@ -40,9 +40,9 @@ def logs_count():
 
 
 def main():
-
-    ip_counts = Counter(logs_count()[0])
-    request404_counts = Counter(logs_count()[1])
+    ip_list, request404_list = logs_count()
+    ip_counts = Counter(ip_list)
+    request404_counts = Counter(request404_list)
 
     # 将字典按 Values 排序
     sorted_ip = sorted(ip_counts.items(), key=lambda x: x[1])
@@ -52,8 +52,8 @@ def main():
     ip_dict = dict([sorted_ip[-1]])
     url_dict = dict([sorted_request404[-1]])
 
-    return ip_dict, url_dict
+    print(ip_dict, url_dict)
 
 
 if __name__ == '__main__':
-    print(main())
+    main()

@@ -36,8 +36,8 @@ if __name__ == '__main__':
         sys.exit(1)
 
     # 获取用户 ID
-    user_id = sys.argv[1]
+    user_id = int(sys.argv[1])
 
     # 根据用户 ID 获取用户排名，分数和时间
-    userdata = get_rank(int(user_id))
+    userdata = get_rank(user_id)
     print(userdata)
