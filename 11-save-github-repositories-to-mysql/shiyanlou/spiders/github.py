@@ -14,7 +14,7 @@ class GithubSpider(scrapy.Spider):
     def parse(self, response):
         for repository in response.css('li.public'):
             item = GithubItem({
-                'name': repository.xpath('.//a[@itemprop="name codeRepository"]/text()').re_first("\n\s*(.*)"),
+                'name': repository.xpath('.//a[@itemprop="name codeRepository"]/text()').re_first(r'\n\s*(.*)'),
                 'update_time': repository.xpath('.//relative-time/@datetime').extract_first()
             })
             yield item

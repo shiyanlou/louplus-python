@@ -9,6 +9,7 @@ Base = declarative_base()
 
 class Repository(Base):
     __tablename__ = 'repositories'
+
     id = Column(Integer, primary_key=True)
     name = Column(String(64))
     update_time = Column(DateTime)
