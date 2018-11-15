@@ -1,10 +1,10 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 
-from .base import BaseModel
+from .base import Base
 
 
-class AddressModel(BaseModel):
+class Address(Base):
     __tablename__ = 'address'
 
     address = Column(String(100), nullable=False)

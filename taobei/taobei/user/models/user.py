@@ -1,19 +1,19 @@
-from enum import Enum
-
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
+from marshmallow import Schema, fields, post_load
 
-from .base import BaseModel
+from .base import Base
+from .wallet_transaction import WalletTransaction
 
 
-class Gender(Enum):
+class Gender:
     UNKNOWN = ''
     MALE = 'm'
     FEMALE = 'f'
 
 
-class UserModel(BaseModel):
+class User(Base):
     __tablename__ = 'user'
 
     username = Column(String(20), nullable=False, unique=True)
@@ -24,9 +24,9 @@ class UserModel(BaseModel):
     wallet_money = Column(Integer, nullable=False, default=0)
     addresses = relationship('Address', back_populates='owner')
     payer_transactions = relationship(
-        'WalletTransaction', back_populates='payer')
+        'WalletTransaction', back_populates='payer', foreign_keys=[WalletTransaction.payer_id])
     payee_transactions = relationship(
-        'WalletTransaction', back_populates='payee')
+        'WalletTransaction', back_populates='payee', foreign_keys=[WalletTransaction.payee_id])
 
     @property
     def password(self):
@@ -38,3 +38,19 @@ class UserModel(BaseModel):
 
     def check_password(self, password):
         return check_password_hash(self._password, password)
+
+
+class UserSchema(Schema):
+    id = fields.Int()
+    username = fields.Str()
+    password = fields.Str()
+    avatar = fields.Str()
+    gender = fields.Str()
+    mobile = fields.Str()
+    wallet_money = fields.Int()
+    created_at = fields.DateTime()
+    updated_at = fields.DateTime()
+
+    @post_load
+    def make_user(self, data):
+        return User(**data)

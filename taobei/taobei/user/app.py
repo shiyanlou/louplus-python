@@ -2,15 +2,25 @@ from flask import Flask
 
 from . import config
 from . import db
-from . import handlers
+
+
+def init_handlers(app):
+    from . import handlers
+
+    if app.env == 'production':
+        app.register_error_handler(Exception, handlers.handle_error)
+
+    app.register_blueprint(handlers.user)
+
 
 app = Flask(__name__)
-
 app.config.from_object(config.configs.get(app.env))
+
 
 db.init(app)
 
-app.register_blueprint(handlers.user)
+init_handlers(app)
+
 
 if __name__ == '__main__':
     from gevent import pywsgi
