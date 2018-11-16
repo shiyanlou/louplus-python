@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
+from marshmallow import Schema, fields, post_load
 
 from .base import Base
 
@@ -14,3 +15,18 @@ class Address(Base):
     owner_id = Column(Integer, ForeignKey(
         'user.id', ondelete='CASCADE'), nullable=False)
     owner = relationship('User', uselist=False, back_populates='addresses')
+
+
+class AddressSchema(Schema):
+    id = fields.Int()
+    address = fields.Str()
+    zip_code = fields.Str()
+    phone = fields.Str()
+    is_default = fields.Bool()
+    owner_id = fields.Int()
+    created_at = fields.DateTime()
+    updated_at = fields.DateTime()
+
+    @post_load
+    def make_user(self, data):
+        return Address(**data)

@@ -11,6 +11,8 @@ def init_handlers(app):
         app.register_error_handler(Exception, handlers.handle_error)
 
     app.register_blueprint(handlers.user)
+    app.register_blueprint(handlers.address)
+    app.register_blueprint(handlers.wallet_transaction)
 
 
 app = Flask(__name__)

@@ -1,10 +1,11 @@
 from flask import Blueprint, request, current_app
+from sqlalchemy import or_
 
 from ..db import session
-from ..models import User, UserSchema
+from ..models import User, UserSchema, Address, AddressSchema, WalletTransaction, WalletTransactionSchema
 from .common import json_response, ResponseCode
 
-user = Blueprint('user', __name__, url_prefix='/user')
+user = Blueprint('user', __name__, url_prefix='/')
 
 
 @user.route('/users', methods=['POST'])
@@ -30,14 +31,13 @@ def user_list():
 
 @user.route('/users/<int:user_id>', methods=['POST'])
 def update_user(user_id):
-    count = session.query(User).filter(
-        User.id == user_id).update(request.get_json())
+    values = request.get_json()
+
+    count = session.query(User).filter(User.id == user_id).update(values)
     if count == 0:
         return json_response(ResponseCode.NOT_FOUND)
-
-    session.commit()
-
     user = session.query(User).get(user_id)
+    session.commit()
 
     return json_response(user=UserSchema().dump(user))
 
@@ -49,3 +49,18 @@ def user_info(user_id):
         return json_response(ResponseCode.NOT_FOUND)
 
     return json_response(user=UserSchema().dump(user))
+
+
+@user.route('/users/<int:user_id>/addresses', methods=['GET'])
+def addresses_of_user(user_id):
+    query = session.query(Address).filter(Address.owner_id == user_id)
+
+    return json_response(addresses=AddressSchema().dump(query.all(), many=True))
+
+
+@user.route('/users/<int:user_id>/wallet_transactions', methods=['GET'])
+def wallet_transactions_of_user(user_id):
+    query = session.query(WalletTransaction).filter(
+        or_(WalletTransaction.payer_id == user_id, WalletTransaction.payee_id == user_id))
+
+    return json_response(wallet_transactions=WalletTransactionSchema().dump(query.all(), many=True))
