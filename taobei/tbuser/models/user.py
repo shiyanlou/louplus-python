@@ -23,10 +23,10 @@ class User(Base):
     mobile = Column(String(11), unique=True)
     wallet_money = Column(Integer, nullable=False, default=0)
     addresses = relationship('Address', back_populates='owner')
-    payer_transactions = relationship(
-        'WalletTransaction', back_populates='payer', foreign_keys=[WalletTransaction.payer_id])
-    payee_transactions = relationship(
-        'WalletTransaction', back_populates='payee', foreign_keys=[WalletTransaction.payee_id])
+    payer_transactions = relationship('WalletTransaction', back_populates='payer', foreign_keys=[
+                                      WalletTransaction.payer_id], lazy='dynamic')
+    payee_transactions = relationship('WalletTransaction', back_populates='payee', foreign_keys=[
+                                      WalletTransaction.payee_id], lazy='dynamic')
 
     @property
     def password(self):

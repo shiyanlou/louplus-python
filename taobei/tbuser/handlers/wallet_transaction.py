@@ -19,13 +19,17 @@ def create_wallet_transaction():
 
 @wallet_transaction.route('/wallet_transactions', methods=['GET'])
 def wallet_transaction_list():
+    order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
         'limit', current_app.config['FLASK_SQLALCHEMY_PER_PAGE'], type=int)
     offset = request.args.get('offset', 0, type=int)
 
-    query = WalletTransaction.query.limit(limit).offset(offset)
+    order_by = WalletTransaction.id.asc(
+    ) if order_direction == 'asc' else WalletTransaction.id.desc()
+    query = WalletTransaction.query.order_by(
+        order_by).limit(limit).offset(offset)
 
-    return json_response(wallet_transactions=WalletTransactionSchema().dump(query.all(), many=True))
+    return json_response(wallet_transactions=WalletTransactionSchema().dump(query, many=True))
 
 
 @wallet_transaction.route('/wallet_transactions/<int:wallet_transaction_id>', methods=['POST'])

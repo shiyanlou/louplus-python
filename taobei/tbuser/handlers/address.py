@@ -20,13 +20,15 @@ def create_address():
 
 @address.route('/addresses', methods=['GET'])
 def address_list():
+    order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
         'limit', current_app.config['FLASK_SQLALCHEMY_PER_PAGE'], type=int)
     offset = request.args.get('offset', 0, type=int)
 
-    query = Address.query.limit(limit).offset(offset)
+    order_by = Address.id.asc() if order_direction == 'asc' else Address.id.desc()
+    query = Address.query.order_by(order_by).limit(limit).offset(offset)
 
-    return json_response(addresses=AddressSchema().dump(query.all(), many=True))
+    return json_response(addresses=AddressSchema().dump(query, many=True))
 
 
 @address.route('/addresses/<int:address_id>', methods=['POST'])
