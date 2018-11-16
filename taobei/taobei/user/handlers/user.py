@@ -24,7 +24,7 @@ def user_list():
         'limit', current_app.config['FLASK_SQLALCHEMY_PER_PAGE'], type=int)
     offset = request.args.get('offset', 0, type=int)
 
-    query = session.query(User).limit(limit).offset(offset)
+    query = User.query.limit(limit).offset(offset)
 
     return json_response(users=UserSchema().dump(query.all(), many=True))
 
@@ -33,10 +33,10 @@ def user_list():
 def update_user(user_id):
     values = request.get_json()
 
-    count = session.query(User).filter(User.id == user_id).update(values)
+    count = User.query.filter(User.id == user_id).update(values)
     if count == 0:
         return json_response(ResponseCode.NOT_FOUND)
-    user = session.query(User).get(user_id)
+    user = User.query.get(user_id)
     session.commit()
 
     return json_response(user=UserSchema().dump(user))
@@ -44,7 +44,7 @@ def update_user(user_id):
 
 @user.route('/users/<int:user_id>', methods=['GET'])
 def user_info(user_id):
-    user = session.query(User).get(user_id)
+    user = User.query.get(user_id)
     if user is None:
         return json_response(ResponseCode.NOT_FOUND)
 
@@ -53,14 +53,14 @@ def user_info(user_id):
 
 @user.route('/users/<int:user_id>/addresses', methods=['GET'])
 def addresses_of_user(user_id):
-    query = session.query(Address).filter(Address.owner_id == user_id)
+    query = Address.query.filter(Address.owner_id == user_id)
 
     return json_response(addresses=AddressSchema().dump(query.all(), many=True))
 
 
 @user.route('/users/<int:user_id>/wallet_transactions', methods=['GET'])
 def wallet_transactions_of_user(user_id):
-    query = session.query(WalletTransaction).filter(
+    query = WalletTransaction.query.filter(
         or_(WalletTransaction.payer_id == user_id, WalletTransaction.payee_id == user_id))
 
     return json_response(wallet_transactions=WalletTransactionSchema().dump(query.all(), many=True))

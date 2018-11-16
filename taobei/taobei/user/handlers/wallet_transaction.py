@@ -23,7 +23,7 @@ def wallet_transaction_list():
         'limit', current_app.config['FLASK_SQLALCHEMY_PER_PAGE'], type=int)
     offset = request.args.get('offset', 0, type=int)
 
-    query = session.query(WalletTransaction).limit(limit).offset(offset)
+    query = WalletTransaction.query.limit(limit).offset(offset)
 
     return json_response(wallet_transactions=WalletTransactionSchema().dump(query.all(), many=True))
 
@@ -32,12 +32,11 @@ def wallet_transaction_list():
 def update_wallet_transaction(wallet_transaction_id):
     values = request.get_json()
 
-    count = session.query(WalletTransaction).filter(
+    count = WalletTransaction.query.filter(
         WalletTransaction.id == wallet_transaction_id).update(values)
     if count == 0:
         return json_response(ResponseCode.NOT_FOUND)
-    wallet_transaction = session.query(
-        WalletTransaction).get(wallet_transaction_id)
+    wallet_transaction = WalletTransaction.query.get(wallet_transaction_id)
     session.commit()
 
     return json_response(wallet_transaction=WalletTransactionSchema().dump(wallet_transaction))
@@ -45,8 +44,7 @@ def update_wallet_transaction(wallet_transaction_id):
 
 @wallet_transaction.route('/wallet_transactions/<int:wallet_transaction_id>', methods=['GET'])
 def wallet_transaction_info(wallet_transaction_id):
-    wallet_transaction = session.query(
-        WalletTransaction).get(wallet_transaction_id)
+    wallet_transaction = WalletTransaction.query.get(wallet_transaction_id)
     if wallet_transaction is None:
         return json_response(ResponseCode.NOT_FOUND)
 

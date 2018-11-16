@@ -24,7 +24,7 @@ def address_list():
         'limit', current_app.config['FLASK_SQLALCHEMY_PER_PAGE'], type=int)
     offset = request.args.get('offset', 0, type=int)
 
-    query = session.query(Address).limit(limit).offset(offset)
+    query = Address.query.limit(limit).offset(offset)
 
     return json_response(addresses=AddressSchema().dump(query.all(), many=True))
 
@@ -33,11 +33,11 @@ def address_list():
 def update_address(address_id):
     values = request.get_json()
 
-    count = session.query(Address).filter(
+    count = Address.query.filter(
         Address.id == address_id).update(values)
     if count == 0:
         return json_response(ResponseCode.NOT_FOUND)
-    address = session.query(Address).get(address_id)
+    address = Address.query.get(address_id)
     session.commit()
 
     return json_response(address=AddressSchema().dump(address))
@@ -45,7 +45,7 @@ def update_address(address_id):
 
 @address.route('/addresses/<int:address_id>', methods=['GET'])
 def address_info(address_id):
-    address = session.query(Address).get(address_id)
+    address = Address.query.get(address_id)
     if address is None:
         return json_response(ResponseCode.NOT_FOUND)
 
