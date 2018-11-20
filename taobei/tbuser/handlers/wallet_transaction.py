@@ -1,7 +1,8 @@
 from flask import Blueprint, request, current_app
+from sqlalchemy import and_
 
 from ..db import session
-from ..models import WalletTransaction, WalletTransactionSchema
+from ..models import WalletTransaction, WalletTransactionSchema, User
 from .common import json_response, ResponseCode
 
 wallet_transaction = Blueprint('wallet_transaction', __name__, url_prefix='/')
@@ -12,7 +13,34 @@ def create_wallet_transaction():
     data = request.get_json()
 
     wallet_transaction = WalletTransactionSchema().load(data)
+
+    # 采用乐观锁来防止并发情况下可能出现的数据不一致性，也可使用悲观锁（query 时使用 with_for_update），但资源消耗较大
+    payer = User.query.get(wallet_transaction.payer_id)
+    if payer is None:
+        return json_response(ResponseCode.NOT_FOUND)
+    payee = User.query.get(wallet_transaction.payee_id)
+    if payee is None:
+        return json_response(ResponseCode.NOT_FOUND)
+    count = User.query.filter(
+        and_(User.id == payer.id, User.wallet_money >= wallet_transaction.amount,
+             User.wallet_money == payer.wallet_money)
+    ).update({
+        User.wallet_money: payer.wallet_money - wallet_transaction.amount
+    })
+    if count == 0:
+        session.rollback()
+        return json_response(ResponseCode.TRANSACTION_FAILURE)
+    count = User.query.filter(
+        and_(User.id == payee.id, User.wallet_money == payee.wallet_money)
+    ).update({
+        User.wallet_money: payee.wallet_money + wallet_transaction.amount
+    })
+    if count == 0:
+        session.rollback()
+        return json_response(ResponseCode.TRANSACTION_FAILURE)
+
     session.add(wallet_transaction)
+
     session.commit()
 
     return json_response(wallet_transaction=WalletTransactionSchema().dump(wallet_transaction))
