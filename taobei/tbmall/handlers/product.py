@@ -10,8 +10,9 @@ product = Blueprint('product', __name__, url_prefix='/')
 
 @product.route('/products', methods=['POST'])
 def create_product():
-    product = ProductSchema().load(request.get_json())
+    data = request.get_json()
 
+    product = ProductSchema().load(data)
     session.add(product)
     session.commit()
 
@@ -33,9 +34,9 @@ def product_list():
 
 @product.route('/products/<int:product_id>', methods=['POST'])
 def update_product(product_id):
-    values = request.get_json()
+    data = request.get_json()
 
-    count = Product.query.filter(Product.id == product_id).update(values)
+    count = Product.query.filter(Product.id == product_id).update(data)
     if count == 0:
         return json_response(ResponseCode.NOT_FOUND)
     product = Product.query.get(product_id)
@@ -49,6 +50,20 @@ def product_info(product_id):
     product = Product.query.get(product_id)
     if product is None:
         return json_response(ResponseCode.NOT_FOUND)
+
+    return json_response(product=ProductSchema().dump(product))
+
+
+@product.route('/products/<int:product_id>/shops', methods=['POST'])
+def add_shop_to_product(product_id):
+    data = request.get_json()
+
+    product = Product.query.get(product_id)
+    if product is None:
+        return json_response(ResponseCode.NOT_FOUND)
+    for v in data:
+        product.shops.append(Shop.query.get(v['id']))
+    session.commit()
 
     return json_response(product=ProductSchema().dump(product))
 

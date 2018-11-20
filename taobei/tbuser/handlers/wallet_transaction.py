@@ -9,8 +9,9 @@ wallet_transaction = Blueprint('wallet_transaction', __name__, url_prefix='/')
 
 @wallet_transaction.route('/wallet_transactions', methods=['POST'])
 def create_wallet_transaction():
-    wallet_transaction = WalletTransactionSchema().load(request.get_json())
+    data = request.get_json()
 
+    wallet_transaction = WalletTransactionSchema().load(data)
     session.add(wallet_transaction)
     session.commit()
 
@@ -34,10 +35,10 @@ def wallet_transaction_list():
 
 @wallet_transaction.route('/wallet_transactions/<int:wallet_transaction_id>', methods=['POST'])
 def update_wallet_transaction(wallet_transaction_id):
-    values = request.get_json()
+    data = request.get_json()
 
     count = WalletTransaction.query.filter(
-        WalletTransaction.id == wallet_transaction_id).update(values)
+        WalletTransaction.id == wallet_transaction_id).update(data)
     if count == 0:
         return json_response(ResponseCode.NOT_FOUND)
     wallet_transaction = WalletTransaction.query.get(wallet_transaction_id)

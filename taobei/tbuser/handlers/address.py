@@ -10,8 +10,9 @@ address = Blueprint('address', __name__, url_prefix='/')
 
 @address.route('/addresses', methods=['POST'])
 def create_address():
-    address = AddressSchema().load(request.get_json())
+    data = request.get_json()
 
+    address = AddressSchema().load(data)
     session.add(address)
     session.commit()
 
@@ -33,10 +34,10 @@ def address_list():
 
 @address.route('/addresses/<int:address_id>', methods=['POST'])
 def update_address(address_id):
-    values = request.get_json()
+    data = request.get_json()
 
     count = Address.query.filter(
-        Address.id == address_id).update(values)
+        Address.id == address_id).update(data)
     if count == 0:
         return json_response(ResponseCode.NOT_FOUND)
     address = Address.query.get(address_id)

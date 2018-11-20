@@ -10,8 +10,9 @@ user = Blueprint('user', __name__, url_prefix='/')
 
 @user.route('/users', methods=['POST'])
 def create_user():
-    user = UserSchema().load(request.get_json())
+    data = request.get_json()
 
+    user = UserSchema().load(data)
     session.add(user)
     session.commit()
 
@@ -33,9 +34,9 @@ def user_list():
 
 @user.route('/users/<int:user_id>', methods=['POST'])
 def update_user(user_id):
-    values = request.get_json()
+    data = request.get_json()
 
-    count = User.query.filter(User.id == user_id).update(values)
+    count = User.query.filter(User.id == user_id).update(data)
     if count == 0:
         return json_response(ResponseCode.NOT_FOUND)
     user = User.query.get(user_id)

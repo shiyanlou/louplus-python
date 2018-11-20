@@ -10,8 +10,9 @@ shop = Blueprint('shop', __name__, url_prefix='/')
 
 @shop.route('/shops', methods=['POST'])
 def create_shop():
-    shop = ShopSchema().load(request.get_json())
+    data = request.get_json()
 
+    shop = ShopSchema().load(data)
     session.add(shop)
     session.commit()
 
@@ -33,12 +34,12 @@ def shop_list():
 
 @shop.route('/shops/<int:shop_id>', methods=['POST'])
 def update_shop(shop_id):
-    values = request.get_json()
+    data = request.get_json()
 
-    shop = Shop.query.get(shop_id)
-    count = shop.update(values)
+    count = Shop.query.filter(Shop.id == shop_id).update(data)
     if count == 0:
         return json_response(ResponseCode.NOT_FOUND)
+    shop = Shop.query.get(shop_id)
     session.commit()
 
     return json_response(shop=ShopSchema().dump(shop))
@@ -53,30 +54,18 @@ def shop_info(shop_id):
     return json_response(shop=ShopSchema().dump(shop))
 
 
-@shop.route('/shops/<int:shop_id>', methods=['DELETE'])
-def delete_shop(shop_id):
-    shop = Shop.query.get(shop_id)
-    count = shop.delete()
-    if count == 0:
-        return json_response(ResponseCode.NOT_FOUND)
-    session.commit()
-
-    return json_response(shop=ShopSchema().dump(shop))
-
-
 @shop.route('/shops/<int:shop_id>/products', methods=['POST'])
-def create_product_for_shop(shop_id):
-    product = ProductSchema().load(request.get_json())
+def add_product_to_shop(shop_id):
+    data = request.get_json()
 
     shop = Shop.query.get(shop_id)
     if shop is None:
         return json_response(ResponseCode.NOT_FOUND)
-    product.shops.append(shop)
-
-    session.add(product)
+    for v in data:
+        shop.products.append(Product.query.get(v['id']))
     session.commit()
 
-    return json_response(product=ProductSchema().dump(product))
+    return json_response(shop=ShopSchema().dump(shop))
 
 
 @shop.route('/shops/<int:shop_id>/products', methods=['GET'])
