@@ -12,6 +12,7 @@ def init_handlers(app):
 
     app.register_blueprint(handlers.shop)
     app.register_blueprint(handlers.product)
+    app.register_blueprint(handlers.favorite_product)
 
 
 app = Flask(__name__)

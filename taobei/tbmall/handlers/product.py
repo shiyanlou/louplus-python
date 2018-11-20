@@ -61,8 +61,7 @@ def add_shop_to_product(product_id):
     product = Product.query.get(product_id)
     if product is None:
         return json_response(ResponseCode.NOT_FOUND)
-    for v in data:
-        product.shops.append(Shop.query.get(v['id']))
+    product.shops.append(Shop.query.get(data['id']))
     session.commit()
 
     return json_response(product=ProductSchema().dump(product))
