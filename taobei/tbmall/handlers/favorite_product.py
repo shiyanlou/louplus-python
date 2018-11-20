@@ -21,6 +21,8 @@ def create_favorite_product():
 
 @favorite_product.route('/favorite_products', methods=['GET'])
 def favorite_product_list():
+    user_id = request.args.get('user_id', 0, type=int)
+    product_id = request.args.get('product_id', 0, type=int)
     order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
         'limit', current_app.config['FLASK_SQLALCHEMY_PER_PAGE'], type=int)
@@ -28,8 +30,12 @@ def favorite_product_list():
 
     order_by = FavoriteProduct.id.asc(
     ) if order_direction == 'asc' else FavoriteProduct.id.desc()
-    query = FavoriteProduct.query.order_by(
-        order_by).limit(limit).offset(offset)
+    query = FavoriteProduct.query
+    if user_id > 0:
+        query = query.filter(FavoriteProduct.user_id == user_id)
+    if product_id > 0:
+        query = query.filter(FavoriteProduct.product_id == product_id)
+    query = query.order_by(order_by).limit(limit).offset(offset)
 
     return json_response(favorite_products=FavoriteProductSchema().dump(query, many=True))
 
