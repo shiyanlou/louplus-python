@@ -13,7 +13,6 @@ class AwesomeMovieSpider(scrapy.spiders.CrawlSpider):
     start_urls = ['https://movie.douban.com/subject/3011091/']
 
     rules = (
-        # Rule(LinkExtractor(restrict_xpaths='//div[@class="recommendations-bd"]/dl/dd/a/@href'), callback='parse_page', follow=True),
         Rule(LinkExtractor(allow=r'https://movie.douban.com/subject/.+/?from=subject-page'),
              callback='parse_page', follow=True),
     )
