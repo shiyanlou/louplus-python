@@ -1,9 +1,10 @@
 from flask import Blueprint, request, current_app
 from sqlalchemy import or_
 
-from ..db import session
+from tblib.model import session
+from tblib.handler import json_response, ResponseCode
+
 from ..models import User, UserSchema, Address, AddressSchema, WalletTransaction, WalletTransactionSchema
-from .common import json_response, ResponseCode
 
 user = Blueprint('user', __name__, url_prefix='/')
 

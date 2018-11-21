@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from marshmallow import Schema, fields, post_load
 
-from .base import Base
+from tblib.model import Base
 
 
 class Address(Base):

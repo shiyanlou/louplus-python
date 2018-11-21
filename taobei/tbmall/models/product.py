@@ -2,7 +2,8 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from marshmallow import Schema, fields, post_load
 
-from .base import Base
+from tblib.model import Base
+
 from .shop_product import shop_product
 
 

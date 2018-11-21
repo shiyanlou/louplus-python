@@ -3,7 +3,8 @@ from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from marshmallow import Schema, fields, post_load
 
-from .base import Base
+from tblib.model import Base
+
 from .wallet_transaction import WalletTransaction
 
 

@@ -1,9 +1,10 @@
 from flask import Blueprint, request, current_app
 from sqlalchemy import and_
 
-from ..db import session
+from tblib.model import session
+from tblib.handler import json_response, ResponseCode
+
 from ..models import WalletTransaction, WalletTransactionSchema, User
-from .common import json_response, ResponseCode
 
 wallet_transaction = Blueprint('wallet_transaction', __name__, url_prefix='/')
 

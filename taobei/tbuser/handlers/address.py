@@ -1,8 +1,9 @@
 from flask import Blueprint, request, current_app
 
-from ..db import session
-from ..models import Address, AddressSchema
-from .common import json_response, ResponseCode
+from tblib.model import session
+from tblib.handler import json_response, ResponseCode
+
+from ..models import Address, AddressSchema\
 
 
 address = Blueprint('address', __name__, url_prefix='/')

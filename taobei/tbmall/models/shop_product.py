@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
-from ..db import db
+from tblib.model import db
 
 
 shop_product = db.Table(

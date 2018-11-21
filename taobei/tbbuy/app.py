@@ -1,25 +1,18 @@
+from importlib import import_module
+
 from flask import Flask
+from tblib import model
 
 from . import config
-from . import db
-
-
-def init_handlers(app):
-    from . import handlers
-
-    if app.env == 'production':
-        app.register_error_handler(Exception, handlers.handle_error)
-
-    app.register_blueprint(handlers.cart_product)
-    app.register_blueprint(handlers.order_product)
-    app.register_blueprint(handlers.order)
+from .handlers import init as init_handlers
 
 
 app = Flask(__name__)
 app.config.from_object(config.configs.get(app.env))
 
 
-db.init(app)
+model.init(app)
+import_module('.models', __package__)
 
 init_handlers(app)
 

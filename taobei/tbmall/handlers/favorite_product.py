@@ -1,9 +1,10 @@
 from flask import Blueprint, request, current_app
 from sqlalchemy import and_
 
-from ..db import session
+from tblib.model import session
+from tblib.handler import json_response, ResponseCode
+
 from ..models import FavoriteProduct, FavoriteProductSchema
-from .common import json_response, ResponseCode
 
 favorite_product = Blueprint('favorite_product', __name__, url_prefix='/')
 
