@@ -26,10 +26,10 @@ def json_response(code=ResponseCode.OK, message='', **kwargs):
     })
 
 
-def handle_error(e):
+def handle_error(exception):
     code = ResponseCode.UNKNOWN_ERROR
-    if isinstance(e, NotFound):
+    if isinstance(exception, NotFound):
         code = ResponseCode.NOT_FOUND
-    elif isinstance(e, HTTPException):
+    elif isinstance(exception, HTTPException):
         code = ResponseCode.HTTP_EXCEPTION
-    return json_response(code, str(e))
+    return json_response(code, exception=str(exception))

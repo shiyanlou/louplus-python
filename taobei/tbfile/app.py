@@ -3,13 +3,10 @@ from flask import Flask
 from . import config
 
 
-def init_model(app):
-    from importlib import import_module
-    from tblib import model
+def init_mongo(app):
+    from tblib.mongo import init
 
-    model.init(app)
-
-    import_module('.models', __package__)
+    init(app)
 
 
 def init_handler(app):
@@ -22,7 +19,7 @@ app = Flask(__name__)
 app.config.from_object(config.configs.get(app.env))
 
 
-init_model(app)
+init_mongo(app)
 
 init_handler(app)
 

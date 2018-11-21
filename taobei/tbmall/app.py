@@ -1,20 +1,30 @@
-from importlib import import_module
-
 from flask import Flask
-from tblib import model
 
 from . import config
-from .handlers import init as init_handlers
+
+
+def init_model(app):
+    from importlib import import_module
+    from tblib import model
+
+    model.init(app)
+
+    import_module('.models', __package__)
+
+
+def init_handler(app):
+    from .handlers import init
+
+    init(app)
 
 
 app = Flask(__name__)
 app.config.from_object(config.configs.get(app.env))
 
 
-model.init(app)
-import_module('.models', __package__)
+init_model(app)
 
-init_handlers(app)
+init_handler(app)
 
 
 if __name__ == '__main__':
