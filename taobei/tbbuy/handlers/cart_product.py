@@ -6,10 +6,10 @@ from tblib.handler import json_response, ResponseCode
 
 from ..models import CartProduct, CartProductSchema
 
-cart_product = Blueprint('cart_product', __name__, url_prefix='/')
+cart_product = Blueprint('cart_product', __name__, url_prefix='/cart_products')
 
 
-@cart_product.route('/cart_products', methods=['POST'])
+@cart_product.route('', methods=['POST'])
 def create_cart_product():
     data = request.get_json()
 
@@ -20,7 +20,7 @@ def create_cart_product():
     return json_response(cart_product=CartProductSchema().dump(cart_product))
 
 
-@cart_product.route('/cart_products', methods=['GET'])
+@cart_product.route('', methods=['GET'])
 def cart_product_list():
     user_id = request.args.get('user_id', 0, type=int)
     product_id = request.args.get('product_id', 0, type=int)
@@ -41,7 +41,7 @@ def cart_product_list():
     return json_response(favorite_products=CartProductSchema().dump(query, many=True))
 
 
-@cart_product.route('/cart_products/<int:user_id>/<int:product_id>', methods=['DELETE'])
+@cart_product.route('/<int:user_id>/<int:product_id>', methods=['DELETE'])
 def delete_cart_product(user_id, product_id):
     cart_product = CartProduct.query.filter(and_(
         CartProduct.user_id == user_id, CartProduct.product_id == product_id)).first()
@@ -53,7 +53,7 @@ def delete_cart_product(user_id, product_id):
     return json_response(cart_product=CartProductSchema().dump(cart_product))
 
 
-@cart_product.route('/cart_products/<int:user_id>/<int:product_id>', methods=['GET'])
+@cart_product.route('/<int:user_id>/<int:product_id>', methods=['GET'])
 def cart_product_info(user_id, product_id):
     cart_product = CartProduct.query.filter(and_(
         CartProduct.user_id == user_id, CartProduct.product_id == product_id)).first()

@@ -1,8 +1,9 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from marshmallow import Schema, fields, post_load
 
-from tblib.model import Base
+from .base import Base
+from .user import UserSchema
 
 
 class WalletTransaction(Base):
@@ -14,10 +15,10 @@ class WalletTransaction(Base):
         'user.id', ondelete='CASCADE'), nullable=False)
     payee_id = Column(Integer, ForeignKey(
         'user.id', ondelete='CASCADE'), nullable=False)
-    payer = relationship(
-        'User', uselist=False, back_populates='payer_transactions', foreign_keys=[payer_id])
-    payee = relationship(
-        'User', uselist=False, back_populates='payee_transactions', foreign_keys=[payee_id])
+    payer = relationship('User', uselist=False, foreign_keys=[
+                         payer_id], backref=backref('payer_transactions', lazy='dynamic'))
+    payee = relationship('User', uselist=False, foreign_keys=[
+                         payee_id], backref=backref('payee_transactions', lazy='dynamic'))
 
 
 class WalletTransactionSchema(Schema):
@@ -26,6 +27,8 @@ class WalletTransactionSchema(Schema):
     note = fields.Str()
     payer_id = fields.Int()
     payee_id = fields.Int()
+    payer = fields.Nested(UserSchema)
+    payee = fields.Nested(UserSchema)
     created_at = fields.DateTime()
     updated_at = fields.DateTime()
 

@@ -2,7 +2,6 @@ from os import path
 
 from flask import Blueprint, request, current_app
 from werkzeug.wsgi import wrap_file
-from sqlalchemy import or_
 from werkzeug.exceptions import NotFound
 from gridfs import GridFS
 from gridfs.errors import NoFile
@@ -13,10 +12,10 @@ from tblib.handler import json_response, ResponseCode
 
 from ..models import FileSchema
 
-file = Blueprint('file', __name__, url_prefix='/')
+file = Blueprint('file', __name__, url_prefix='/files')
 
 
-@file.route('/files', methods=['POST'])
+@file.route('', methods=['POST'])
 def create_file():
     if 'file' not in request.files or request.files['file'].filename == '':
         raise NotFound()
@@ -24,12 +23,11 @@ def create_file():
     id = mongo.save_file(request.files['file'].filename, request.files["file"])
 
     _, ext = path.splitext(request.files['file'].filename)
-    id = '{}{}'.format(id, ext)
 
-    return json_response(id=id)
+    return json_response(id='{}{}'.format(id, ext))
 
 
-@file.route('/files/<file_id>', methods=['GET'])
+@file.route('/<file_id>', methods=['GET'])
 def file_info(file_id):
     id, _ = path.splitext(file_id)
     id = BSONObjectIdConverter({}).to_python(id)
@@ -75,7 +73,7 @@ def view_file(file_id):
     return file_response(id)
 
 
-@file.route('/download/<file_id>', methods=['GET'])
+@file.route('/<file_id>/download', methods=['GET'])
 def download_file(file_id):
     id, _ = path.splitext(file_id)
     id = BSONObjectIdConverter({}).to_python(id)

@@ -2,7 +2,9 @@ from sqlalchemy import Column, Integer, String, Index
 from sqlalchemy.orm import relationship
 from marshmallow import Schema, fields, post_load
 
-from tblib.model import Base
+from .base import Base
+
+from .order_product import OrderProductSchema
 
 
 class OrderStatus:
@@ -25,7 +27,6 @@ class Order(Base):
     address_id = Column(Integer, nullable=False)
     user_id = Column(Integer, nullable=False)
     status = Column(String(20), nullable=False, default=OrderStatus.NEW)
-    order_products = relationship('OrderProduct', back_populates='order')
 
 
 class OrderSchema(Schema):
@@ -35,6 +36,7 @@ class OrderSchema(Schema):
     address_id = fields.Int()
     user_id = fields.Int()
     status = fields.Str()
+    order_products = fields.Nested(OrderProductSchema, many=True)
     created_at = fields.DateTime()
     updated_at = fields.DateTime()
 

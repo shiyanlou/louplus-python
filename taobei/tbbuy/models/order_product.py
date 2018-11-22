@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, UniqueConstraint, Index
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from marshmallow import Schema, fields, post_load
 
-from tblib.model import Base
+from .base import Base
 
 
 class OrderProduct(Base):
@@ -17,8 +17,8 @@ class OrderProduct(Base):
     product_id = Column(Integer, nullable=False)
     price = Column(Integer, nullable=False)
     amount = Column(Integer, nullable=False, default=1)
-    order = relationship('Order', uselist=False,
-                         back_populates='order_products')
+    order = relationship('Order', uselist=False, backref=backref(
+        'order_products', lazy='dynamic'))
 
 
 class OrderProductSchema(Schema):

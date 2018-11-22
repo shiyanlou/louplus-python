@@ -3,12 +3,6 @@ from flask import Flask
 from . import config
 
 
-def init_mongo(app):
-    from tblib.mongo import init
-
-    init(app)
-
-
 def init_handler(app):
     from .handlers import init
 
@@ -17,8 +11,6 @@ def init_handler(app):
 
 app = Flask(__name__)
 app.config.from_object(config.configs.get(app.env))
-
-init_mongo(app)
 
 init_handler(app)
 

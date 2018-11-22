@@ -6,10 +6,10 @@ from tblib.handler import json_response, ResponseCode
 from ..models import Address, AddressSchema\
 
 
-address = Blueprint('address', __name__, url_prefix='/')
+address = Blueprint('address', __name__, url_prefix='/addresses')
 
 
-@address.route('/addresses', methods=['POST'])
+@address.route('', methods=['POST'])
 def create_address():
     data = request.get_json()
 
@@ -20,20 +20,24 @@ def create_address():
     return json_response(address=AddressSchema().dump(address))
 
 
-@address.route('/addresses', methods=['GET'])
+@address.route('', methods=['GET'])
 def address_list():
+    owner_id = request.args.get('owner_id', 0, type=int)
     order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
         'limit', current_app.config['FLASK_SQLALCHEMY_PER_PAGE'], type=int)
     offset = request.args.get('offset', 0, type=int)
 
     order_by = Address.id.asc() if order_direction == 'asc' else Address.id.desc()
-    query = Address.query.order_by(order_by).limit(limit).offset(offset)
+    query = Address.query
+    if owner_id != 0:
+        query = query.filter(Address.owner_id == owner_id)
+    query = query.order_by(order_by).limit(limit).offset(offset)
 
     return json_response(addresses=AddressSchema().dump(query, many=True))
 
 
-@address.route('/addresses/<int:address_id>', methods=['POST'])
+@address.route('/<int:address_id>', methods=['POST'])
 def update_address(address_id):
     data = request.get_json()
 
@@ -47,7 +51,7 @@ def update_address(address_id):
     return json_response(address=AddressSchema().dump(address))
 
 
-@address.route('/addresses/<int:address_id>', methods=['GET'])
+@address.route('/<int:address_id>', methods=['GET'])
 def address_info(address_id):
     address = Address.query.get(address_id)
     if address is None:

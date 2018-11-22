@@ -1,15 +1,16 @@
 from flask import Blueprint, request, current_app
-from sqlalchemy import and_
+from sqlalchemy import and_, or_
 
 from tblib.model import session
 from tblib.handler import json_response, ResponseCode
 
 from ..models import WalletTransaction, WalletTransactionSchema, User
 
-wallet_transaction = Blueprint('wallet_transaction', __name__, url_prefix='/')
+wallet_transaction = Blueprint(
+    'wallet_transaction', __name__, url_prefix='/wallet_transactions')
 
 
-@wallet_transaction.route('/wallet_transactions', methods=['POST'])
+@wallet_transaction.route('', methods=['POST'])
 def create_wallet_transaction():
     data = request.get_json()
 
@@ -47,8 +48,9 @@ def create_wallet_transaction():
     return json_response(wallet_transaction=WalletTransactionSchema().dump(wallet_transaction))
 
 
-@wallet_transaction.route('/wallet_transactions', methods=['GET'])
+@wallet_transaction.route('', methods=['GET'])
 def wallet_transaction_list():
+    user_id = request.args.get('user_id', 0, type=int)
     order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
         'limit', current_app.config['FLASK_SQLALCHEMY_PER_PAGE'], type=int)
@@ -56,13 +58,16 @@ def wallet_transaction_list():
 
     order_by = WalletTransaction.id.asc(
     ) if order_direction == 'asc' else WalletTransaction.id.desc()
-    query = WalletTransaction.query.order_by(
-        order_by).limit(limit).offset(offset)
+    query = WalletTransaction.query
+    if user_id != 0:
+        query = query.filter(or_(WalletTransaction.payer_id ==
+                                 user_id, WalletTransaction.payee_id == user_id))
+    query = query.order_by(order_by).limit(limit).offset(offset)
 
     return json_response(wallet_transactions=WalletTransactionSchema().dump(query, many=True))
 
 
-@wallet_transaction.route('/wallet_transactions/<int:wallet_transaction_id>', methods=['POST'])
+@wallet_transaction.route('/<int:wallet_transaction_id>', methods=['POST'])
 def update_wallet_transaction(wallet_transaction_id):
     data = request.get_json()
 
@@ -76,7 +81,7 @@ def update_wallet_transaction(wallet_transaction_id):
     return json_response(wallet_transaction=WalletTransactionSchema().dump(wallet_transaction))
 
 
-@wallet_transaction.route('/wallet_transactions/<int:wallet_transaction_id>', methods=['GET'])
+@wallet_transaction.route('/<int:wallet_transaction_id>', methods=['GET'])
 def wallet_transaction_info(wallet_transaction_id):
     wallet_transaction = WalletTransaction.query.get(wallet_transaction_id)
     if wallet_transaction is None:

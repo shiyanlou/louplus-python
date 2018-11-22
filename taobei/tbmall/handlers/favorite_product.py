@@ -6,10 +6,11 @@ from tblib.handler import json_response, ResponseCode
 
 from ..models import FavoriteProduct, FavoriteProductSchema
 
-favorite_product = Blueprint('favorite_product', __name__, url_prefix='/')
+favorite_product = Blueprint(
+    'favorite_product', __name__, url_prefix='/favorite_products')
 
 
-@favorite_product.route('/favorite_products', methods=['POST'])
+@favorite_product.route('', methods=['POST'])
 def create_favorite_product():
     data = request.get_json()
 
@@ -20,7 +21,7 @@ def create_favorite_product():
     return json_response(favorite_product=FavoriteProductSchema().dump(favorite_product))
 
 
-@favorite_product.route('/favorite_products', methods=['GET'])
+@favorite_product.route('', methods=['GET'])
 def favorite_product_list():
     user_id = request.args.get('user_id', 0, type=int)
     product_id = request.args.get('product_id', 0, type=int)
@@ -41,7 +42,7 @@ def favorite_product_list():
     return json_response(favorite_products=FavoriteProductSchema().dump(query, many=True))
 
 
-@favorite_product.route('/favorite_products/<int:user_id>/<int:product_id>', methods=['DELETE'])
+@favorite_product.route('/<int:user_id>/<int:product_id>', methods=['DELETE'])
 def delete_favorite_product(user_id, product_id):
     favorite_product = FavoriteProduct.query.filter(and_(
         FavoriteProduct.user_id == user_id, FavoriteProduct.product_id == product_id)).first()
@@ -53,7 +54,7 @@ def delete_favorite_product(user_id, product_id):
     return json_response(favorite_product=FavoriteProductSchema().dump(favorite_product))
 
 
-@favorite_product.route('/favorite_products/<int:user_id>/<int:product_id>', methods=['GET'])
+@favorite_product.route('/<int:user_id>/<int:product_id>', methods=['GET'])
 def favorite_product_info(user_id, product_id):
     favorite_product = FavoriteProduct.query.filter(and_(
         FavoriteProduct.user_id == user_id, FavoriteProduct.product_id == product_id)).first()

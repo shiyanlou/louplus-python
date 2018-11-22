@@ -1,8 +1,9 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from marshmallow import Schema, fields, post_load
 
-from tblib.model import Base
+from .base import Base
+from .user import UserSchema
 
 
 class Address(Base):
@@ -14,7 +15,8 @@ class Address(Base):
     is_default = Column(Boolean, nullable=False, default=False)
     owner_id = Column(Integer, ForeignKey(
         'user.id', ondelete='CASCADE'), nullable=False)
-    owner = relationship('User', uselist=False, back_populates='addresses')
+    owner = relationship('User', uselist=False,
+                         backref=backref('addresses', lazy='dynamic'))
 
 
 class AddressSchema(Schema):
@@ -24,6 +26,7 @@ class AddressSchema(Schema):
     phone = fields.Str()
     is_default = fields.Bool()
     owner_id = fields.Int()
+    owner = fields.Nested(UserSchema)
     created_at = fields.DateTime()
     updated_at = fields.DateTime()
 

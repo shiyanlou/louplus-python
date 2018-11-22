@@ -6,12 +6,15 @@ from tblib.handler import json_response, ResponseCode
 
 from ..models import Order, OrderSchema
 
-order = Blueprint('order', __name__, url_prefix='/')
+order = Blueprint('order', __name__, url_prefix='/orders')
 
 
-@order.route('/orders', methods=['POST'])
+@order.route('', methods=['POST'])
 def create_order():
     data = request.get_json()
+    if data.get('pay_amount') is None:
+        data['pay_amount'] = sum([x['price'] * x['amount']
+                                  for x in data['order_products']])
 
     order = OrderSchema().load(data)
     session.add(order)
@@ -20,7 +23,7 @@ def create_order():
     return json_response(order=OrderSchema().dump(order))
 
 
-@order.route('/orders', methods=['GET'])
+@order.route('', methods=['GET'])
 def order_list():
     user_id = request.args.get('user_id', 0, type=int)
     order_direction = request.args.get('order_direction', 'asc')
@@ -37,7 +40,7 @@ def order_list():
     return json_response(orders=OrderSchema().dump(query, many=True))
 
 
-@order.route('/orders/<int:order_id>', methods=['POST'])
+@order.route('/<int:order_id>', methods=['POST'])
 def update_order(order_id):
     data = request.get_json()
 
@@ -50,7 +53,7 @@ def update_order(order_id):
     return json_response(order=OrderSchema().dump(order))
 
 
-@order.route('/orders/<int:order_id>', methods=['GET'])
+@order.route('/<int:order_id>', methods=['GET'])
 def order_info(order_id):
     order = Order.query.get(order_id)
     if order is None:

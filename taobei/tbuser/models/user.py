@@ -3,9 +3,7 @@ from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from marshmallow import Schema, fields, post_load
 
-from tblib.model import Base
-
-from .wallet_transaction import WalletTransaction
+from .base import Base
 
 
 class Gender:
@@ -23,11 +21,6 @@ class User(Base):
     gender = Column(String(1), nullable=False, default=Gender.UNKNOWN)
     mobile = Column(String(11), unique=True)
     wallet_money = Column(Integer, nullable=False, default=0)
-    addresses = relationship('Address', back_populates='owner')
-    payer_transactions = relationship('WalletTransaction', back_populates='payer', foreign_keys=[
-                                      WalletTransaction.payer_id], lazy='dynamic')
-    payee_transactions = relationship('WalletTransaction', back_populates='payee', foreign_keys=[
-                                      WalletTransaction.payee_id], lazy='dynamic')
 
     @property
     def password(self):

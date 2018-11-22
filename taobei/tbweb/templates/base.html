@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>{% block title %}淘贝网{% endblock %}</title>
+  {% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-4.1.3.min.css') }}">
+  {% endblock %}
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="#">淘贝网</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item {{ 'active' if request.path.startswith('/product/') else '' }}">
+          <a class="nav-link" href="#">商品 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item {{ 'active' if request.path.startswith('/shop/') else '' }}">
+          <a class="nav-link" href="#">店铺</a>
+        </li>
+      </ul>
+      <div>
+        <form class="d-inline form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="search" placeholder="搜索商品、店铺" aria-label="">
+          <button class="btn btn-secondary my-2 my-sm-0" type="submit">搜索</button>
+        </form>
+        <button class="btn btn-success my-2 my-sm-0" type="submit">登录</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">{% block content %}{% endblock %}</div>
+  
+  {% block js %}
+  <script src="{{ url_for('static', filename='jquery-3.3.1.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='popper-1.14.3.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='bootstrap-4.1.3.min.js') }}"></script>
+  {% endblock %}
+</body>
+</html>

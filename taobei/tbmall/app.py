@@ -21,7 +21,6 @@ def init_handler(app):
 app = Flask(__name__)
 app.config.from_object(config.configs.get(app.env))
 
-
 init_model(app)
 
 init_handler(app)
