@@ -7,5 +7,5 @@ product = Blueprint('product', __name__, url_prefix='/products')
 
 @product.route('')
 def index():
-    products = TbMall(current_app).get('/products')
-    return render_template('product/index.html')
+    resp = TbMall(current_app).get_json('/products')
+    return render_template('product/index.html', **resp['data'])

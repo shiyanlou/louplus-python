@@ -11,5 +11,9 @@
 </nav>
 
 
-
+<ul>
+  {% for product in products %}
+  <li>{{ product['title'] }}</li>
+  {% endfor %}
+</ul>
 {% endblock %}
