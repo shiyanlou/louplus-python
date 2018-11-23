@@ -15,4 +15,10 @@ def index():
         'limit': limit,
         'offset': offset
     })
+
     return render_template('product/index.html', **resp['data'])
+
+
+@product.route('/<int:product_id>')
+def detail(product_id):
+    pass

@@ -2,19 +2,19 @@
 
 {% extends "base.html" %}
 
-{% block title %}淘贝网 - 商品列表{% endblock %}
+{% block title %}淘贝网 - 店铺列表{% endblock %}
 
 {% block content %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/">首页</a></li>
-    <li class="breadcrumb-item active" aria-current="page">商品列表</li>
+    <li class="breadcrumb-item active" aria-current="page">店铺列表</li>
   </ol>
 </nav>
 
-<div class="d-flex flex-wrap justify-content-center">
-  {% for product in products %}
-  {{ macros.product(product) }}
+<div>
+  {% for shop in shops %}
+  {{ macros.shop(shop) }}
   {% endfor %}
 </div>
 

@@ -1,0 +1,25 @@
+{% import 'macros.html' as macros %}
+
+{% extends "base.html" %}
+
+{% block title %}淘贝网 - 店铺详情{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">首页</a></li>
+    <li class="breadcrumb-item"><a href="/shops">店铺列表</a></li>
+    <li class="breadcrumb-item active" aria-current="page">店铺详情</li>
+  </ol>
+</nav>
+
+{{ macros.shop(shop) }}
+
+<div class="d-flex flex-wrap justify-content-center">
+  {% for product in products %}
+  {{ macros.product(product) }}
+  {% endfor %}
+</div>
+
+{{ macros.pagination((total / config['PAGINATION_PER_PAGE'])|round(0, 'ceil')|int, request.args.get('page', '1')|int, '.detail', shop_id=shop.id) }}
+{% endblock %}
