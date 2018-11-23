@@ -25,16 +25,17 @@ def shop_list():
     owner_id = request.args.get('owner_id', 0, type=int)
     order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
-        'limit', current_app.config['FLASK_SQLALCHEMY_PER_PAGE'], type=int)
+        'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
     offset = request.args.get('offset', 0, type=int)
 
     order_by = Shop.id.asc() if order_direction == 'asc' else Shop.id.desc()
     query = Shop.query
     if owner_id != 0:
         query = query.filter(Shop.owner_id == owner_id)
+    total = query.count()
     query = query.order_by(order_by).limit(limit).offset(offset)
 
-    return json_response(shops=ShopSchema().dump(query, many=True))
+    return json_response(shops=ShopSchema().dump(query, many=True), total=total)
 
 
 @shop.route('/<int:shop_id>', methods=['POST'])

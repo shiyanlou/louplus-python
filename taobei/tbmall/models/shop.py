@@ -11,9 +11,9 @@ class Shop(Base):
         Index('idx_owner_id', 'owner_id'),
     )
 
-    name = Column(String(20), nullable=False, unique=True)
-    description = Column(String(200), nullable=False, default='')
-    cover = Column(String(100), nullable=False, default='')
+    name = Column(String(200), nullable=False, unique=True)
+    description = Column(String(2000), nullable=False, default='')
+    cover = Column(String(200), nullable=False, default='')
     owner_id = Column(Integer, nullable=False)
 
 

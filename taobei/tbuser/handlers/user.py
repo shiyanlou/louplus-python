@@ -24,13 +24,15 @@ def create_user():
 def user_list():
     order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
-        'limit', current_app.config['FLASK_SQLALCHEMY_PER_PAGE'], type=int)
+        'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
     offset = request.args.get('offset', 0, type=int)
 
     order_by = User.id.asc() if order_direction == 'asc' else User.id.desc()
-    query = User.query.order_by(order_by).limit(limit).offset(offset)
+    query = User.query
+    total = query.count()
+    query = query.order_by(order_by).limit(limit).offset(offset)
 
-    return json_response(users=UserSchema().dump(query, many=True))
+    return json_response(users=UserSchema().dump(query, many=True), total=total)
 
 
 @user.route('/<int:user_id>', methods=['POST'])

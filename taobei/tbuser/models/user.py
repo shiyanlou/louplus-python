@@ -17,7 +17,7 @@ class User(Base):
 
     username = Column(String(20), nullable=False, unique=True)
     _password = Column('password', String(256), nullable=False)
-    avatar = Column(String(100), nullable=False, default='')
+    avatar = Column(String(200), nullable=False, default='')
     gender = Column(String(1), nullable=False, default=Gender.UNKNOWN)
     mobile = Column(String(11), unique=True)
     wallet_money = Column(Integer, nullable=False, default=0)

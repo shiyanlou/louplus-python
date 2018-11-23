@@ -12,10 +12,10 @@ from tblib.handler import json_response, ResponseCode
 
 from ..models import FileSchema
 
-file = Blueprint('file', __name__, url_prefix='/files')
+file = Blueprint('file', __name__, url_prefix='')
 
 
-@file.route('', methods=['POST'])
+@file.route('/files', methods=['POST'])
 def create_file():
     if 'file' not in request.files or request.files['file'].filename == '':
         raise NotFound()
@@ -27,7 +27,7 @@ def create_file():
     return json_response(id='{}{}'.format(id, ext))
 
 
-@file.route('/<file_id>', methods=['GET'])
+@file.route('/files/<file_id>', methods=['GET'])
 def file_info(file_id):
     id, _ = path.splitext(file_id)
     id = BSONObjectIdConverter({}).to_python(id)

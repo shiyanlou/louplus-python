@@ -28,16 +28,17 @@ def order_list():
     user_id = request.args.get('user_id', 0, type=int)
     order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
-        'limit', current_app.config['FLASK_SQLALCHEMY_PER_PAGE'], type=int)
+        'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
     offset = request.args.get('offset', 0, type=int)
 
     order_by = Order.id.asc() if order_direction == 'asc' else Order.id.desc()
     query = Order.query
     if user_id > 0:
         query = query.filter(Order.user_id == user_id)
+    total = query.count()
     query = query.order_by(order_by).limit(limit).offset(offset)
 
-    return json_response(orders=OrderSchema().dump(query, many=True))
+    return json_response(orders=OrderSchema().dump(query, many=True), total=total)
 
 
 @order.route('/<int:order_id>', methods=['POST'])

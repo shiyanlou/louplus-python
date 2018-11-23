@@ -25,16 +25,17 @@ def product_list():
     shop_id = request.args.get('shop_id', 0, type=int)
     order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
-        'limit', current_app.config['FLASK_SQLALCHEMY_PER_PAGE'], type=int)
+        'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
     offset = request.args.get('offset', 0, type=int)
 
     order_by = Product.id.asc() if order_direction == 'asc' else Product.id.desc()
     query = Product.query
     if shop_id != 0:
         query = query.filter(Product.shop_id == shop_id)
+    total = query.count()
     query = query.order_by(order_by).limit(limit).offset(offset)
 
-    return json_response(products=ProductSchema().dump(query, many=True))
+    return json_response(products=ProductSchema().dump(query, many=True), total=total)
 
 
 @product.route('/<int:product_id>', methods=['POST'])

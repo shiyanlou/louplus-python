@@ -6,7 +6,7 @@ class BaseConfig(object):
     SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root@localhost:3306/tbmall?charset=utf8'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    FLASK_SQLALCHEMY_PER_PAGE = 20
+    PAGINATION_PER_PAGE = 20
 
 
 class DevelopmentConfig(BaseConfig):

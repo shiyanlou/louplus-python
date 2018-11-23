@@ -53,7 +53,7 @@ def wallet_transaction_list():
     user_id = request.args.get('user_id', 0, type=int)
     order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
-        'limit', current_app.config['FLASK_SQLALCHEMY_PER_PAGE'], type=int)
+        'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
     offset = request.args.get('offset', 0, type=int)
 
     order_by = WalletTransaction.id.asc(
@@ -62,9 +62,10 @@ def wallet_transaction_list():
     if user_id != 0:
         query = query.filter(or_(WalletTransaction.payer_id ==
                                  user_id, WalletTransaction.payee_id == user_id))
+    total = query.count()
     query = query.order_by(order_by).limit(limit).offset(offset)
 
-    return json_response(wallet_transactions=WalletTransactionSchema().dump(query, many=True))
+    return json_response(wallet_transactions=WalletTransactionSchema().dump(query, many=True), total=total)
 
 
 @wallet_transaction.route('/<int:wallet_transaction_id>', methods=['POST'])

@@ -10,7 +10,7 @@ class WalletTransaction(Base):
     __tablename__ = 'wallet_transaction'
 
     amount = Column(Integer, nullable=False)
-    note = Column(String(100), nullable=False, default='')
+    note = Column(String(200), nullable=False, default='')
     payer_id = Column(Integer, ForeignKey(
         'user.id', ondelete='CASCADE'), nullable=False)
     payee_id = Column(Integer, ForeignKey(

@@ -6,7 +6,7 @@ class BaseConfig(object):
     SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root@localhost:3306/tbweb?charset=utf8'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    FLASK_SQLALCHEMY_PER_PAGE = 20
+    PAGINATION_PER_PAGE = 20
 
     SERVICE_TBBUY = {
         'addresses': ['http://localhost:5030'],
@@ -20,6 +20,8 @@ class BaseConfig(object):
     SERVICE_TBUSER = {
         'addresses': ['http://localhost:5010'],
     }
+
+    DOMAIN_TBFILE = 'http://localhost:5040'
 
 
 class DevelopmentConfig(BaseConfig):

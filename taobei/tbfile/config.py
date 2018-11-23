@@ -5,7 +5,7 @@ class BaseConfig(object):
 
     MONGO_URI = 'mongodb://localhost:27017/tbfile'
 
-    FLASK_SQLALCHEMY_PER_PAGE = 20
+    PAGINATION_PER_PAGE = 20
 
 
 class DevelopmentConfig(BaseConfig):

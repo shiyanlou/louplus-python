@@ -23,7 +23,7 @@ class Order(Base):
     )
 
     pay_amount = Column(Integer, nullable=False)
-    note = Column(String(100), nullable=False, default='')
+    note = Column(String(200), nullable=False, default='')
     address_id = Column(Integer, nullable=False)
     user_id = Column(Integer, nullable=False)
     status = Column(String(20), nullable=False, default=OrderStatus.NEW)

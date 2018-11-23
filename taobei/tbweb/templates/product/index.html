@@ -1,3 +1,5 @@
+{% import 'macros.html' as macros %}
+
 {% extends "base.html" %}
 
 {% block title %}淘贝网 - 商品列表{% endblock %}
@@ -10,10 +12,11 @@
   </ol>
 </nav>
 
-
-<ul>
+<div class="d-flex flex-wrap justify-content-between">
   {% for product in products %}
-  <li>{{ product['title'] }}</li>
+  {{ macros.product(product) }}
   {% endfor %}
-</ul>
+</div>
+
+{{ macros.pagination((total / config['PAGINATION_PER_PAGE'])|round(0, 'ceil')|int, request.args.get('page', '1')|int, '.index') }}
 {% endblock %}

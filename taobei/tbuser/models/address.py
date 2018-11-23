@@ -9,7 +9,7 @@ from .user import UserSchema
 class Address(Base):
     __tablename__ = 'address'
 
-    address = Column(String(100), nullable=False)
+    address = Column(String(200), nullable=False)
     zip_code = Column(String(6), nullable=False, default='')
     phone = Column(String(20), nullable=False)
     is_default = Column(Boolean, nullable=False, default=False)

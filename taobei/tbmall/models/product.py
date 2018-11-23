@@ -12,9 +12,9 @@ class Product(Base):
         Index('idx_shop_id', 'shop_id'),
     )
 
-    title = Column(String(20), nullable=False)
-    description = Column(String(200), nullable=False, default='')
-    cover = Column(String(100), nullable=False, default='')
+    title = Column(String(200), nullable=False)
+    description = Column(String(2000), nullable=False, default='')
+    cover = Column(String(200), nullable=False, default='')
     price = Column(Integer, nullable=False)
     amount = Column(Integer, nullable=False)
     shop_id = Column(Integer, ForeignKey(
