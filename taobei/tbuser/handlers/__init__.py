@@ -6,8 +6,7 @@ from .wallet_transaction import wallet_transaction
 
 
 def init(app):
-    if app.env == 'production':
-        app.register_error_handler(Exception, handle_error)
+    app.register_error_handler(Exception, handle_error)
 
     app.register_blueprint(user)
     app.register_blueprint(address)

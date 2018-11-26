@@ -22,8 +22,8 @@ def create_cart_product():
 
 @cart_product.route('', methods=['GET'])
 def cart_product_list():
-    user_id = request.args.get('user_id', 0, type=int)
-    product_id = request.args.get('product_id', 0, type=int)
+    user_id = request.args.get('user_id', type=int)
+    product_id = request.args.get('product_id', type=int)
     order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
         'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
@@ -32,9 +32,9 @@ def cart_product_list():
     order_by = CartProduct.id.asc(
     ) if order_direction == 'asc' else CartProduct.id.desc()
     query = CartProduct.query
-    if user_id > 0:
+    if user_id is not None:
         query = query.filter(CartProduct.user_id == user_id)
-    if product_id > 0:
+    if product_id is not None:
         query = query.filter(CartProduct.product_id == product_id)
     total = query.count()
     query = query.order_by(order_by).limit(limit).offset(offset)

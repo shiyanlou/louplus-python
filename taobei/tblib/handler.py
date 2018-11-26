@@ -1,3 +1,5 @@
+import traceback
+
 from flask import jsonify
 from werkzeug.exceptions import HTTPException, NotFound
 
@@ -27,6 +29,8 @@ def json_response(code=ResponseCode.OK, message='', **kwargs):
 
 
 def handle_error(exception):
+    traceback.print_exc()
+
     code = ResponseCode.UNKNOWN_ERROR
     if isinstance(exception, NotFound):
         code = ResponseCode.NOT_FOUND

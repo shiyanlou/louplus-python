@@ -1,58 +1,83 @@
 {% macro product(item) -%}
 <div class="m-2 p-2 border" style="width: 250px;">
-    <a href="{{ url_for('product.detail', product_id=item['id']) }}">
-        <img class="w-100" src="{{ item['cover'] if item['cover'].startswith('http') else '{}/{}'.format(config['DOMAIN_TBFILE'], item['cover']) }}" />
-        <p class="text-truncate">{{ item['title'] }}</p>
-    </a>
-    <div class="d-flex justify-content-between">
-        <span class="text-monospace text-info">¥{{ item['price'] }}</span>
-        <a href="{{ url_for('shop.detail', shop_id=item['shop']['id']) }}">
-            <span class="d-inline-block text-truncate">{{ item['shop']['name'] }}</span>
-        </a>
-    </div>
+	<a href="{{ url_for('product.detail', product_id=item['id']) }}">
+		<img class="w-100" src="{{ item['cover'] if item['cover'].startswith('http') else '{}/{}'.format(config['DOMAIN_TBFILE'], item['cover']) }}" />
+		<p class="text-truncate">{{ item['title'] }}</p>
+	</a>
+	<div class="d-flex justify-content-between">
+		<span class="text-monospace text-info">¥{{ item['price'] }}</span>
+		<a href="{{ url_for('shop.detail', shop_id=item['shop']['id']) }}">
+			<span class="d-inline-block text-truncate">{{ item['shop']['name'] }}</span>
+		</a>
+	</div>
 </div>
 {%- endmacro %}
 
 {% macro shop(item) -%}
 <div class="p-3 border-bottom d-flex justify-content-between">
-    <div class="media m-2 p-2">
-        <img class="mr-3" style="width: 70px" src="{{ item['cover'] if item['cover'].startswith('http') else '{}/{}'.format(config['DOMAIN_TBFILE'], item['cover']) }}" />
-        <div class="media-body">
-            <a href="{{ url_for('shop.detail', shop_id=item['id']) }}">
-                <h5 class="mt-0">{{ item['name'] }}</h5>
-            </a>
-            <p class="text-secondary">{{ item['description'] }}</p>
-        </div>
-    </div>
-    
-    <div class="d-flex">
-        {% for s in item.get('products', [])[:3] %}
-        {{ product(s) }}
-        {% endfor %}
-    </div>
+	<div class="media m-2 p-2">
+		<img class="mr-3" style="width: 70px" src="{{ item['cover'] if item['cover'].startswith('http') else '{}/{}'.format(config['DOMAIN_TBFILE'], item['cover']) }}" />
+		<div class="media-body">
+			<a href="{{ url_for('shop.detail', shop_id=item['id']) }}">
+				<h5 class="mt-0">{{ item['name'] }}</h5>
+			</a>
+			<p class="text-secondary">{{ item['description'] }}</p>
+		</div>
+	</div>
+	
+	<div class="d-flex">
+		{% for s in item.get('products', [])[:3] %}
+		{{ product(s) }}
+		{% endfor %}
+	</div>
 </div>
 {%- endmacro %}
 
 {% macro pagination(total, current, endpoint) -%}
 <nav class="my-5">
-    <ul class="pagination justify-content-center">
-        <li class="page-item {{ 'disabled' if current == 1 else '' }}">
-            <a class="page-link" href="{{ '#' if current == 1 else url_for(endpoint, page=current-1, **kwargs) }}" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-            </a>
-        </li>
-        {% for i in range(1, total + 1) %}
-        <li class="page-item {{ 'active' if current == i else '' }}">
-            <a class="page-link" href="{{ url_for(endpoint, page=i, **kwargs) }}">{{ i }}</a>
-        </li>
-        {% endfor %}
-        <li class="page-item {{ 'disabled' if current == total else '' }}">
-            <a class="page-link" href="{{ '#' if current == total else url_for(endpoint, page=current+1, **kwargs) }}" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
-            </a>
-        </li>
-    </ul>
+	<ul class="pagination justify-content-center">
+		<li class="page-item {{ 'disabled' if current == 1 else '' }}">
+			<a class="page-link" href="{{ '#' if current == 1 else url_for(endpoint, page=current-1, **kwargs) }}" aria-label="Previous">
+				<span aria-hidden="true">&laquo;</span>
+				<span class="sr-only">Previous</span>
+			</a>
+		</li>
+		{% for i in range(1, total + 1) %}
+		<li class="page-item {{ 'active' if current == i else '' }}">
+			<a class="page-link" href="{{ url_for(endpoint, page=i, **kwargs) }}">{{ i }}</a>
+		</li>
+		{% endfor %}
+		<li class="page-item {{ 'disabled' if current == total else '' }}">
+			<a class="page-link" href="{{ '#' if current == total else url_for(endpoint, page=current+1, **kwargs) }}" aria-label="Next">
+				<span aria-hidden="true">&raquo;</span>
+				<span class="sr-only">Next</span>
+			</a>
+		</li>
+	</ul>
 </nav>
 {%- endmacro %}
+
+{% macro form(form, url) %}
+<form method="POST" action="{{ url }}">
+	{% for field in form %}
+	{% if field.type == 'CSRFTokenField' %}
+	{{ form.csrf_token }}
+	{% elif field.type == 'SubmitField' %}
+	{{ form.submit(class='btn btn-primary', type='submit') }}
+	{% elif field.type == 'BooleanField' %}
+	<div class="checkbox">
+		<label>{{ field() }} {{ field.label.text }}</label>
+	</div>
+	{% else %}
+	<div class="form-group {% if field.errors %}has-error{% endif %}">
+		{{ field.label }} {{ field(class='form-control') }}
+		{% if field.errors %}
+		{% for error in field.errors %}
+		<span class="text-danger">{{ error }}</span>
+		{% endfor %}
+		{% endif %}
+	</div>
+	{% endif %}
+	{% endfor %}
+</form>
+{% endmacro %}

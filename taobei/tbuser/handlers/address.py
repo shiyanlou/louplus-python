@@ -22,7 +22,7 @@ def create_address():
 
 @address.route('', methods=['GET'])
 def address_list():
-    owner_id = request.args.get('owner_id', 0, type=int)
+    owner_id = request.args.get('owner_id', type=int)
     order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
         'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
@@ -30,7 +30,7 @@ def address_list():
 
     order_by = Address.id.asc() if order_direction == 'asc' else Address.id.desc()
     query = Address.query
-    if owner_id != 0:
+    if owner_id is not None:
         query = query.filter(Address.owner_id == owner_id)
     total = query.count()
     query = query.order_by(order_by).limit(limit).offset(offset)

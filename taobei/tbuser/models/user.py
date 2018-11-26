@@ -37,7 +37,6 @@ class User(Base):
 class UserSchema(Schema):
     id = fields.Int()
     username = fields.Str()
-    password = fields.Str()
     avatar = fields.Str()
     gender = fields.Str()
     mobile = fields.Str()

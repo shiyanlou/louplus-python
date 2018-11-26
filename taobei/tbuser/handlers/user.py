@@ -12,8 +12,10 @@ user = Blueprint('user', __name__, url_prefix='/users')
 @user.route('', methods=['POST'])
 def create_user():
     data = request.get_json()
+    password = data.pop('password')
 
     user = UserSchema().load(data)
+    user.password = password
     session.add(user)
     session.commit()
 
@@ -22,6 +24,7 @@ def create_user():
 
 @user.route('', methods=['GET'])
 def user_list():
+    username = request.args.get('username')
     order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
         'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
@@ -29,6 +32,8 @@ def user_list():
 
     order_by = User.id.asc() if order_direction == 'asc' else User.id.desc()
     query = User.query
+    if username is not None:
+        query = query.filter(User.username == username)
     total = query.count()
     query = query.order_by(order_by).limit(limit).offset(offset)
 
@@ -55,3 +60,17 @@ def user_info(user_id):
         return json_response(ResponseCode.NOT_FOUND)
 
     return json_response(user=UserSchema().dump(user))
+
+
+@user.route('/check_password', methods=['GET'])
+def check_password():
+    username = request.args.get('username')
+    password = request.args.get('password')
+    if username is None or password is None:
+        return json_response(isCorrect=False)
+
+    user = User.query.filter(User.username == username).first()
+    if user is None:
+        return json_response(isCorrect=False)
+
+    return json_response(isCorrect=user.check_password(password))

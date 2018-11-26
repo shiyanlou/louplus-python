@@ -5,8 +5,7 @@ from .order import order
 
 
 def init(app):
-    if app.env == 'production':
-        app.register_error_handler(Exception, handle_error)
+    app.register_error_handler(Exception, handle_error)
 
     app.register_blueprint(cart_product)
     app.register_blueprint(order)

@@ -22,7 +22,7 @@ def create_product():
 
 @product.route('', methods=['GET'])
 def product_list():
-    shop_id = request.args.get('shop_id', 0, type=int)
+    shop_id = request.args.get('shop_id', type=int)
     order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
         'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
@@ -30,7 +30,7 @@ def product_list():
 
     order_by = Product.id.asc() if order_direction == 'asc' else Product.id.desc()
     query = Product.query
-    if shop_id != 0:
+    if shop_id is not None:
         query = query.filter(Product.shop_id == shop_id)
     total = query.count()
     query = query.order_by(order_by).limit(limit).offset(offset)

@@ -22,7 +22,7 @@ def create_shop():
 
 @shop.route('', methods=['GET'])
 def shop_list():
-    owner_id = request.args.get('owner_id', 0, type=int)
+    owner_id = request.args.get('owner_id', type=int)
     order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
         'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
@@ -30,7 +30,7 @@ def shop_list():
 
     order_by = Shop.id.asc() if order_direction == 'asc' else Shop.id.desc()
     query = Shop.query
-    if owner_id != 0:
+    if owner_id is not None:
         query = query.filter(Shop.owner_id == owner_id)
     total = query.count()
     query = query.order_by(order_by).limit(limit).offset(offset)

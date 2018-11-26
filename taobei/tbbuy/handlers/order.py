@@ -25,7 +25,7 @@ def create_order():
 
 @order.route('', methods=['GET'])
 def order_list():
-    user_id = request.args.get('user_id', 0, type=int)
+    user_id = request.args.get('user_id', type=int)
     order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
         'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
@@ -33,7 +33,7 @@ def order_list():
 
     order_by = Order.id.asc() if order_direction == 'asc' else Order.id.desc()
     query = Order.query
-    if user_id > 0:
+    if user_id is not None:
         query = query.filter(Order.user_id == user_id)
     total = query.count()
     query = query.order_by(order_by).limit(limit).offset(offset)

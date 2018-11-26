@@ -31,12 +31,35 @@
           <input class="form-control mr-sm-2" type="search" placeholder="搜索商品、店铺" aria-label="">
           <button class="btn btn-secondary my-2 my-sm-0" type="submit">搜索</button>
         </form>
-        <button class="btn btn-success my-2 my-sm-0" type="submit">登录</button>
+        {% if current_user.is_authenticated %}
+        <button class="btn btn-link my-2 my-sm-0" type="submit">
+          <a href="{{ url_for('user.logout') }}" class="text-light">退出</a>
+        </button>
+        {% else %}
+        <button class="btn btn-success my-2 my-sm-0" type="submit">
+          <a href="{{ url_for('user.login') }}" class="text-light">登录</a>
+        </button>
+        {% endif %}
       </div>
     </div>
   </nav>
 
-  <div class="container" style="padding-bottom: 60px;">{% block content %}{% endblock %}</div>
+  <div class="container" style="padding-bottom: 60px;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <span class="text-info">{{ message }}</span>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    
+    {% block body %}{% endblock %}
+  </div>
 
   <div class="d-flex bg-dark justify-content-between align-items-center text-light fixed-bottom" style="height: 60px;">
     <div class="p-3">

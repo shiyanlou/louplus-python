@@ -50,7 +50,7 @@ def create_wallet_transaction():
 
 @wallet_transaction.route('', methods=['GET'])
 def wallet_transaction_list():
-    user_id = request.args.get('user_id', 0, type=int)
+    user_id = request.args.get('user_id', type=int)
     order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
         'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
@@ -59,7 +59,7 @@ def wallet_transaction_list():
     order_by = WalletTransaction.id.asc(
     ) if order_direction == 'asc' else WalletTransaction.id.desc()
     query = WalletTransaction.query
-    if user_id != 0:
+    if user_id is not None:
         query = query.filter(or_(WalletTransaction.payer_id ==
                                  user_id, WalletTransaction.payee_id == user_id))
     total = query.count()

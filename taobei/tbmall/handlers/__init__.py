@@ -6,8 +6,7 @@ from .favorite_product import favorite_product
 
 
 def init(app):
-    if app.env == 'production':
-        app.register_error_handler(Exception, handle_error)
+    app.register_error_handler(Exception, handle_error)
 
     app.register_blueprint(shop)
     app.register_blueprint(product)
