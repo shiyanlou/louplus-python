@@ -25,6 +25,7 @@ def create_user():
 @user.route('', methods=['GET'])
 def user_list():
     username = request.args.get('username')
+    mobile = request.args.get('mobile')
     order_direction = request.args.get('order_direction', 'asc')
     limit = request.args.get(
         'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
@@ -34,6 +35,8 @@ def user_list():
     query = User.query
     if username is not None:
         query = query.filter(User.username == username)
+    if mobile is not None:
+        query = query.filter(User.mobile == mobile)
     total = query.count()
     query = query.order_by(order_by).limit(limit).offset(offset)
 
@@ -44,10 +47,11 @@ def user_list():
 def update_user(user_id):
     data = request.get_json()
 
-    count = User.query.filter(User.id == user_id).update(data)
-    if count == 0:
-        return json_response(ResponseCode.NOT_FOUND)
     user = User.query.get(user_id)
+    if user is None:
+        return json_response(ResponseCode.NOT_FOUND)
+    for key, value in data.items():
+        setattr(user, key, value)
     session.commit()
 
     return json_response(user=UserSchema().dump(user))
@@ -73,4 +77,6 @@ def check_password():
     if user is None:
         return json_response(isCorrect=False)
 
-    return json_response(isCorrect=user.check_password(password))
+    isCorrect = user.check_password(password)
+
+    return json_response(isCorrect=isCorrect, user=UserSchema().dump(user) if isCorrect else None)

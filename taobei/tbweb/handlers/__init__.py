@@ -1,8 +1,9 @@
-from flask import current_app
+import traceback
+
+from flask import current_app, render_template
 from flask_login import LoginManager
 
-from tblib.handler import handle_error
-
+from .address import address
 from .common import common
 from .product import product
 from .shop import shop
@@ -11,7 +12,16 @@ from ..models import User
 from ..services import TbUser
 
 
+def handle_error(error):
+    traceback.print_exc()
+
+    return render_template('error.html', error=str(error))
+
+
 def init(app):
+    app.register_error_handler(Exception, handle_error)
+
+    app.register_blueprint(address)
     app.register_blueprint(common)
     app.register_blueprint(product)
     app.register_blueprint(shop)

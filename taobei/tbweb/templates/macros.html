@@ -14,21 +14,25 @@
 {%- endmacro %}
 
 {% macro shop(item) -%}
-<div class="p-3 border-bottom d-flex justify-content-between">
-	<div class="media m-2 p-2">
-		<img class="mr-3" style="width: 70px" src="{{ item['cover'] if item['cover'].startswith('http') else '{}/{}'.format(config['DOMAIN_TBFILE'], item['cover']) }}" />
-		<div class="media-body">
-			<a href="{{ url_for('shop.detail', shop_id=item['id']) }}">
-				<h5 class="mt-0">{{ item['name'] }}</h5>
-			</a>
-			<p class="text-secondary">{{ item['description'] }}</p>
+<div class="row py-3 border-bottom">
+	<div class="col-6 col-md-4 col-lg-3">
+		<div class="media">
+			<img class="mr-3" style="width: 70px" src="{{ item['cover'] if item['cover'].startswith('http') else '{}/{}'.format(config['DOMAIN_TBFILE'], item['cover']) }}" />
+			<div class="media-body">
+				<a href="{{ url_for('shop.detail', shop_id=item['id']) }}">
+					<h5 class="mt-0">{{ item['name'] }}</h5>
+				</a>
+				<p class="text-secondary">{{ item['description'] }}</p>
+			</div>
 		</div>
 	</div>
 	
-	<div class="d-flex">
-		{% for s in item.get('products', [])[:3] %}
-		{{ product(s) }}
-		{% endfor %}
+	<div class="col-6 col-md-8 col-lg-9">
+		<div class="d-flex flex-wrap">
+			{% for s in item.get('products', [])[:3] %}
+			{{ product(s) }}
+			{% endfor %}
+		</div>
 	</div>
 </div>
 {%- endmacro %}
@@ -57,8 +61,8 @@
 </nav>
 {%- endmacro %}
 
-{% macro form(form, url) %}
-<form method="POST" action="{{ url }}">
+{% macro form(form, url='', enctype='') %}
+<form method="POST" action="{{ url }}" enctype="{{ enctype }}">
 	{% for field in form %}
 	{% if field.type == 'CSRFTokenField' %}
 	{{ form.csrf_token }}
@@ -80,4 +84,8 @@
 	{% endif %}
 	{% endfor %}
 </form>
+{% endmacro %}
+
+{% macro file_url(filename) %}
+{{ filename if filename.startswith('http') else '{}/{}'.format(config['DOMAIN_TBFILE'], filename) }}
 {% endmacro %}

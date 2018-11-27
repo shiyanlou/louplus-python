@@ -1,1 +1,1 @@
-from .user import RegisterForm, LoginForm
+from .user import RegisterForm, LoginForm, ProfileForm, AvatarForm, PasswordForm, WalletForm
