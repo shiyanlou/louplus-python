@@ -15,8 +15,8 @@ def analysis(file, user_id):
     except ValueError:
         return 0, 0
 
-    df = df[df['user_id'] == user_id].minutes
-    return df.count(), df.sum()
+    s = df[df['user_id'] == user_id].minutes
+    return s.count(), s.sum()
 
 
 def analysis_raw(file, user_id):
