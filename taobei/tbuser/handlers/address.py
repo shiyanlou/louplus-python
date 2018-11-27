@@ -42,6 +42,11 @@ def address_list():
 def update_address(address_id):
     data = request.get_json()
 
+    if data.get('is_default'):
+        Address.query.filter(Address.is_default == True).update({
+            'is_default': False,
+        })
+
     count = Address.query.filter(
         Address.id == address_id).update(data)
     if count == 0:

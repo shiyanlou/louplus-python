@@ -37,6 +37,23 @@
 </div>
 {%- endmacro %}
 
+{% macro address(item, editable=false) -%}
+<div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+  <div>
+    <p><strong>地址：</strong>{{ item.address }} <span class="text-success">{{ '默认' if item.is_default else '' }}</span></p>
+    <p>
+      <strong>联系电话：</strong><span>{{ item.phone }}</span>
+      <strong>邮编：</strong><span>{{ item.zip_code }}</span>
+    </p>
+  </div>
+  {% if editable %}
+  <div>
+    <a class="btn btn-outline-secondary" href="{{ url_for('.edit', address_id=item.id) }}">编辑</a>
+  </div>
+  {% endif %}
+</div>
+{%- endmacro %}
+
 {% macro pagination(total, current, endpoint) -%}
 <nav class="my-5">
 	<ul class="pagination justify-content-center">

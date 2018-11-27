@@ -2,7 +2,7 @@ from flask import current_app
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField
-from wtforms.validators import Required, Length, Email, EqualTo, DataRequired, ValidationError, NumberRange
+from wtforms.validators import Required, Optional, Length, Email, EqualTo, DataRequired, ValidationError, NumberRange
 
 from ..services import TbUser
 

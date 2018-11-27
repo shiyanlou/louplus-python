@@ -55,9 +55,7 @@
           </div>
         </div>
         {% else %}
-        <button class="btn btn-success my-2 my-sm-0" type="submit">
-          <a href="{{ url_for('user.login') }}" class="text-light">登录</a>
-        </button>
+        <a class="btn btn-success" href="{{ url_for('user.login') }}">登录</a>
         {% endif %}
       </div>
     </div>
