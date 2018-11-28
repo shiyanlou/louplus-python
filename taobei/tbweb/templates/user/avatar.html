@@ -1,4 +1,4 @@
-{% import 'macros.html' as macros %}
+{% from 'macros.html' import form as form_macro %}
 
 {% extends "base.html" %}
 
@@ -7,7 +7,7 @@
 {% block body %}
 <div class="form w-50 mx-auto my-5">
   <h5>设置头像</h5>
-  {{ macros.form(form, enctype='multipart/form-data') }}
+  {{ form_macro(form, enctype='multipart/form-data') }}
 </div>
 {% endblock %}
 

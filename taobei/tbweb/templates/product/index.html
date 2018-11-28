@@ -1,4 +1,5 @@
-{% import 'macros.html' as macros %}
+{% from 'macros.html' import pagination %}
+{% from 'product/macros.html' import product as product_macro %}
 
 {% extends "base.html" %}
 
@@ -14,9 +15,9 @@
 
 <div class="d-flex flex-wrap justify-content-center">
   {% for product in products %}
-  {{ macros.product(product) }}
+  {{ product_macro(product) }}
   {% endfor %}
 </div>
 
-{{ macros.pagination((total / config['PAGINATION_PER_PAGE'])|round(0, 'ceil')|int, request.args.get('page', '1')|int, '.index') }}
+{{ pagination((total / config['PAGINATION_PER_PAGE'])|round(0, 'ceil')|int, request.args.get('page', '1')|int, '.index') }}
 {% endblock %}

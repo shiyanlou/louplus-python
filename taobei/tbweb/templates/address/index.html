@@ -1,4 +1,4 @@
-{% import 'macros.html' as macros %}
+{% from 'address/macros.html' import address as address_macro %}
 
 {% extends "base.html" %}
 
@@ -18,7 +18,7 @@
 
 <div class="">
 	{% for address in addresses %}
-	{{ macros.address(address, editable=true) }}
+	{{ address_macro(address, editable=true) }}
 	{% endfor %}
 </div>
 {% endblock %}

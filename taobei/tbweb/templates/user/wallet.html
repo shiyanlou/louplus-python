@@ -1,4 +1,4 @@
-{% import 'macros.html' as macros %}
+{% from 'macros.html' import form as form_macro %}
 
 {% extends "base.html" %}
 
@@ -9,7 +9,7 @@
   <h5>钱包</h5>
   <p class="my-3">当前余额：<span class="text-info">¥{{ current_user.wallet_money }}</span></p>
   <hr>
-  {{ macros.form(form) }}
+  {{ form_macro(form) }}
 </div>
 {% endblock %}
 

@@ -1,4 +1,4 @@
-{% import 'macros.html' as macros %}
+{% from 'macros.html' import file_url %}
 
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -39,7 +39,7 @@
           <button class="btn btn-link dropdown-toggle text-light" type="button" id="dropdownMenuButton" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
             {% if current_user.avatar %}
-            <img width="30" height="30" class="rounded-circle" src="{{ macros.file_url(current_user.avatar) }}" />
+            <img width="30" height="30" class="rounded-circle" src="{{ file_url(current_user.avatar) }}" />
             {% endif %}
             {{ current_user.username }}
           </button>

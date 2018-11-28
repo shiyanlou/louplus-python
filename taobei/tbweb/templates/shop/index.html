@@ -1,4 +1,6 @@
-{% import 'macros.html' as macros %}
+{% from 'macros.html' import pagination %}
+{% from 'product/macros.html' import product as product_macro %}
+{% from 'shop/macros.html' import shop as shop_macro %}
 
 {% extends "base.html" %}
 
@@ -12,11 +14,21 @@
   </ol>
 </nav>
 
-<div>
-  {% for shop in shops %}
-  {{ macros.shop(shop) }}
-  {% endfor %}
-</div>
+{% for shop in shops %}
+<div class="row py-3 border-bottom">
+  <div class="col-6 col-md-4 col-lg-3">
+    {{ shop_macro(shop) }}
+  </div>
 
-{{ macros.pagination((total / config['PAGINATION_PER_PAGE'])|round(0, 'ceil')|int, request.args.get('page', '1')|int, '.index') }}
+  <div class="col-6 col-md-8 col-lg-9">
+    <div class="d-flex flex-wrap">
+      {% for product in shop.get('products', [])[:3] %}
+      {{ product_macro(product) }}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+{{ pagination((total / config['PAGINATION_PER_PAGE'])|round(0, 'ceil')|int, request.args.get('page', '1')|int, '.index') }}
 {% endblock %}

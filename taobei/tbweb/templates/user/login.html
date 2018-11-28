@@ -1,4 +1,4 @@
-{% import 'macros.html' as macros %}
+{% from 'macros.html' import form as form_macro %}
 
 {% extends "base.html" %}
 
@@ -7,7 +7,7 @@
 {% block body %}
 <div class="form w-50 mx-auto my-5">
   <h5>登录</h5>
-  {{ macros.form(form) }}
+  {{ form_macro(form) }}
   <p class="text-right">
     还没有账号？<a href="{{ url_for('user.register') }}">注册一个</a>
   </p>
