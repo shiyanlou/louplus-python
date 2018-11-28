@@ -14,10 +14,26 @@ def create_cart_product():
     data = request.get_json()
 
     cart_product = CartProductSchema().load(data)
-    session.add(cart_product)
+
+    cart_products = CartProduct.query.filter(
+        CartProduct.user_id == cart_product.user_id).all()
+
+    existed = None
+    for v in cart_products:
+        if v.product_id == cart_product.product_id:
+            existed = v
+            break
+
+    if len(cart_products) >= current_app.config['CART_PRODUCT_LIMIT'] and existed is None:
+        return json_response(ResponseCode.QUANTITY_EXCEEDS_LIMIT)
+
+    if existed is None:
+        session.add(cart_product)
+    else:
+        existed.amount += cart_product.amount
     session.commit()
 
-    return json_response(cart_product=CartProductSchema().dump(cart_product))
+    return json_response(cart_product=CartProductSchema().dump(cart_product if existed is None else existed))
 
 
 @cart_product.route('', methods=['GET'])
@@ -25,9 +41,6 @@ def cart_product_list():
     user_id = request.args.get('user_id', type=int)
     product_id = request.args.get('product_id', type=int)
     order_direction = request.args.get('order_direction', 'asc')
-    limit = request.args.get(
-        'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
-    offset = request.args.get('offset', 0, type=int)
 
     order_by = CartProduct.id.asc(
     ) if order_direction == 'asc' else CartProduct.id.desc()
@@ -37,28 +50,40 @@ def cart_product_list():
     if product_id is not None:
         query = query.filter(CartProduct.product_id == product_id)
     total = query.count()
-    query = query.order_by(order_by).limit(limit).offset(offset)
+    query = query.order_by(order_by)
 
-    return json_response(favorite_products=CartProductSchema().dump(query, many=True), total=total)
+    return json_response(cart_products=CartProductSchema().dump(query, many=True), total=total)
 
 
-@cart_product.route('/<int:user_id>/<int:product_id>', methods=['DELETE'])
-def delete_cart_product(user_id, product_id):
-    cart_product = CartProduct.query.filter(and_(
-        CartProduct.user_id == user_id, CartProduct.product_id == product_id)).first()
-    if cart_product is None:
+@cart_product.route('/<int:id>', methods=['POST'])
+def update_cart_product(id):
+    data = request.get_json()
+
+    count = CartProduct.query.filter(CartProduct.id == id).update(data)
+    if count == 0:
         return json_response(ResponseCode.NOT_FOUND)
-    session.delete(cart_product)
+    cart_product = CartProduct.query.get(id)
     session.commit()
 
     return json_response(cart_product=CartProductSchema().dump(cart_product))
 
 
-@cart_product.route('/<int:user_id>/<int:product_id>', methods=['GET'])
-def cart_product_info(user_id, product_id):
-    cart_product = CartProduct.query.filter(and_(
-        CartProduct.user_id == user_id, CartProduct.product_id == product_id)).first()
+@cart_product.route('/<int:id>', methods=['GET'])
+def cart_product_info(id):
+    cart_product = CartProduct.query.filter(CartProduct.id == id).first()
     if cart_product is None:
         return json_response(ResponseCode.NOT_FOUND)
+
+    return json_response(cart_product=CartProductSchema().dump(cart_product))
+
+
+@cart_product.route('/<int:id>', methods=['DELETE'])
+def delete_cart_product(id):
+    cart_product = CartProduct.query.filter(CartProduct.id == id).first()
+    if cart_product is None:
+        return json_response(ResponseCode.NOT_FOUND)
+
+    session.delete(cart_product)
+    session.commit()
 
     return json_response(cart_product=CartProductSchema().dump(cart_product))

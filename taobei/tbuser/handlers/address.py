@@ -38,8 +38,8 @@ def address_list():
     return json_response(addresses=AddressSchema().dump(query, many=True), total=total)
 
 
-@address.route('/<int:address_id>', methods=['POST'])
-def update_address(address_id):
+@address.route('/<int:id>', methods=['POST'])
+def update_address(id):
     data = request.get_json()
 
     if data.get('is_default'):
@@ -48,18 +48,18 @@ def update_address(address_id):
         })
 
     count = Address.query.filter(
-        Address.id == address_id).update(data)
+        Address.id == id).update(data)
     if count == 0:
         return json_response(ResponseCode.NOT_FOUND)
-    address = Address.query.get(address_id)
+    address = Address.query.get(id)
     session.commit()
 
     return json_response(address=AddressSchema().dump(address))
 
 
-@address.route('/<int:address_id>', methods=['GET'])
-def address_info(address_id):
-    address = Address.query.get(address_id)
+@address.route('/<int:id>', methods=['GET'])
+def address_info(id):
+    address = Address.query.get(id)
     if address is None:
         return json_response(ResponseCode.NOT_FOUND)
 

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>{{ config['SITE_NAME'] }} - 购物车</title>
+{% endblock %}
+
+{% block body %}
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="/">首页</a></li>
+		<li class="breadcrumb-item active" aria-current="page">购物车</li>
+  </ol>
+</nav>
+
+{% for cart_product in cart_products %}
+<div class="p-3 border-bottom d-flex justify-content-between">
+  <div class="d-flex">
+    <div>
+      <a href="{{ url_for('product.detail', id=cart_product['product']['id']) }}">
+        <img class="w-100" src="{{ file_url(cart_product['product']['cover']) }}" />
+      </a>
+    </div>
+    <div class="d-flex flex-column justify-content-around">
+      <div>
+        <h5>{{ cart_product['product']['title'] }}</h5>
+        <p class="text-monospace text-info">¥{{ cart_product['product']['price'] }}</p>
+      </div>
+      <p>数量：<span class="text-monospace text-success">{{ cart_product['amount'] }}</span></p>
+    </div>
+  </div>
+  <div class="d-flex flex-column justify-content-around">
+    <a class="btn btn-outline-secondary" href="{{ url_for('.detail', id=cart_product.id) }}">修改</a>
+    <a class="btn btn-outline-secondary delete-cart-product" href="{{ url_for('.delete', id=cart_product.id) }}">删除</a>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block js %}
+{{ super() }}
+<script>
+  $(document).ready(function() {
+    $('.delete-cart-product').click(function() {
+      if (confirm('确认删除？')) {
+        $.ajax({
+          url: $(this).attr('href'),
+          type: 'DELETE',
+          success: function(result) {
+            console.log(result)
+            if (result['code'] == 0) {
+              location.reload()
+            } else {
+              alert(result['message'])
+            }
+          },
+        })
+      }
+      
+      return false
+    })
+  })
+</script>
+{% endblock %}

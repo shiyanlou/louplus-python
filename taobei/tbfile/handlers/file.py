@@ -27,9 +27,9 @@ def create_file():
     return json_response(id='{}{}'.format(id, ext))
 
 
-@file.route('/files/<file_id>', methods=['GET'])
-def file_info(file_id):
-    id, _ = path.splitext(file_id)
+@file.route('/files/<id>', methods=['GET'])
+def file_info(id):
+    id, _ = path.splitext(id)
     id = BSONObjectIdConverter({}).to_python(id)
 
     try:
@@ -65,17 +65,17 @@ def file_response(id, download=False):
     return response
 
 
-@file.route('/<file_id>', methods=['GET'])
-def view_file(file_id):
-    id, _ = path.splitext(file_id)
+@file.route('/<id>', methods=['GET'])
+def view_file(id):
+    id, _ = path.splitext(id)
     id = BSONObjectIdConverter({}).to_python(id)
 
     return file_response(id)
 
 
-@file.route('/<file_id>/download', methods=['GET'])
-def download_file(file_id):
-    id, _ = path.splitext(file_id)
+@file.route('/<id>/download', methods=['GET'])
+def download_file(id):
+    id, _ = path.splitext(id)
     id = BSONObjectIdConverter({}).to_python(id)
 
     return file_response(id, True)

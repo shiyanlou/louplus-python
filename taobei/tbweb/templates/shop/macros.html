@@ -1,8 +1,10 @@
+{% from 'macros.html' import file_url %}
+
 {% macro shop(item) -%}
 <div class="media">
-  <img class="mr-3" style="width: 70px" src="{{ item['cover'] if item['cover'].startswith('http') else '{}/{}'.format(config['DOMAIN_TBFILE'], item['cover']) }}" />
+  <img class="mr-3" style="width: 70px" src="{{ file_url(item['cover']) }}" />
   <div class="media-body">
-    <a href="{{ url_for('shop.detail', shop_id=item['id']) }}">
+    <a href="{{ url_for('shop.detail', id=item['id']) }}">
       <h5 class="mt-0">{{ item['name'] }}</h5>
     </a>
     <p class="text-secondary">{{ item['description'] }}</p>

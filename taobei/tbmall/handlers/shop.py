@@ -38,22 +38,22 @@ def shop_list():
     return json_response(shops=ShopSchema().dump(query, many=True), total=total)
 
 
-@shop.route('/<int:shop_id>', methods=['POST'])
-def update_shop(shop_id):
+@shop.route('/<int:id>', methods=['POST'])
+def update_shop(id):
     data = request.get_json()
 
-    count = Shop.query.filter(Shop.id == shop_id).update(data)
+    count = Shop.query.filter(Shop.id == id).update(data)
     if count == 0:
         return json_response(ResponseCode.NOT_FOUND)
-    shop = Shop.query.get(shop_id)
+    shop = Shop.query.get(id)
     session.commit()
 
     return json_response(shop=ShopSchema().dump(shop))
 
 
-@shop.route('/<int:shop_id>', methods=['GET'])
-def shop_info(shop_id):
-    shop = Shop.query.get(shop_id)
+@shop.route('/<int:id>', methods=['GET'])
+def shop_info(id):
+    shop = Shop.query.get(id)
     if shop is None:
         return json_response(ResponseCode.NOT_FOUND)
 

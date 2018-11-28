@@ -26,17 +26,17 @@ def index():
     return render_template('shop/index.html', **resp['data'])
 
 
-@shop.route('/<int:shop_id>')
-def detail(shop_id):
+@shop.route('/<int:id>')
+def detail(id):
     page = request.args.get('page', 1, type=int)
 
-    resp = TbMall(current_app).get_json('/shops/{}'.format(shop_id))
+    resp = TbMall(current_app).get_json('/shops/{}'.format(id))
     shop = resp['data']['shop']
 
     limit = current_app.config['PAGINATION_PER_PAGE']
     offset = (page - 1) * limit
     resp = TbMall(current_app).get_json('/products', params={
-        'shop_id': shop_id,
+        'shop_id': id,
         'limit': limit,
         'offset': offset
     })

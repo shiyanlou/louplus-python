@@ -4,7 +4,9 @@
 
 {% extends "base.html" %}
 
-{% block title %}淘贝网 - 店铺详情{% endblock %}
+{% block title %}
+<title>{{ config['SITE_NAME'] }} - 店铺详情</title>
+{% endblock %}
 
 {% block body %}
 <nav aria-label="breadcrumb">
@@ -25,5 +27,5 @@
   {% endfor %}
 </div>
 
-{{ pagination((total / config['PAGINATION_PER_PAGE'])|round(0, 'ceil')|int, request.args.get('page', '1')|int, '.detail', shop_id=shop.id) }}
+{{ pagination((total / config['PAGINATION_PER_PAGE'])|round(0, 'ceil')|int, request.args.get('page', '1')|int, '.detail', id=shop.id) }}
 {% endblock %}

@@ -41,22 +41,22 @@ def order_list():
     return json_response(orders=OrderSchema().dump(query, many=True), total=total)
 
 
-@order.route('/<int:order_id>', methods=['POST'])
-def update_order(order_id):
+@order.route('/<int:id>', methods=['POST'])
+def update_order(id):
     data = request.get_json()
 
-    count = Order.query.filter(Order.id == order_id).update(data)
+    count = Order.query.filter(Order.id == id).update(data)
     if count == 0:
         return json_response(ResponseCode.NOT_FOUND)
-    order = Order.query.get(order_id)
+    order = Order.query.get(id)
     session.commit()
 
     return json_response(order=OrderSchema().dump(order))
 
 
-@order.route('/<int:order_id>', methods=['GET'])
-def order_info(order_id):
-    order = Order.query.get(order_id)
+@order.route('/<int:id>', methods=['GET'])
+def order_info(id):
+    order = Order.query.get(id)
     if order is None:
         return json_response(ResponseCode.NOT_FOUND)
 

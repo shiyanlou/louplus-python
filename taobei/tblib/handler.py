@@ -8,12 +8,14 @@ class ResponseCode:
     ERROR = 1
     NOT_FOUND = 10
     TRANSACTION_FAILURE = 20
+    QUANTITY_EXCEEDS_LIMIT = 30
 
     MESSAGES = {
         OK: '成功',
         ERROR: '未知错误',
         NOT_FOUND: '资源未找到',
         TRANSACTION_FAILURE: '执行事务失败',
+        QUANTITY_EXCEEDS_LIMIT: '数量超过限制',
     }
 
 

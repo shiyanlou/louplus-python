@@ -1,5 +1,6 @@
 from flask import Blueprint, request, current_app
 from sqlalchemy import or_
+from werkzeug.exceptions import BadRequest
 
 from tblib.model import session
 from tblib.handler import json_response, ResponseCode
@@ -38,23 +39,40 @@ def product_list():
     return json_response(products=ProductSchema().dump(query, many=True), total=total)
 
 
-@product.route('/<int:product_id>', methods=['POST'])
-def update_product(product_id):
+@product.route('/<int:id>', methods=['POST'])
+def update_product(id):
     data = request.get_json()
 
-    count = Product.query.filter(Product.id == product_id).update(data)
+    count = Product.query.filter(Product.id == id).update(data)
     if count == 0:
         return json_response(ResponseCode.NOT_FOUND)
-    product = Product.query.get(product_id)
+    product = Product.query.get(id)
     session.commit()
 
     return json_response(product=ProductSchema().dump(product))
 
 
-@product.route('/<int:product_id>', methods=['GET'])
-def product_info(product_id):
-    product = Product.query.get(product_id)
+@product.route('/<int:id>', methods=['GET'])
+def product_info(id):
+    product = Product.query.get(id)
     if product is None:
         return json_response(ResponseCode.NOT_FOUND)
 
     return json_response(product=ProductSchema().dump(product))
+
+
+@product.route('/infos', methods=['GET'])
+def product_infos():
+    ids = []
+    for v in request.args.get('ids', '').split(','):
+        id = int(v.strip())
+        if id > 0:
+            ids.append(id)
+    if len(ids) == 0:
+        raise BadRequest()
+
+    query = Product.query.filter(Product.id.in_(ids))
+
+    products = {product.id: ProductSchema().dump(product) for product in query}
+
+    return json_response(products=products)

@@ -33,6 +33,10 @@
 	<div class="checkbox">
 		<label>{{ field() }} {{ field.label.text }}</label>
 	</div>
+	{% elif field.type == 'HiddenField' %}
+	<div class="form-group">
+    {{ field(class='form-control') }}
+	</div>
 	{% else %}
 	<div class="form-group {% if field.errors %}has-error{% endif %}">
 		{{ field.label }} {{ field(class='form-control') }}

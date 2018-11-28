@@ -68,23 +68,23 @@ def wallet_transaction_list():
     return json_response(wallet_transactions=WalletTransactionSchema().dump(query, many=True), total=total)
 
 
-@wallet_transaction.route('/<int:wallet_transaction_id>', methods=['POST'])
-def update_wallet_transaction(wallet_transaction_id):
+@wallet_transaction.route('/<int:id>', methods=['POST'])
+def update_wallet_transaction(id):
     data = request.get_json()
 
     count = WalletTransaction.query.filter(
-        WalletTransaction.id == wallet_transaction_id).update(data)
+        WalletTransaction.id == id).update(data)
     if count == 0:
         return json_response(ResponseCode.NOT_FOUND)
-    wallet_transaction = WalletTransaction.query.get(wallet_transaction_id)
+    wallet_transaction = WalletTransaction.query.get(id)
     session.commit()
 
     return json_response(wallet_transaction=WalletTransactionSchema().dump(wallet_transaction))
 
 
-@wallet_transaction.route('/<int:wallet_transaction_id>', methods=['GET'])
-def wallet_transaction_info(wallet_transaction_id):
-    wallet_transaction = WalletTransaction.query.get(wallet_transaction_id)
+@wallet_transaction.route('/<int:id>', methods=['GET'])
+def wallet_transaction_info(id):
+    wallet_transaction = WalletTransaction.query.get(id)
     if wallet_transaction is None:
         return json_response(ResponseCode.NOT_FOUND)
 

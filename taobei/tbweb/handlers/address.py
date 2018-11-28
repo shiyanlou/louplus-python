@@ -38,13 +38,13 @@ def create():
     return render_template('address/create.html', form=form)
 
 
-@address.route('/<int:address_id>', methods=['GET', 'POST'])
+@address.route('/<int:id>', methods=['GET', 'POST'])
 @login_required
-def edit(address_id):
-    resp = TbUser(current_app).get_json('/addresses/{}'.format(address_id))
+def detail(id):
+    resp = TbUser(current_app).get_json('/addresses/{}'.format(id))
     form = AddressForm(data=resp['data']['address'])
     if form.validate_on_submit():
-        resp = TbUser(current_app).post_json('/addresses/{}'.format(address_id), json={
+        resp = TbUser(current_app).post_json('/addresses/{}'.format(id), json={
             'address': form.address.data,
             'phone': form.phone.data,
             'zip_code': form.zip_code.data,
@@ -52,8 +52,8 @@ def edit(address_id):
         }, check_code=False)
         if resp['code'] != 0:
             flash(resp['message'], 'danger')
-            return render_template('address/edit.html', form=form)
+            return render_template('address/detail.html', form=form)
 
         return redirect(url_for('.index'))
 
-    return render_template('address/edit.html', form=form)
+    return render_template('address/detail.html', form=form)

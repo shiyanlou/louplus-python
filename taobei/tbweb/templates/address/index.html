@@ -1,8 +1,8 @@
-{% from 'address/macros.html' import address as address_macro %}
-
 {% extends "base.html" %}
 
-{% block title %}淘贝网 - 收货地址列表{% endblock %}
+{% block title %}
+<title>{{ config['SITE_NAME'] }} - 收货地址列表</title>
+{% endblock %}
 
 {% block body %}
 <nav aria-label="breadcrumb">
@@ -16,9 +16,18 @@
   <a class="btn btn-primary" href="{{ url_for('.create') }}">新增地址</a>
 </div>
 
-<div class="">
-	{% for address in addresses %}
-	{{ address_macro(address, editable=true) }}
-	{% endfor %}
+{% for address in addresses %}
+<div class="p-3 border-bottom d-flex justify-content-between">
+  <div>
+    <p><strong>地址：</strong>{{ address.address }} <span class="text-success">{{ '默认' if address.is_default else '' }}</span></p>
+    <p>
+      <strong>联系电话：</strong><span>{{ address.phone }}</span>
+      <strong>邮编：</strong><span>{{ address.zip_code }}</span>
+    </p>
+  </div>
+  <div class="d-flex flex-column justify-content-around">
+    <a class="btn btn-outline-secondary" href="{{ url_for('.detail', id=address.id) }}">编辑</a>
+  </div>
 </div>
+{% endfor %}
 {% endblock %}

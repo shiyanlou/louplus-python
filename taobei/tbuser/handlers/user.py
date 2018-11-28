@@ -43,11 +43,11 @@ def user_list():
     return json_response(users=UserSchema().dump(query, many=True), total=total)
 
 
-@user.route('/<int:user_id>', methods=['POST'])
-def update_user(user_id):
+@user.route('/<int:id>', methods=['POST'])
+def update_user(id):
     data = request.get_json()
 
-    user = User.query.get(user_id)
+    user = User.query.get(id)
     if user is None:
         return json_response(ResponseCode.NOT_FOUND)
     for key, value in data.items():
@@ -57,9 +57,9 @@ def update_user(user_id):
     return json_response(user=UserSchema().dump(user))
 
 
-@user.route('/<int:user_id>', methods=['GET'])
-def user_info(user_id):
-    user = User.query.get(user_id)
+@user.route('/<int:id>', methods=['GET'])
+def user_info(id):
+    user = User.query.get(id)
     if user is None:
         return json_response(ResponseCode.NOT_FOUND)
 

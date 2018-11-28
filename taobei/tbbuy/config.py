@@ -8,6 +8,8 @@ class BaseConfig(object):
 
     PAGINATION_PER_PAGE = 20
 
+    CART_PRODUCT_LIMIT = 10
+
 
 class DevelopmentConfig(BaseConfig):
     pass

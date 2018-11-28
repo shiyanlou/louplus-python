@@ -18,6 +18,11 @@ class Service(requests.Session):
     def base_url(self):
         return ''
 
+    def check_code(self, json):
+        if json['code'] != 0:
+            raise ServiceResponseNotOk(
+                '{}: {}'.format(json['code'], json['message']))
+
     def get(self, path, **kwargs):
         url = self.base_url + path
         kwargs.setdefault('timeout', self.timeout)
@@ -27,9 +32,9 @@ class Service(requests.Session):
         resp = self.get(path, **kwargs)
 
         json = resp.json()
-        if check_code and json['code'] != 0:
-            raise ServiceResponseNotOk(
-                '{}: {}'.format(json['code'], json['message']))
+
+        if check_code:
+            self.check_code(json)
 
         return json
 
@@ -48,8 +53,23 @@ class Service(requests.Session):
         resp = self.post(path, data, json, **kwargs)
 
         json = resp.json()
-        if check_code and json['code'] != 0:
-            raise ServiceResponseNotOk(
-                '{}: {}'.format(json['code'], json['message']))
+
+        if check_code:
+            self.check_code(json)
+
+        return json
+
+    def delete(self, path, **kwargs):
+        url = self.base_url + path
+        kwargs.setdefault('timeout', self.timeout)
+        return super().delete(url, **kwargs)
+
+    def delete_json(self, path, check_code=True, **kwargs):
+        resp = self.delete(path, **kwargs)
+
+        json = resp.json()
+
+        if check_code:
+            self.check_code(json)
 
         return json

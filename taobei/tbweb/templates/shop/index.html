@@ -4,7 +4,9 @@
 
 {% extends "base.html" %}
 
-{% block title %}淘贝网 - 店铺列表{% endblock %}
+{% block title %}
+<title>{{ config['SITE_NAME'] }} - 店铺列表</title>
+{% endblock %}
 
 {% block body %}
 <nav aria-label="breadcrumb">
@@ -19,7 +21,6 @@
   <div class="col-6 col-md-4 col-lg-3">
     {{ shop_macro(shop) }}
   </div>
-
   <div class="col-6 col-md-8 col-lg-9">
     <div class="d-flex flex-wrap">
       {% for product in shop.get('products', [])[:3] %}

@@ -19,6 +19,7 @@ def index():
     return render_template('product/index.html', **resp['data'])
 
 
-@product.route('/<int:product_id>')
-def detail(product_id):
-    pass
+@product.route('/<int:id>')
+def detail(id):
+    resp = TbMall(current_app).get_json('/products/{}'.format(id))
+    return render_template('product/detail.html', **resp['data'])
