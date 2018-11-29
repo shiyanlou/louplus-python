@@ -69,8 +69,11 @@ def create():
     resp = TbUser(current_app).get_json('/addresses', params={
         'user_id': current_user.get_id(),
     })
-    form.address_id.choices = [(str(v['id']), v['address'])
-                               for v in resp['data']['addresses']]
+    addresses = resp['data']['addresses']
+    form.address_id.choices = [(str(v['id']), v['address']) for v in addresses]
+    for addresse in addresses:
+        if addresse['is_default']:
+            form.address_id.data = str(addresse['id'])
 
     resp = TbBuy(current_app).get_json('/cart_products', params={
         'user_id': current_user.get_id(),
