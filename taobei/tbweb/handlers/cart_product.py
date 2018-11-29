@@ -61,7 +61,7 @@ def detail(id):
 def delete(id):
     resp = TbBuy(current_app).delete_json('/cart_products/{}'.format(id))
 
-    return json_response(**resp['data'])
+    return json_response(resp['code'], resp['message'], **resp['data'])
 
 
 @cart_product.route('/add/<int:product_id>', methods=['GET', 'POST'])

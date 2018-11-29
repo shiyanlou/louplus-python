@@ -1,4 +1,5 @@
 from flask import Blueprint, request, current_app
+from werkzeug.exceptions import BadRequest
 
 from tblib.model import session
 from tblib.handler import json_response, ResponseCode
@@ -22,16 +23,16 @@ def create_address():
 
 @address.route('', methods=['GET'])
 def address_list():
-    owner_id = request.args.get('owner_id', type=int)
-    order_direction = request.args.get('order_direction', 'asc')
+    user_id = request.args.get('user_id', type=int)
+    order_direction = request.args.get('order_direction', 'desc')
     limit = request.args.get(
         'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
     offset = request.args.get('offset', 0, type=int)
 
     order_by = Address.id.asc() if order_direction == 'asc' else Address.id.desc()
     query = Address.query
-    if owner_id is not None:
-        query = query.filter(Address.owner_id == owner_id)
+    if user_id is not None:
+        query = query.filter(Address.user_id == user_id)
     total = query.count()
     query = query.order_by(order_by).limit(limit).offset(offset)
 
@@ -64,3 +65,21 @@ def address_info(id):
         return json_response(ResponseCode.NOT_FOUND)
 
     return json_response(address=AddressSchema().dump(address))
+
+
+@address.route('/infos', methods=['GET'])
+def address_infos():
+    ids = []
+    for v in request.args.get('ids', '').split(','):
+        id = int(v.strip())
+        if id > 0:
+            ids.append(id)
+    if len(ids) == 0:
+        raise BadRequest()
+
+    query = Address.query.filter(Address.id.in_(ids))
+
+    addresses = {address.id: AddressSchema().dump(address)
+                 for address in query}
+
+    return json_response(addresses=addresses)

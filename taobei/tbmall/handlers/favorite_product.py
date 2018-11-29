@@ -25,7 +25,7 @@ def create_favorite_product():
 def favorite_product_list():
     user_id = request.args.get('user_id', type=int)
     product_id = request.args.get('product_id', type=int)
-    order_direction = request.args.get('order_direction', 'asc')
+    order_direction = request.args.get('order_direction', 'desc')
     limit = request.args.get(
         'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
     offset = request.args.get('offset', 0, type=int)

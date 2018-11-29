@@ -1,3 +1,5 @@
+{% from 'cart_product/macros.html' import cart_product as cart_product_macro  %}
+
 {% extends "base.html" %}
 
 {% block title %}
@@ -12,25 +14,16 @@
   </ol>
 </nav>
 
+<div class="d-flex justify-content-end">
+  <a class="btn btn-primary" href="{{ url_for('order.create') }}">购买</a>
+</div>
+
 {% for cart_product in cart_products %}
 <div class="p-3 border-bottom d-flex justify-content-between">
-  <div class="d-flex">
-    <div>
-      <a href="{{ url_for('product.detail', id=cart_product['product']['id']) }}">
-        <img class="w-100" src="{{ file_url(cart_product['product']['cover']) }}" />
-      </a>
-    </div>
-    <div class="d-flex flex-column justify-content-around">
-      <div>
-        <h5>{{ cart_product['product']['title'] }}</h5>
-        <p class="text-monospace text-info">¥{{ cart_product['product']['price'] }}</p>
-      </div>
-      <p>数量：<span class="text-monospace text-success">{{ cart_product['amount'] }}</span></p>
-    </div>
-  </div>
-  <div class="d-flex flex-column justify-content-around">
-    <a class="btn btn-outline-secondary" href="{{ url_for('.detail', id=cart_product.id) }}">修改</a>
-    <a class="btn btn-outline-secondary delete-cart-product" href="{{ url_for('.delete', id=cart_product.id) }}">删除</a>
+  {{ cart_product_macro(cart_product) }}
+  <div class="d-flex flex-column justify-content-center">
+    <a class="btn btn-outline-secondary m-2" href="{{ url_for('.detail', id=cart_product.id) }}">修改</a>
+    <a class="btn btn-outline-secondary m-2 delete-cart-product" href="#" data-url="{{ url_for('.delete', id=cart_product.id) }}">删除</a>
   </div>
 </div>
 {% endfor %}
@@ -43,10 +36,9 @@
     $('.delete-cart-product').click(function() {
       if (confirm('确认删除？')) {
         $.ajax({
-          url: $(this).attr('href'),
+          url: $(this).data('url'),
           type: 'DELETE',
           success: function(result) {
-            console.log(result)
             if (result['code'] == 0) {
               location.reload()
             } else {
@@ -55,8 +47,6 @@
           },
         })
       }
-      
-      return false
     })
   })
 </script>

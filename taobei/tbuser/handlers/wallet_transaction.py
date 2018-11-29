@@ -20,9 +20,11 @@ def create_wallet_transaction():
     payer = User.query.get(wallet_transaction.payer_id)
     if payer is None:
         return json_response(ResponseCode.NOT_FOUND)
+
     payee = User.query.get(wallet_transaction.payee_id)
     if payee is None:
         return json_response(ResponseCode.NOT_FOUND)
+
     count = User.query.filter(
         and_(User.id == payer.id, User.wallet_money >= wallet_transaction.amount,
              User.wallet_money == payer.wallet_money)
@@ -32,6 +34,7 @@ def create_wallet_transaction():
     if count == 0:
         session.rollback()
         return json_response(ResponseCode.TRANSACTION_FAILURE)
+
     count = User.query.filter(
         and_(User.id == payee.id, User.wallet_money == payee.wallet_money)
     ).update({
@@ -51,7 +54,7 @@ def create_wallet_transaction():
 @wallet_transaction.route('', methods=['GET'])
 def wallet_transaction_list():
     user_id = request.args.get('user_id', type=int)
-    order_direction = request.args.get('order_direction', 'asc')
+    order_direction = request.args.get('order_direction', 'desc')
     limit = request.args.get(
         'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
     offset = request.args.get('offset', 0, type=int)

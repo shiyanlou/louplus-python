@@ -27,8 +27,10 @@
 	{% for field in form %}
 	{% if field.type == 'CSRFTokenField' %}
 	{{ form.csrf_token }}
-	{% elif field.type == 'SubmitField' %}
-	{{ form.submit(class='btn btn-primary', type='submit') }}
+  {% elif field.type == 'SubmitField' %}
+  <div class="text-center my-5">
+    {{ form.submit(class='btn btn-primary', type='submit') }}
+  </div>
 	{% elif field.type == 'BooleanField' %}
 	<div class="checkbox">
 		<label>{{ field() }} {{ field.label.text }}</label>

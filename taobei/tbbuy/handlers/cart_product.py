@@ -40,7 +40,7 @@ def create_cart_product():
 def cart_product_list():
     user_id = request.args.get('user_id', type=int)
     product_id = request.args.get('product_id', type=int)
-    order_direction = request.args.get('order_direction', 'asc')
+    order_direction = request.args.get('order_direction', 'desc')
 
     order_by = CartProduct.id.asc(
     ) if order_direction == 'asc' else CartProduct.id.desc()
@@ -53,6 +53,16 @@ def cart_product_list():
     query = query.order_by(order_by)
 
     return json_response(cart_products=CartProductSchema().dump(query, many=True), total=total)
+
+
+@cart_product.route('', methods=['DELETE'])
+def delete_cart_products():
+    user_id = request.args.get('user_id', type=int)
+
+    CartProduct.query.filter(CartProduct.user_id == user_id).delete()
+    session.commit()
+
+    return json_response()
 
 
 @cart_product.route('/<int:id>', methods=['POST'])

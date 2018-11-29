@@ -26,7 +26,7 @@ def create_user():
 def user_list():
     username = request.args.get('username')
     mobile = request.args.get('mobile')
-    order_direction = request.args.get('order_direction', 'asc')
+    order_direction = request.args.get('order_direction', 'desc')
     limit = request.args.get(
         'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
     offset = request.args.get('offset', 0, type=int)

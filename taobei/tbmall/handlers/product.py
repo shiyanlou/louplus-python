@@ -24,7 +24,7 @@ def create_product():
 @product.route('', methods=['GET'])
 def product_list():
     shop_id = request.args.get('shop_id', type=int)
-    order_direction = request.args.get('order_direction', 'asc')
+    order_direction = request.args.get('order_direction', 'desc')
     limit = request.args.get(
         'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
     offset = request.args.get('offset', 0, type=int)

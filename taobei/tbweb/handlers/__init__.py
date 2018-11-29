@@ -6,6 +6,7 @@ from flask_login import LoginManager
 from .address import address
 from .cart_product import cart_product
 from .common import common
+from .order import order
 from .product import product
 from .shop import shop
 from .user import user
@@ -19,6 +20,7 @@ def init(app):
     app.register_blueprint(address)
     app.register_blueprint(cart_product)
     app.register_blueprint(common)
+    app.register_blueprint(order)
     app.register_blueprint(product)
     app.register_blueprint(shop)
     app.register_blueprint(user)

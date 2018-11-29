@@ -12,7 +12,7 @@ address = Blueprint('address', __name__, url_prefix='/addresses')
 @login_required
 def index():
     resp = TbUser(current_app).get_json('/addresses', params={
-        'owner_id': current_user.get_id(),
+        'user_id': current_user.get_id(),
     })
     return render_template('address/index.html', addresses=resp['data']['addresses'])
 
@@ -27,7 +27,7 @@ def create():
             'phone': form.phone.data,
             'zip_code': form.zip_code.data,
             'is_default': form.is_default.data,
-            'owner_id': current_user.get_id(),
+            'user_id': current_user.get_id(),
         }, check_code=False)
         if resp['code'] != 0:
             flash(resp['message'], 'danger')

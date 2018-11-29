@@ -9,6 +9,7 @@ class ResponseCode:
     NOT_FOUND = 10
     TRANSACTION_FAILURE = 20
     QUANTITY_EXCEEDS_LIMIT = 30
+    NO_ENOUGH_MONEY = 40
 
     MESSAGES = {
         OK: '成功',
@@ -16,6 +17,7 @@ class ResponseCode:
         NOT_FOUND: '资源未找到',
         TRANSACTION_FAILURE: '执行事务失败',
         QUANTITY_EXCEEDS_LIMIT: '数量超过限制',
+        NO_ENOUGH_MONEY: '余额不足',
     }
 
 

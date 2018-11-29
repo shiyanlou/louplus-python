@@ -8,13 +8,13 @@ from .base import Base
 class Shop(Base):
     __tablename__ = 'shop'
     __table_args__ = (
-        Index('idx_owner_id', 'owner_id'),
+        Index('idx_user_id', 'user_id'),
     )
 
     name = Column(String(200), nullable=False, unique=True)
     description = Column(String(2000), nullable=False, default='')
     cover = Column(String(200), nullable=False, default='')
-    owner_id = Column(Integer, nullable=False)
+    user_id = Column(Integer, nullable=False)
 
 
 class ShopSchema(Schema):
@@ -22,7 +22,7 @@ class ShopSchema(Schema):
     name = fields.Str()
     description = fields.Str()
     cover = fields.Str()
-    owner_id = fields.Int()
+    user_id = fields.Int()
     created_at = fields.DateTime()
     updated_at = fields.DateTime()
 

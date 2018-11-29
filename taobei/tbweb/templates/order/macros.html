@@ -1,0 +1,17 @@
+{% macro status_name(status) -%}
+{% if status == 'new' %}
+{{ '待支付' }}
+{% elif status == 'cancelled' %}
+{{ '已取消' }}
+{% elif status == 'paied' %}
+{{ '待发货' }}
+{% elif status == 'delivered' %}
+{{ '待收货' }}
+{% elif status == 'received' %}
+{{ '待评价' }}
+{% elif status == 'returned' %}
+{{ '已退货' }}
+{% elif status == 'commented' %}
+{{ '已评价' }}
+{% endif %}
+{%- endmacro %}

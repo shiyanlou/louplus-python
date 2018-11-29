@@ -12,6 +12,7 @@ class OrderStatus:
     CANCELLED = 'cancelled'
     PAIED = 'paied'
     DELIVERED = 'delivered'
+    RECEIVED = 'received'
     RETURNED = 'returned'
     COMMENTED = 'commented'
 
