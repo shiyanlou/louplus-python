@@ -7,6 +7,7 @@
     <a href="{{ url_for('shop.detail', id=item['id']) }}">
       <h5 class="mt-0">{{ item['name'] }}</h5>
     </a>
+    <p class="text-secondary">店主：{{ item['user']['username'] }}</p>
     <p class="text-secondary">{{ item['description'] }}</p>
   </div>
 </div>

@@ -1,10 +1,11 @@
 from flask import Blueprint, request, current_app
 from sqlalchemy import or_
+from werkzeug.exceptions import BadRequest
 
 from tblib.model import session
 from tblib.handler import json_response, ResponseCode
 
-from ..models import User, UserSchema, Address, AddressSchema, WalletTransaction, WalletTransactionSchema
+from ..models import User, UserSchema, User, UserSchema, WalletTransaction, WalletTransactionSchema
 
 user = Blueprint('user', __name__, url_prefix='/users')
 
@@ -64,6 +65,24 @@ def user_info(id):
         return json_response(ResponseCode.NOT_FOUND)
 
     return json_response(user=UserSchema().dump(user))
+
+
+@user.route('/infos', methods=['GET'])
+def user_infos():
+    ids = []
+    for v in request.args.get('ids', '').split(','):
+        id = int(v.strip())
+        if id > 0:
+            ids.append(id)
+    if len(ids) == 0:
+        raise BadRequest()
+
+    query = User.query.filter(User.id.in_(ids))
+
+    users = {user.id: UserSchema().dump(user)
+             for user in query}
+
+    return json_response(users=users)
 
 
 @user.route('/check_password', methods=['GET'])

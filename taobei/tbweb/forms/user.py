@@ -8,8 +8,8 @@ from ..services import TbUser
 
 
 class RegisterForm(FlaskForm):
-    username = StringField('用户名', validators=[Required(), Length(3, 24)])
-    password = PasswordField('密码', validators=[Required(), Length(6, 24)])
+    username = StringField('用户名', validators=[Required(), Length(2, 20)])
+    password = PasswordField('密码', validators=[Required(), Length(6, 20)])
     repeat_password = PasswordField(
         '重复密码', validators=[Required(), EqualTo('password')])
     submit = SubmitField('提交')
@@ -23,14 +23,14 @@ class RegisterForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    username = StringField('用户名', validators=[Required(), Length(3, 24)])
-    password = PasswordField('密码', validators=[Required(), Length(6, 24)])
+    username = StringField('用户名', validators=[Required(), Length(2, 20)])
+    password = PasswordField('密码', validators=[Required(), Length(6, 20)])
     remember_me = BooleanField('记住我')
     submit = SubmitField('提交')
 
 
 class ProfileForm(FlaskForm):
-    username = StringField('用户名', validators=[Length(3, 24)])
+    username = StringField('用户名', validators=[Length(2, 20)])
     gender = StringField('性别', validators=[Length(1, 1)])
     mobile = StringField('手机', validators=[Length(11, 11)])
     submit = SubmitField('提交')
@@ -43,7 +43,7 @@ class AvatarForm(FlaskForm):
 
 
 class PasswordForm(FlaskForm):
-    password = PasswordField('密码', validators=[Required(), Length(6, 24)])
+    password = PasswordField('密码', validators=[Required(), Length(6, 20)])
     repeat_password = PasswordField(
         '重复密码', validators=[Required(), EqualTo('password')])
     submit = SubmitField('提交')

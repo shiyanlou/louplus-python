@@ -1,6 +1,6 @@
 from flask import Blueprint, request, current_app, render_template
 
-from ..services import TbMall
+from ..services import TbMall, TbUser
 
 shop = Blueprint('shop', __name__, url_prefix='/shops')
 
@@ -15,15 +15,25 @@ def index():
         'limit': limit,
         'offset': offset
     })
+    shops = resp['data']['shops']
+    total = resp['data']['total']
 
-    for shop in resp['data']['shops']:
+    user_ids = [shop['user_id'] for shop in shops]
+    if len(user_ids) > 0:
+        resp = TbUser(current_app).get_json('/users/infos', params={
+            'ids': ','.join([str(v) for v in user_ids]),
+        })
+        for shop in shops:
+            shop['user'] = resp['data']['users'].get(str(shop['user_id']))
+
+    for shop in shops:
         r = TbMall(current_app).get_json('/products', params={
             'shop_id': shop['id'],
             'limit': 3
         })
         shop['products'] = r['data']['products']
 
-    return render_template('shop/index.html', **resp['data'])
+    return render_template('shop/index.html', shops=shops, total=total)
 
 
 @shop.route('/<int:id>')
@@ -32,6 +42,9 @@ def detail(id):
 
     resp = TbMall(current_app).get_json('/shops/{}'.format(id))
     shop = resp['data']['shop']
+
+    resp = TbUser(current_app).get_json('/users/{}'.format(id))
+    shop['user'] = resp['data']['user']
 
     limit = current_app.config['PAGINATION_PER_PAGE']
     offset = (page - 1) * limit
