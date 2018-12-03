@@ -15,8 +15,8 @@ class Address(Base):
     is_default = Column(Boolean, nullable=False, default=False)
     user_id = Column(Integer, ForeignKey(
         'user.id', ondelete='CASCADE'), nullable=False)
-    owner = relationship('User', uselist=False,
-                         backref=backref('addresses', lazy='dynamic'))
+    user = relationship('User', uselist=False,
+                        backref=backref('addresses', lazy='dynamic'))
 
 
 class AddressSchema(Schema):
@@ -26,7 +26,7 @@ class AddressSchema(Schema):
     phone = fields.Str()
     is_default = fields.Bool()
     user_id = fields.Int()
-    owner = fields.Nested(UserSchema)
+    user = fields.Nested(UserSchema)
     created_at = fields.DateTime()
     updated_at = fields.DateTime()
 

@@ -45,15 +45,12 @@ def co2():
     # 按收入群体对数据进行求和
     df_sum = df.groupby('Income group').sum()
 
-    # ERROR: df_max = df.max()
-
     df_max = df.sort_values(by='Sum emissions', ascending=False).groupby(
         'Income group').head(1).set_index('Income group')
     df_max.columns = ['Highest emissions', 'Highest emission country']
     df_max = df_max.reindex(
         columns=['Highest emission country', 'Highest emissions'])
 
-    # ERROR: df_min = df.min()
     df_min = df.sort_values(by='Sum emissions').groupby(
         'Income group').head(1).set_index('Income group')
     df_min.columns = ['Lowest emissions', 'Lowest emission country']

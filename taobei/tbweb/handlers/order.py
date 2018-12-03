@@ -91,6 +91,9 @@ def create():
             str(cart_product['product_id']))
 
     if form.validate_on_submit():
+        # TODO 扣除商品数量
+
+        # 创建订单
         resp = TbBuy(current_app).post_json('/orders', json={
             'address_id': form.address_id.data,
             'note': form.note.data,
@@ -107,6 +110,7 @@ def create():
             flash(resp['message'], 'danger')
             return render_template('order/create.html', form=form, cart_products=cart_products)
 
+        # 清空购物车
         resp = TbBuy(current_app).delete_json('/cart_products', params={
             'user_id': current_user.get_id(),
         })

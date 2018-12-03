@@ -12,6 +12,9 @@ address = Blueprint('address', __name__, url_prefix='/addresses')
 
 @address.route('', methods=['POST'])
 def create_address():
+    """添加地址
+    """
+
     data = request.get_json()
 
     address = AddressSchema().load(data)
@@ -23,6 +26,9 @@ def create_address():
 
 @address.route('', methods=['GET'])
 def address_list():
+    """查询地址列表，可通过用户 ID 等字段筛选
+    """
+
     user_id = request.args.get('user_id', type=int)
     order_direction = request.args.get('order_direction', 'desc')
     limit = request.args.get(
@@ -41,6 +47,9 @@ def address_list():
 
 @address.route('/<int:id>', methods=['POST'])
 def update_address(id):
+    """更新地址
+    """
+
     data = request.get_json()
 
     if data.get('is_default'):
@@ -60,6 +69,9 @@ def update_address(id):
 
 @address.route('/<int:id>', methods=['GET'])
 def address_info(id):
+    """查询地址
+    """
+
     address = Address.query.get(id)
     if address is None:
         return json_response(ResponseCode.NOT_FOUND)
@@ -69,6 +81,9 @@ def address_info(id):
 
 @address.route('/infos', methods=['GET'])
 def address_infos():
+    """批量查询用户，查询指定 ID 列表里的多个地址
+    """
+
     ids = []
     for v in request.args.get('ids', '').split(','):
         id = int(v.strip())

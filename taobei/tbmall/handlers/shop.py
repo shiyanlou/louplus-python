@@ -11,6 +11,9 @@ shop = Blueprint('shop', __name__, url_prefix='/shops')
 
 @shop.route('', methods=['POST'])
 def create_shop():
+    """创建店铺
+    """
+
     data = request.get_json()
 
     shop = ShopSchema().load(data)
@@ -22,6 +25,9 @@ def create_shop():
 
 @shop.route('', methods=['GET'])
 def shop_list():
+    """店铺列表，可根据用户 ID 等条件来筛选
+    """
+
     user_id = request.args.get('user_id', type=int)
     order_direction = request.args.get('order_direction', 'desc')
     limit = request.args.get(
@@ -40,6 +46,9 @@ def shop_list():
 
 @shop.route('/<int:id>', methods=['POST'])
 def update_shop(id):
+    """更新店铺
+    """
+
     data = request.get_json()
 
     count = Shop.query.filter(Shop.id == id).update(data)
@@ -53,6 +62,9 @@ def update_shop(id):
 
 @shop.route('/<int:id>', methods=['GET'])
 def shop_info(id):
+    """查询店铺
+    """
+
     shop = Shop.query.get(id)
     if shop is None:
         return json_response(ResponseCode.NOT_FOUND)

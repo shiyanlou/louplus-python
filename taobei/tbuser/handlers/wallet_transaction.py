@@ -12,6 +12,9 @@ wallet_transaction = Blueprint(
 
 @wallet_transaction.route('', methods=['POST'])
 def create_wallet_transaction():
+    """创建交易
+    """
+
     data = request.get_json()
 
     wallet_transaction = WalletTransactionSchema().load(data)
@@ -53,6 +56,9 @@ def create_wallet_transaction():
 
 @wallet_transaction.route('', methods=['GET'])
 def wallet_transaction_list():
+    """查询交易列表
+    """
+
     user_id = request.args.get('user_id', type=int)
     order_direction = request.args.get('order_direction', 'desc')
     limit = request.args.get(
@@ -73,6 +79,9 @@ def wallet_transaction_list():
 
 @wallet_transaction.route('/<int:id>', methods=['POST'])
 def update_wallet_transaction(id):
+    """更新交易
+    """
+
     data = request.get_json()
 
     count = WalletTransaction.query.filter(
@@ -87,6 +96,9 @@ def update_wallet_transaction(id):
 
 @wallet_transaction.route('/<int:id>', methods=['GET'])
 def wallet_transaction_info(id):
+    """查询交易
+    """
+
     wallet_transaction = WalletTransaction.query.get(id)
     if wallet_transaction is None:
         return json_response(ResponseCode.NOT_FOUND)

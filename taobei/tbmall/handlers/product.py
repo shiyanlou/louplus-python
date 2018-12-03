@@ -12,6 +12,9 @@ product = Blueprint('product', __name__, url_prefix='/products')
 
 @product.route('', methods=['POST'])
 def create_product():
+    """创建商品
+    """
+
     data = request.get_json()
 
     product = ProductSchema().load(data)
@@ -23,6 +26,9 @@ def create_product():
 
 @product.route('', methods=['GET'])
 def product_list():
+    """查询商品列表，可根据店铺 ID等条件来筛选
+    """
+
     shop_id = request.args.get('shop_id', type=int)
     order_direction = request.args.get('order_direction', 'desc')
     limit = request.args.get(
@@ -41,6 +47,9 @@ def product_list():
 
 @product.route('/<int:id>', methods=['POST'])
 def update_product(id):
+    """更新商品
+    """
+
     data = request.get_json()
 
     count = Product.query.filter(Product.id == id).update(data)
@@ -54,6 +63,9 @@ def update_product(id):
 
 @product.route('/<int:id>', methods=['GET'])
 def product_info(id):
+    """查询商品
+    """
+
     product = Product.query.get(id)
     if product is None:
         return json_response(ResponseCode.NOT_FOUND)
@@ -63,6 +75,9 @@ def product_info(id):
 
 @product.route('/infos', methods=['GET'])
 def product_infos():
+    """批量查询商品，查询指定 ID 列表里的多个商品
+    """
+
     ids = []
     for v in request.args.get('ids', '').split(','):
         id = int(v.strip())

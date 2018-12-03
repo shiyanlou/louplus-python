@@ -11,6 +11,9 @@ order = Blueprint('order', __name__, url_prefix='/orders')
 
 @order.route('', methods=['POST'])
 def create_order():
+    """创建订单，订单商品需要一起提交
+    """
+
     data = request.get_json()
     if data.get('pay_amount') is None:
         data['pay_amount'] = sum([x['price'] * x['amount']
@@ -25,6 +28,9 @@ def create_order():
 
 @order.route('', methods=['GET'])
 def order_list():
+    """订单列表
+    """
+
     user_id = request.args.get('user_id', type=int)
     order_direction = request.args.get('order_direction', 'desc')
     limit = request.args.get(
@@ -43,6 +49,10 @@ def order_list():
 
 @order.route('/<int:id>', methods=['POST'])
 def update_order(id):
+    """更新订单，支持部分更新，但只能更新地址、备注、状态都信息
+    注意订单商品要么不更新，要么整体一起更新
+    """
+
     data = request.get_json()
 
     order = Order.query.get(id)
@@ -75,6 +85,9 @@ def update_order(id):
 
 @order.route('/<int:id>', methods=['GET'])
 def order_info(id):
+    """查询订单
+    """
+
     order = Order.query.get(id)
     if order is None:
         return json_response(ResponseCode.NOT_FOUND)

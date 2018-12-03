@@ -12,6 +12,9 @@ user = Blueprint('user', __name__, url_prefix='/users')
 
 @user.route('', methods=['POST'])
 def create_user():
+    """注册用户
+    """
+
     data = request.get_json()
     password = data.pop('password')
 
@@ -25,6 +28,9 @@ def create_user():
 
 @user.route('', methods=['GET'])
 def user_list():
+    """查询用户列表，可通过用户名、手机等字段进行筛选
+    """
+
     username = request.args.get('username')
     mobile = request.args.get('mobile')
     order_direction = request.args.get('order_direction', 'desc')
@@ -46,6 +52,9 @@ def user_list():
 
 @user.route('/<int:id>', methods=['POST'])
 def update_user(id):
+    """更新用户
+    """
+
     data = request.get_json()
 
     user = User.query.get(id)
@@ -60,6 +69,9 @@ def update_user(id):
 
 @user.route('/<int:id>', methods=['GET'])
 def user_info(id):
+    """查询用户
+    """
+
     user = User.query.get(id)
     if user is None:
         return json_response(ResponseCode.NOT_FOUND)
@@ -69,6 +81,9 @@ def user_info(id):
 
 @user.route('/infos', methods=['GET'])
 def user_infos():
+    """批量查询用户，查询指定 ID 列表里的多个用户
+    """
+
     ids = []
     for v in request.args.get('ids', '').split(','):
         id = int(v.strip())
@@ -87,6 +102,9 @@ def user_infos():
 
 @user.route('/check_password', methods=['GET'])
 def check_password():
+    """验证用户名和密码是否匹配
+    """
+
     username = request.args.get('username')
     password = request.args.get('password')
     if username is None or password is None:
