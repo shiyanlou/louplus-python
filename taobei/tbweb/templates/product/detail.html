@@ -25,9 +25,10 @@
   <div class="col-8 d-flex flex-column justify-content-around">
     <div>
       <h5>{{ product['title'] }}</h5>
-      <p class="text-monospace text-info">¥{{ product['price'] }}</p>
+      <p>{{ product['description'] or '暂无描述' }}</p>
     </div>
     <div>
+      <p>价格：<span class="text-monospace text-success">¥{{ product['price'] }}</span></p>
       <p>数量：<span class="text-monospace text-success">{{ product['amount'] }}</span></p>
       <a class="btn btn-primary" href="{{ url_for('cart_product.add', product_id=product['id']) }}">加入购物车</a>
     </div>
