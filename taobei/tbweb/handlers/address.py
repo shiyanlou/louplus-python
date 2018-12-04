@@ -11,6 +11,9 @@ address = Blueprint('address', __name__, url_prefix='/addresses')
 @address.route('')
 @login_required
 def index():
+    """当前用户地址列表
+    """
+
     resp = TbUser(current_app).get_json('/addresses', params={
         'user_id': current_user.get_id(),
     })
@@ -20,6 +23,9 @@ def index():
 @address.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
+    """添加地址
+    """
+
     form = AddressForm()
     if form.validate_on_submit():
         resp = TbUser(current_app).post_json('/addresses', json={
@@ -41,6 +47,9 @@ def create():
 @address.route('/<int:id>', methods=['GET', 'POST'])
 @login_required
 def detail(id):
+    """地址详情
+    """
+
     resp = TbUser(current_app).get_json('/addresses/{}'.format(id))
     form = AddressForm(data=resp['data']['address'])
     if form.validate_on_submit():

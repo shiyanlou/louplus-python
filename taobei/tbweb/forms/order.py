@@ -7,5 +7,5 @@ from wtforms.validators import Required, Optional, Length, Email, EqualTo, DataR
 
 class OrderForm(FlaskForm):
     address_id = SelectField('收货地址', validators=[Required()])
-    note = StringField('备注', validators=[Required(), Length(1, 200)])
+    note = StringField('备注', validators=[Optional(), Length(1, 200)])
     submit = SubmitField('提交')

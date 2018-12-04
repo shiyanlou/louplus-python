@@ -7,6 +7,9 @@ product = Blueprint('product', __name__, url_prefix='/products')
 
 @product.route('')
 def index():
+    """商品列表
+    """
+
     page = request.args.get('page', 1, type=int)
 
     limit = current_app.config['PAGINATION_PER_PAGE']
@@ -21,5 +24,8 @@ def index():
 
 @product.route('/<int:id>')
 def detail(id):
+    """商品详情
+    """
+
     resp = TbMall(current_app).get_json('/products/{}'.format(id))
     return render_template('product/detail.html', **resp['data'])

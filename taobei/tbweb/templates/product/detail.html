@@ -28,6 +28,7 @@
       <p class="text-monospace text-info">¥{{ product['price'] }}</p>
     </div>
     <div>
+      <p>数量：<span class="text-monospace text-success">{{ product['amount'] }}</span></p>
       <a class="btn btn-primary" href="{{ url_for('cart_product.add', product_id=product['id']) }}">加入购物车</a>
     </div>
   </div>

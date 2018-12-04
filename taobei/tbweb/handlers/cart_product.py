@@ -12,6 +12,9 @@ cart_product = Blueprint('cart_product', __name__, url_prefix='/cart_products')
 @cart_product.route('')
 @login_required
 def index():
+    """购物车商品列表
+    """
+
     resp = TbBuy(current_app).get_json('/cart_products', params={
         'user_id': current_user.get_id(),
     })
@@ -34,6 +37,9 @@ def index():
 @cart_product.route('/<int:id>', methods=['GET', 'POST'])
 @login_required
 def detail(id):
+    """购物车商品详情
+    """
+
     resp = TbBuy(current_app).get_json('/cart_products/{}'.format(id))
     cart_product = resp['data']['cart_product']
 
@@ -59,6 +65,9 @@ def detail(id):
 @cart_product.route('/<int:id>', methods=['DELETE'])
 @login_required
 def delete(id):
+    """删除购物车商品
+    """
+
     resp = TbBuy(current_app).delete_json('/cart_products/{}'.format(id))
 
     return json_response(resp['code'], resp['message'], **resp['data'])
@@ -67,6 +76,9 @@ def delete(id):
 @cart_product.route('/add/<int:product_id>', methods=['GET', 'POST'])
 @login_required
 def add(product_id):
+    """添加商品到购物车
+    """
+
     resp = TbMall(current_app).get_json('/products/{}'.format(product_id))
     product = resp['data']['product']
 

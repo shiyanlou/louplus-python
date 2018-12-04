@@ -16,6 +16,9 @@ class Service(requests.Session):
 
     @property
     def base_url(self):
+        """服务基本地址，包括协议、域名和可选的路径前缀，子类需要覆盖实现该方法
+        """
+
         return ''
 
     def check_code(self, json):

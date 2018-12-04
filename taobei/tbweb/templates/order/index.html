@@ -10,9 +10,9 @@
 
 {% block body %}
 <nav aria-label="breadcrumb">
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="/">首页</a></li>
-		<li class="breadcrumb-item active" aria-current="page">订单列表</li>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">首页</a></li>
+    <li class="breadcrumb-item active" aria-current="page">订单列表</li>
   </ol>
 </nav>
 
@@ -27,7 +27,8 @@
     {% for order_product in order['order_products'] %}
     {{ cart_product_macro(order_product) }}
     {% endfor %}
-    <p class="d-flex"><span class="text-info">￥{{ order.pay_amount }}</span><span class="ml-auto text-danger">{{ status_name(order.status) }}</span></p>
+    <p class="d-flex"><span class="text-info">￥{{ order.pay_amount }}</span><span class="ml-auto text-danger">{{
+        status_name(order.status) }}</span></p>
     <p>{{ order.note }}</p>
   </div>
   <div class="ml-auto d-flex flex-column justify-content-center">
@@ -45,7 +46,8 @@
 </div>
 {% endfor %}
 
-{{ pagination((total / config['PAGINATION_PER_PAGE'])|round(0, 'ceil')|int, request.args.get('page', '1')|int, '.index') }}
+{{ pagination((total / config['PAGINATION_PER_PAGE'])|round(0, 'ceil')|int, request.args.get('page', '1')|int,
+'.index') }}
 {% endblock %}
 
 {% block js %}
@@ -86,4 +88,3 @@
   })
 </script>
 {% endblock %}
-

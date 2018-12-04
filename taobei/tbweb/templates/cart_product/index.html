@@ -1,4 +1,4 @@
-{% from 'cart_product/macros.html' import cart_product as cart_product_macro  %}
+{% from 'cart_product/macros.html' import cart_product as cart_product_macro %}
 
 {% extends "base.html" %}
 
@@ -8,9 +8,9 @@
 
 {% block body %}
 <nav aria-label="breadcrumb">
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="/">首页</a></li>
-		<li class="breadcrumb-item active" aria-current="page">购物车</li>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">首页</a></li>
+    <li class="breadcrumb-item active" aria-current="page">购物车</li>
   </ol>
 </nav>
 
@@ -32,13 +32,13 @@
 {% block js %}
 {{ super() }}
 <script>
-  $(document).ready(function() {
-    $('.delete-cart-product').click(function() {
+  $(document).ready(function () {
+    $('.delete-cart-product').click(function () {
       if (confirm('确认删除？')) {
         $.ajax({
           url: $(this).data('url'),
           type: 'DELETE',
-          success: function(result) {
+          success: function (result) {
             if (result['code'] == 0) {
               location.reload()
             } else {
