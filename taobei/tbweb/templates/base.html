@@ -13,11 +13,6 @@
 
   {% block css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
-  <style>
-    html, body {
-      height: 100%;
-    }
-  </style>
   {% endblock %}
 </head>
 
@@ -69,7 +64,7 @@
     </div>
   </nav>
 
-  <div class="container" style="padding-bottom: 60px; min-height: 100%;">
+  <div class="container" style="min-height: 900px;">
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     {% for category, message in messages %}
@@ -86,13 +81,9 @@
     {% block body %}{% endblock %}
   </div>
 
-  <div class="d-flex bg-dark justify-content-between align-items-center text-light" style="height: 60px;">
-    <div class="p-3">
-      <a href="https://shiyanlou.com" target="_blank">实验楼</a>
-    </div>
-    <div class="p-3">
-      <span>Copyright @2018-2018 淘贝网</span>
-    </div>
+  <div class="bg-dark p-3 text-light d-flex align-items-center small" style="height: 60px;">
+    <a href="https://shiyanlou.com" target="_blank">实验楼</a>
+    <span class="ml-auto">Copyright @2018-2018 淘贝网</span>
   </div>
   
   {% block js %}

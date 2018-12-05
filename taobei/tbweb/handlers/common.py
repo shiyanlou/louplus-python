@@ -6,4 +6,4 @@ common = Blueprint('common', __name__, url_prefix='/')
 
 @common.route('')
 def index():
-    return redirect('/products')
+    return render_template('index.html')
