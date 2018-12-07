@@ -1,4 +1,6 @@
-from os import path
+from os import path, unlink
+from concurrent.futures import ThreadPoolExecutor
+from io import BytesIO, BufferedReader
 
 from flask import Blueprint, request, current_app
 from werkzeug.wsgi import wrap_file
@@ -6,11 +8,14 @@ from werkzeug.exceptions import NotFound
 from gridfs import GridFS
 from gridfs.errors import NoFile
 from flask_pymongo import BSONObjectIdConverter
+from PIL import Image
 
 from tblib.mongo import mongo
 from tblib.handler import json_response, ResponseCode
 
 from ..models import FileSchema
+
+executor = ThreadPoolExecutor(max_workers=2)
 
 file = Blueprint('file', __name__, url_prefix='')
 
@@ -27,7 +32,35 @@ def create_file():
 
     _, ext = path.splitext(request.files['file'].filename)
 
+    executor.submit(lambda: make_thumbnails(id))
+
     return json_response(id='{}{}'.format(id, ext))
+
+
+def make_thumbnails(id):
+    try:
+        file = GridFS(mongo.db).get(id)
+    except NoFile:
+        raise NotFound()
+
+    img = Image.open(file)
+
+    thumbnails = {}
+    for size in (1024, 512, 200):
+        t = img.copy()
+        t.thumbnail((size, size))
+        filename = '{}_{}.jpg'.format(id, size)
+        filepath = '/tmp/{}'.format(filename)
+        t.save(filepath, "JPEG")
+        with open(filepath, 'rb') as f:
+            thumbnails['{}'.format(size)] = mongo.save_file(filename, f)
+        unlink(filepath)
+
+    mongo.db.fs.files.update({'_id': id}, {
+        '$set': {
+            'thumbnails': thumbnails
+        }
+    })
 
 
 @file.route('/files/<id>', methods=['GET'])
