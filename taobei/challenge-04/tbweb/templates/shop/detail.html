@@ -1,0 +1,31 @@
+{% from 'macros.html' import pagination %}
+{% from 'product/macros.html' import product as product_macro %}
+{% from 'shop/macros.html' import shop as shop_macro %}
+
+{% extends "base.html" %}
+
+{% block title %}
+<title>{{ config['SITE_NAME'] }} - 店铺详情</title>
+{% endblock %}
+
+{% block body %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">首页</a></li>
+    <li class="breadcrumb-item"><a href="/shops">店铺列表</a></li>
+    <li class="breadcrumb-item active" aria-current="page">店铺详情</li>
+  </ol>
+</nav>
+
+<div class="py-3 border-bottom">
+{{ shop_macro(shop) }}
+</div>
+
+<div class="d-flex flex-wrap justify-content-center">
+  {% for product in products %}
+  {{ product_macro(product) }}
+  {% endfor %}
+</div>
+
+{{ pagination((total / config['PAGINATION_PER_PAGE'])|round(0, 'ceil')|int, request.args.get('page', '1')|int, '.detail', id=shop.id) }}
+{% endblock %}

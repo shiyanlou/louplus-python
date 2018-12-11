@@ -1,0 +1,95 @@
+{% from 'macros.html' import file_url %}
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  {% block title %}
+  <title>{{ config['SITE_NAME'] }}</title>
+  {% endblock %}
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+  {% block css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+  {% endblock %}
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="/">淘贝网</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item {{ 'active' if request.path.startswith('/product') else '' }}">
+          <a class="nav-link" href="/products">商品 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item {{ 'active' if request.path.startswith('/shop') else '' }}">
+          <a class="nav-link" href="/shops">店铺</a>
+        </li>
+      </ul>
+      <div>
+        {% if current_user.is_authenticated %}
+        <a class="btn btn-link text-light" href="{{ url_for('cart_product.index') }}">购物车</a>
+        <div class="d-inline dropdown">
+          <button class="btn btn-link dropdown-toggle text-light" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            {% if current_user.avatar %}
+            <img width="30" height="30" class="rounded-circle" src="{{ file_url(current_user.avatar) }}" />
+            {% endif %}
+            {{ current_user.username }}
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="{{ url_for('user.profile') }}">编辑资料</a>
+            <a class="dropdown-item" href="{{ url_for('user.avatar') }}">设置头像</a>
+            <a class="dropdown-item" href="{{ url_for('user.password') }}">修改密码</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{{ url_for('user.wallet') }}">钱包</a>
+            <a class="dropdown-item" href="{{ url_for('address.index') }}">收货地址</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{{ url_for('order.index') }}">我的订单</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{{ url_for('user.logout') }}">退出</a>
+          </div>
+        </div>
+        {% else %}
+        <a class="btn btn-success" href="{{ url_for('user.login') }}">登录</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <div class="container" style="min-height: 900px;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    {% block body %}{% endblock %}
+  </div>
+
+  <div class="bg-dark p-3 text-light d-flex align-items-center small" style="height: 60px;">
+    <a href="https://shiyanlou.com" target="_blank">实验楼</a>
+    <span class="ml-auto">Copyright @2018-2018 淘贝网</span>
+  </div>
+  
+  {% block js %}
+  <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='popper.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+  {% endblock %}
+</body>
+</html>

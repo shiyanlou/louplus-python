@@ -1,0 +1,26 @@
+{% from 'macros.html' import pagination %}
+{% from 'product/macros.html' import product as product_macro %}
+
+{% extends "base.html" %}
+
+{% block title %}
+<title>{{ config['SITE_NAME'] }} - 商品列表</title>
+{% endblock %}
+
+{% block body %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">首页</a></li>
+    <li class="breadcrumb-item active" aria-current="page">商品列表</li>
+  </ol>
+</nav>
+
+<div class="d-flex flex-wrap justify-content-center">
+  {% for product in products %}
+  {{ product_macro(product) }}
+  {% endfor %}
+</div>
+
+{{ pagination((total / config['PAGINATION_PER_PAGE'])|round(0, 'ceil')|int, request.args.get('page', '1')|int,
+'.index') }}
+{% endblock %}

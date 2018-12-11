@@ -1,0 +1,45 @@
+{% from 'macros.html' import pagination %}
+
+{% extends "base.html" %}
+
+{% block title %}
+<title>{{ config['SITE_NAME'] }} - 钱包交易记录</title>
+{% endblock %}
+
+{% block body %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">首页</a></li>
+    <li class="breadcrumb-item"><a href="{{ url_for('.wallet') }}">钱包</a></li>
+    <li class="breadcrumb-item active" aria-current="page">交易记录</li>
+  </ol>
+</nav>
+
+<table class="table my-5">
+  <thead>
+    <tr>
+      <th scope="col">编号</th>
+      <th scope="col">金额</th>
+      <th scope="col">收款方</th>
+      <th scope="col">付款方</th>
+      <th scope="col">备注</th>
+      <th scope="col">交易时间</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for wallet_transaction in wallet_transactions %}
+    <tr>
+      <th scope="row">{{ wallet_transaction['id'] }}</th>
+      <td>￥{{ wallet_transaction['amount'] }}</td>
+      <td>{{ wallet_transaction['payee']['username'] }}</td>
+      <td>{{ wallet_transaction['payer']['username'] }}</td>
+      <td>{{ wallet_transaction['note'] }}</td>
+      <td>{{ wallet_transaction['created_at'][:19] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{{ pagination((total / config['PAGINATION_PER_PAGE'])|round(0, 'ceil')|int, request.args.get('page', '1')|int,
+'.wallet_transactions') }}
+{% endblock %}
