@@ -1,0 +1,22 @@
+{% from 'macros.html' import form as form_macro %}
+{% from 'cart_product/macros.html' import cart_product as cart_product_macro %}
+
+{% extends "base.html" %}
+
+{% block title %}
+<title>{{ config['SITE_NAME'] }} - 创建订单</title>
+{% endblock %}
+
+{% block body %}
+<div class="form w-50 mx-auto my-5">
+  <h5>创建订单</h5>
+
+  <div class="my-3">
+    {% for cart_product in cart_products %}
+    {{ cart_product_macro(cart_product) }}
+    {% endfor %}
+  </div>
+
+  {{ form_macro(form) }}
+</div>
+{% endblock %}

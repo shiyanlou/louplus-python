@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% from 'macros.html' import file_url %}
+{% from 'shop/macros.html' import shop as shop_macro %}
+{% from 'product/macros.html' import product as product_macro %}
+
+{% block title %}
+<title>{{ config['SITE_NAME'] }} - 首页</title>
+{% endblock %}
+
+{% block body %}
+<div id="carousel" class="carousel slide bg-dark py-5" data-ride="carousel">
+  <div class="carousel-inner">
+    {% for product in products %}
+    <div class="carousel-item {{ 'active' if loop.index == 1 else ''}} mx-auto" style="width: 500px;">
+      <img class="d-block w-100" src="{{ file_url(product['cover']) }}" alt="{{ product['title'] }}">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>{{ product['title'] }}</h5>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+
+<h5 class="my-3">精选店铺</h5>
+<hr />
+
+{% for shop in shops %}
+<div class="row py-3 border-bottom">
+  <div class="col-6 col-md-4 col-lg-3">
+    {{ shop_macro(shop) }}
+  </div>
+  <div class="col-6 col-md-8 col-lg-9">
+    <div class="d-flex flex-wrap">
+      {% for product in shop.get('products', [])[:3] %}
+      {{ product_macro(product) }}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

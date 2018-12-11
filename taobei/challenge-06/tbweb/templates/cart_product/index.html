@@ -1,0 +1,53 @@
+{% from 'cart_product/macros.html' import cart_product as cart_product_macro %}
+
+{% extends "base.html" %}
+
+{% block title %}
+<title>{{ config['SITE_NAME'] }} - 购物车</title>
+{% endblock %}
+
+{% block body %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">首页</a></li>
+    <li class="breadcrumb-item active" aria-current="page">购物车</li>
+  </ol>
+</nav>
+
+<div class="d-flex justify-content-end">
+  <a class="btn btn-primary" href="{{ url_for('order.create') }}">购买</a>
+</div>
+
+{% for cart_product in cart_products %}
+<div class="p-3 border-bottom d-flex justify-content-between">
+  {{ cart_product_macro(cart_product) }}
+  <div class="d-flex flex-column justify-content-center">
+    <a class="btn btn-outline-secondary m-2" href="{{ url_for('.detail', id=cart_product.id) }}">修改</a>
+    <a class="btn btn-outline-secondary m-2 delete-cart-product" href="#" data-url="{{ url_for('.delete', id=cart_product.id) }}">删除</a>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block js %}
+{{ super() }}
+<script>
+  $(document).ready(function () {
+    $('.delete-cart-product').click(function () {
+      if (confirm('确认删除？')) {
+        $.ajax({
+          url: $(this).data('url'),
+          type: 'DELETE',
+          success: function (result) {
+            if (result['code'] == 0) {
+              location.reload()
+            } else {
+              alert(result['message'])
+            }
+          },
+        })
+      }
+    })
+  })
+</script>
+{% endblock %}

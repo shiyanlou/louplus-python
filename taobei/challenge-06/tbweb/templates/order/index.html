@@ -1,0 +1,90 @@
+{% from 'macros.html' import pagination %}
+{% from 'cart_product/macros.html' import cart_product as cart_product_macro %}
+{% from 'order/macros.html' import status_name %}
+
+{% extends "base.html" %}
+
+{% block title %}
+<title>{{ config['SITE_NAME'] }} - 订单列表</title>
+{% endblock %}
+
+{% block body %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">首页</a></li>
+    <li class="breadcrumb-item active" aria-current="page">订单列表</li>
+  </ol>
+</nav>
+
+{% for order in orders %}
+<div class="p-3 border-bottom d-flex">
+  <div>
+    <p><strong>收货地址：</strong>{{ order.address.address }}</p>
+    <p>
+      <strong>联系电话：</strong><span>{{ order.address.phone }}</span>
+      <strong>邮编：</strong><span>{{ order.address.zip_code }}</span>
+    </p>
+    {% for order_product in order['order_products'] %}
+    {{ cart_product_macro(order_product) }}
+    {% endfor %}
+    <p class="d-flex"><span class="text-info">￥{{ order.pay_amount }}</span><span class="ml-auto text-danger">{{
+        status_name(order.status) }}</span></p>
+    <p>{{ order.note }}</p>
+  </div>
+  <div class="ml-auto d-flex flex-column justify-content-center">
+    {% if order.status == 'new' %}
+    <a class="btn btn-outline-secondary m-2 pay-order" href="#" data-url="{{ url_for('.pay', id=order.id) }}">支付</a>
+    <a class="btn btn-outline-secondary m-2" href="{{ url_for('.detail', id=order.id) }}">修改</a>
+    <a class="btn btn-outline-secondary m-2 cancel-order" href="#" data-url="{{ url_for('.cancel', id=order.id) }}">取消</a>
+    {% elif order.status == 'delivered' %}
+    <a class="btn btn-outline-secondary m-2" href="#">确认收货</a>
+    <a class="btn btn-outline-secondary m-2" href="#">退货</a>
+    {% elif order.status == 'received' %}
+    <a class="btn btn-outline-secondary m-2" href="#">评价</a>
+    {% endif %}
+  </div>
+</div>
+{% endfor %}
+
+{{ pagination((total / config['PAGINATION_PER_PAGE'])|round(0, 'ceil')|int, request.args.get('page', '1')|int,
+'.index') }}
+{% endblock %}
+
+{% block js %}
+{{ super() }}
+<script>
+  $(document).ready(function () {
+    $('.pay-order').click(function () {
+      if (confirm('确认付款？')) {
+        $.ajax({
+          url: $(this).data('url'),
+          type: 'POST',
+          success: function (result) {
+            if (result['code'] == 0) {
+              location.reload()
+            } else {
+              alert(result['message'])
+            }
+          },
+        })
+      }
+    })
+
+    $('.cancel-order').click(function () {
+      if (confirm('确认取消？')) {
+        $.ajax({
+          url: $(this).data('url'),
+          type: 'POST',
+          success: function (result) {
+            if (result['code'] == 0) {
+              location.reload()
+            } else {
+              alert(result['message'])
+            }
+          },
+        })
+      }
+    })
+  })
+</script>
+{% endblock %}
