@@ -1,0 +1,16 @@
+{% from 'macros.html' import form as form_macro %}
+
+{% extends "base.html" %}
+
+{% block title %}
+<title>{{ config['SITE_NAME'] }} - 钱包</title>
+{% endblock %}
+
+{% block body %}
+<div class="form w-50 mx-auto my-5">
+  <h5>钱包</h5>
+  <p class="my-3">当前余额：<span class="text-info">¥{{ current_user.wallet_money }}</span></p>
+  <hr>
+  {{ form_macro(form) }}
+</div>
+{% endblock %}

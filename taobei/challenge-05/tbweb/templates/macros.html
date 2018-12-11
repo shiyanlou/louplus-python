@@ -1,0 +1,59 @@
+{% macro pagination(total, current, endpoint) -%}
+<nav class="my-5">
+  <ul class="pagination justify-content-center">
+    <li class="page-item {{ 'disabled' if current == 1 else '' }}">
+      <a class="page-link" href="{{ '#' if current == 1 else url_for(endpoint, page=current-1, **kwargs) }}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+        <span class="sr-only">Previous</span>
+      </a>
+    </li>
+    {% for i in range(1, total + 1) %}
+    <li class="page-item {{ 'active' if current == i else '' }}">
+      <a class="page-link" href="{{ url_for(endpoint, page=i, **kwargs) }}">{{ i }}</a>
+    </li>
+    {% endfor %}
+    <li class="page-item {{ 'disabled' if current == total else '' }}">
+      <a class="page-link" href="{{ '#' if current == total else url_for(endpoint, page=current+1, **kwargs) }}"
+        aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+        <span class="sr-only">Next</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+{%- endmacro %}
+
+{% macro form(form, url='', enctype='') %}
+<form method="POST" action="{{ url }}" enctype="{{ enctype }}">
+  {% for field in form %}
+  {% if field.type == 'CSRFTokenField' %}
+  {{ form.csrf_token }}
+  {% elif field.type == 'SubmitField' %}
+  <div class="text-center my-5">
+    {{ form.submit(class='btn btn-primary', type='submit') }}
+  </div>
+  {% elif field.type == 'BooleanField' %}
+  <div class="checkbox">
+    <label>{{ field() }} {{ field.label.text }}</label>
+  </div>
+  {% elif field.type == 'HiddenField' %}
+  <div class="form-group">
+    {{ field(class='form-control') }}
+  </div>
+  {% else %}
+  <div class="form-group {% if field.errors %}has-error{% endif %}">
+    {{ field.label }} {{ field(class='form-control') }}
+    {% if field.errors %}
+    {% for error in field.errors %}
+    <span class="text-danger">{{ error }}</span>
+    {% endfor %}
+    {% endif %}
+  </div>
+  {% endif %}
+  {% endfor %}
+</form>
+{% endmacro %}
+
+{% macro file_url(filename) %}
+{{ filename if filename.startswith('http') else '{}/{}'.format(config['DOMAIN_TBFILE'], filename) }}
+{% endmacro %}

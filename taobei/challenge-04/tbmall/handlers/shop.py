@@ -29,7 +29,6 @@ def shop_list():
     """
 
     user_id = request.args.get('user_id', type=int)
-    keywords = request.args.get('keywords', '')
     order_direction = request.args.get('order_direction', 'desc')
     limit = request.args.get(
         'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
@@ -39,9 +38,6 @@ def shop_list():
     query = Shop.query
     if user_id is not None:
         query = query.filter(Shop.user_id == user_id)
-    if keywords != '':
-        query = query.filter(
-            or_(Shop.name.match(keywords), Shop.description.match(keywords)))
     total = query.count()
     query = query.order_by(order_by).limit(limit).offset(offset)
 

@@ -30,7 +30,6 @@ def product_list():
     """
 
     shop_id = request.args.get('shop_id', type=int)
-    keywords = request.args.get('keywords', '')
     order_direction = request.args.get('order_direction', 'desc')
     limit = request.args.get(
         'limit', current_app.config['PAGINATION_PER_PAGE'], type=int)
@@ -40,9 +39,6 @@ def product_list():
     query = Product.query
     if shop_id is not None:
         query = query.filter(Product.shop_id == shop_id)
-    if keywords != '':
-        query = query.filter(
-            or_(Product.title.match(keywords), Product.description.match(keywords)))
     total = query.count()
     query = query.order_by(order_by).limit(limit).offset(offset)
 

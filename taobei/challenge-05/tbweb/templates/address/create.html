@@ -1,0 +1,14 @@
+{% from 'macros.html' import form as form_macro %}
+
+{% extends "base.html" %}
+
+{% block title %}
+<title>{{ config['SITE_NAME'] }} - 新增地址</title>
+{% endblock %}
+
+{% block body %}
+<div class="form w-50 mx-auto my-5">
+  <h5>新增地址</h5>
+  {{ form_macro(form) }}
+</div>
+{% endblock %}

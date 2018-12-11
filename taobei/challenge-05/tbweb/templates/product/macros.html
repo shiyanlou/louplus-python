@@ -1,0 +1,16 @@
+{% from 'macros.html' import file_url %}
+
+{% macro product(item) -%}
+<div class="m-2 p-2 border" style="width: 250px;">
+  <a href="{{ url_for('product.detail', id=item['id']) }}">
+    <img class="w-100" src="{{ file_url(item['cover']) }}" />
+    <p class="text-truncate">{{ item['title'] }}</p>
+  </a>
+  <div class="d-flex justify-content-between">
+    <span class="text-monospace text-info">¥{{ item['price'] }}</span>
+    <a href="{{ url_for('shop.detail', id=item['shop']['id']) }}">
+      <span class="d-inline-block text-truncate">{{ item['shop']['name'] }}</span>
+    </a>
+  </div>
+</div>
+{%- endmacro %}
