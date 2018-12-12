@@ -1,0 +1,18 @@
+{% from 'macros.html' import file_url %}
+
+{% macro cart_product(item) -%}
+<div class="d-flex">
+  <div>
+    <a href="{{ url_for('product.detail', id=item['product']['id']) }}">
+      <img class="w-100" src="{{ file_url(item['product']['cover']) }}" />
+    </a>
+  </div>
+  <div class="ml-3 d-flex flex-column justify-content-around">
+    <div>
+      <p>{{ item['product']['title'] }}</p>
+      <p class="text-monospace text-info">¥{{ item['product']['price'] }}</p>
+    </div>
+    <p>数量：<span class="text-monospace text-success">{{ item['amount'] }}</span></p>
+  </div>
+</div>
+{%- endmacro %}

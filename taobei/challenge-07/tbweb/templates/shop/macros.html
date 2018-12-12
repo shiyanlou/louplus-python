@@ -1,0 +1,14 @@
+{% from 'macros.html' import file_url %}
+
+{% macro shop(item) -%}
+<div class="media">
+  <img class="mr-3" style="width: 70px" src="{{ file_url(item['cover']) }}" />
+  <div class="media-body">
+    <a href="{{ url_for('shop.detail', id=item['id']) }}">
+      <h5 class="mt-0">{{ item['name'] }}</h5>
+    </a>
+    <p class="text-secondary">店主：{{ item['user']['username'] }}</p>
+    <p class="text-secondary">{{ item['description'] }}</p>
+  </div>
+</div>
+{%- endmacro %}

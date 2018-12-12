@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>{{ config['SITE_NAME'] }} - 出错了</title>
+{% endblock %}
+
+{% block body %}
+<div class="m-5 text-center">
+    <h5>出错了</h5>
+    <h6 class="text-danger">{{ error }}</h6>
+</div>
+{% endblock %}

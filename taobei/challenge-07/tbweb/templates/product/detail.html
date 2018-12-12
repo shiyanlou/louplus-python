@@ -1,0 +1,37 @@
+{% from 'macros.html' import file_url %}
+
+{% extends "base.html" %}
+
+{% block title %}
+<title>{{ config['SITE_NAME'] }} - 商品详情</title>
+{% endblock %}
+
+{% block body %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">首页</a></li>
+    <li class="breadcrumb-item"><a href="/shops">店铺列表</a></li>
+    <li class="breadcrumb-item"><a href="/shops/{{ product['shop']['id'] }}">店铺详情</a></li>
+    <li class="breadcrumb-item active" aria-current="page">商品详情</li>
+  </ol>
+</nav>
+
+<div class="row">
+  <div class="col-4">
+      <a href="{{ url_for('product.detail', id=product['id']) }}">
+        <img class="w-100" src="{{ file_url(product['cover']) }}" />
+      </a>
+  </div>
+  <div class="col-8 d-flex flex-column justify-content-around">
+    <div>
+      <h5>{{ product['title'] }}</h5>
+      <p>{{ product['description'] or '暂无描述' }}</p>
+    </div>
+    <div>
+      <p>价格：<span class="text-monospace text-success">¥{{ product['price'] }}</span></p>
+      <p>数量：<span class="text-monospace text-success">{{ product['amount'] }}</span></p>
+      <a class="btn btn-primary" href="{{ url_for('cart_product.add', product_id=product['id']) }}">加入购物车</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
