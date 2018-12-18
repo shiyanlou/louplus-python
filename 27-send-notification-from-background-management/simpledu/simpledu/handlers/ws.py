@@ -87,6 +87,9 @@ def index(ws):
     while not ws.closed:
         # 接收客户端消息，如果没有则阻塞在此
         message = ws.receive()
+        # 客户端关闭连接时服务端会接收到一个 None 消息
+        if message is None:
+            break
         # 发布消息到 channel
         redis.publish('chat', message)
 
