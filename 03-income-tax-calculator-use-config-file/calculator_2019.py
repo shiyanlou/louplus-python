@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import sys
 import csv
 from collections import namedtuple
@@ -74,7 +73,6 @@ class Args(object):
 # 创建一个全局参数类对象供后续使用
 args = Args()
 
-
 class Config(object):
     """
     配置文件处理类
@@ -149,7 +147,6 @@ class Config(object):
 # 创建一个全局的配置文件处理对象供后续使用
 config = Config()
 
-
 class UserData(object):
     """
     用户工资文件处理类
@@ -157,14 +154,14 @@ class UserData(object):
 
     def __init__(self):
         # 读取用户工资文件
-        self.userdata = self._read_users_data()
+        self.userlist = self._read_users_data()
 
     def _read_users_data(self):
         """
         内部函数，用来读取用户工资文件
         """
 
-        userdata = []
+        userlist = []
         with open(args.userdata_path) as f:
             # 依次读取用户工资文件中的每一行并解析得到用户 ID 和工资
             for line in f.readlines():
@@ -174,18 +171,17 @@ class UserData(object):
                 except ValueError:
                     print('Parameter Error')
                     exit()
-                userdata.append((employee_id, income))
+                userlist.append((employee_id, income))
 
-        return userdata
+        return userlist
 
-    def __iter__(self):
+    def get_userlist(self):
         """
-        实现 __iter__ 方法，使得 UserData 对象成为可迭代对象。
+        获取用户数据列表
         """
 
-        # 直接返回属性 userdata 列表对象的迭代器
-        return iter(self.userdata)
-
+        # 直接返回属性 userlist 列表对象
+        return self.userlist
 
 class IncomeTaxCalculator(object):
     """
@@ -196,8 +192,8 @@ class IncomeTaxCalculator(object):
         # 初始化时接收一个 UserData 对象
         self.userdata = userdata
 
-    @staticmethod
-    def calc_social_insurance_money(income):
+    @classmethod
+    def calc_social_insurance_money(cls, income):
         """
         计算社保金额
         """
@@ -240,7 +236,7 @@ class IncomeTaxCalculator(object):
 
         result = []
         # 循环计算每一个用户的税后工资，并将结果汇总到结果集中
-        for employee_id, income in self.userdata:
+        for employee_id, income in self.userdata.get_userlist():
             # 计算社保金额
             social_insurance_money = '{:.2f}'.format(
                 self.calc_social_insurance_money(income))

@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 import sys
-
 
 def main():
     # 检查命令行参数合法性，并转换为正确类型
@@ -18,17 +16,17 @@ def main():
     # 依据落入的税率区间，按照相应的税率参数计算税费
     if value <= 0:
         result = 0
-    elif 0 < value <= 3000:
+    elif value <= 3000:
         result = value * 0.03 - 0
-    elif 3000 < value <= 12000:
+    elif value <= 12000:
         result = value * 0.1 - 210
-    elif 12000 < value <= 25000:
+    elif value <= 25000:
         result = value * 0.2 - 1410
-    elif 25000 < value <= 35000:
+    elif value <= 35000:
         result = value * 0.25 - 2660
-    elif 35000 < value <= 55000:
+    elif value <= 55000:
         result = value * 0.3 - 4410
-    elif 55000 < value <= 80000:
+    elif value <= 80000:
         result = value * 0.35 - 7160
     else:
         result = income * 0.45 - 15160
