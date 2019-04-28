@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+<head>
+  <meta charset='utf-8'>
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='bootstrap-4.1.3.min.css') }}">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Seiya</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="jobAnalysisDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">拉钩网职位数据分析</a>
+          <div class="dropdown-menu" aria-labelledby="jobAnalysisDropdown">
+            <a class="dropdown-item" href="#">职位最多城市 Top10</a>
+            <a class="dropdown-item" href="#">薪资最高城市 Top10</a>
+            <a class="dropdown-item" href="#">热门职位标签</a>
+            <a class="dropdown-item" href="#">工作经验统计</a>
+            <a class="dropdown-item" href="#">学历要求统计</a>
+            <a class="dropdown-item" href="#">同等城市不同学历薪资对比</a>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="houseAnalysisDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">链家网租房数据分析</a>
+          <div class="dropdown-menu" aria-labelledby="houseAnalysisDropdown">
+            <a class='dropdown-item' href='#'>待补充</a>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="restaurantAnalysisDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">点评网餐馆数据分析</a>
+          <div class="dropdown-menu" aria-labelledby="restaurantAnalysisDropdown">
+            <a class='dropdown-item' href='#'>待补充</a>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </nav>
+  <div class="container">{% block content %}{% endblock %}</div>
+  <script src="{{url_for('static', filename='jquery-3.3.1.min.js') }}"></script>
+  <script src="{{url_for('static', filename='popper-1.14.3.min.js') }}"></script>
+  <script src="{{url_for('static', filename='bootstrap-4.1.3.min.js') }}"></script>
+  <script src="{{url_for('static', filename='g2-3.2.7.min.js') }}"></script>
+</body>
+</html>

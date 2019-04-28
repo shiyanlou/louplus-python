@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}拉勾网职位数据分析{% endblock %}
+
+{% block content %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">首页</a></li>
+      <li class="breadcrumb-item active" aria-current="page">拉勾网职位数据分析</li>
+    </ol>
+  </nav>
+  <div class="row">
+    <div class="col">
+      <div class="card m-5">
+        <div class="card-body">
+          <h5 class="card-title">职位最多城市 Top10</h5>
+          <p class="card-text">职位发布数排名前十的城市</p>
+          <a href="{{ url_for('job.count_top10') }}" class="btn btn-primary">详情</a>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card m-5">
+        <div class="card-body">
+          <h5 class="card-title">薪资最高城市 Top10</h5>
+          <p class="card-text">发布职位薪资排名前十的城市</p>
+          <a href="/job/salary_top10" class="btn btn-primary">详情</a>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card m-5">
+        <div class="card-body">
+          <h5 class="card-title">热门职位标签</h5>
+          <p class="card-text">所有职位里出现的热门职位标签</p>
+          <a href="{{ url_for('job.hot_tags') }}" class="btn btn-primary">详情</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col">
+      <div class="card m-5">
+        <div class="card-body">
+          <h5 class="card-title">工作经验统计</h5>
+          <p class="card-text">所有职位中各类工作经验的占比</p>
+          <a href="/job/experience_stat" class="btn btn-primary">详情</a>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card m-5">
+        <div class="card-body">
+          <h5 class="card-title">学历要求统计</h5>
+          <p class="card-text">所有职位要求中各类学历的占比</p>
+          <a href="/job/education_stat" class="btn btn-primary">详情</a>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card m-5">
+        <div class="card-body">
+          <h5 class="card-title">同等学历不同城市薪资对比</h5>
+          <p class="card-text">同等学历要求的职位在不同城市中的薪资对比</p>
+          <a href="#" class="btn btn-primary">详情</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,16 @@
+Flask
+flask-login
+marshmallow
+hiredis
+redis
+Flask-SQLAlchemy
+ipython
+pylint
+pytest
+pytest-flask
+flask-shell-ipython
+flask-migrate
+flask-wtf
+mysqlclient
+faker
+fake-useragent

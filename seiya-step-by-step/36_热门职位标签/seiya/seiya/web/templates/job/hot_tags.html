@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}热门职位标签{% endblock %}
+
+{% block content %}
+  <nav aria-label='breadcrumb'>
+    <ol class='breadcrumb'>
+      <li class='breadcrumb-item'><a href='/'>首页</a></li>
+      <li class='breadcrumb-item'><a href='/job'>拉勾网职位数据分析</a></li>
+      <li class='breadcrumb-item active' aria-current='page'>热门职位标签</li>
+    </ol>
+  </nav>
+  <div class='text-center my-5'>
+    <img src="{{ url_for('job.hot_tags_plot') }}">
+  </div>
+  <table class='table table-striped my-5'>
+    <thead>
+      <tr>
+        <th scope='col'>排名</th>
+        <th scope='col'>职位标签</th>
+        <th scope='col'>出现次数</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in query %}
+        <tr>
+          <th scope='row'>{{ loop.index }}</th>
+          <td>{{ i.tag }}</td>
+          <td>{{ i.count }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

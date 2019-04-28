@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Seiya - 学历要求统计{% endblock %}
+
+{% block content %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">主页</a></li>
+      <li class="breadcrumb-item"><a href="/job">拉勾网职位数据分析</a></li>
+      <li class="breadcrumb-item active" aria-current="page">学历要求统计</li>
+    </ol>
+  </nav>
+  
+  <div class="my-5" id="chart"></div>
+{% endblock %}
+
+{% block js %}
+  <script>
+    $.getJSON('/job/education_stat.json', function (data) {
+      var chart = new G2.Chart({
+        container: 'chart',
+        forceFit: true,
+        height: 500
+      });
+      var total = data.map(v => v.count).reduce((a, b) => a + b);
+      data.forEach(v => {
+        v.percent = +(v.count / total).toFixed(2);
+      });
+      chart.source(data, {
+        percent: {
+          formatter: v => v * 100 + '%'
+        }
+      });
+      chart.coord('theta', {
+        radius: 0.75
+      });
+      chart.tooltip({
+        showTitle: false,
+        itemTpl: '<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
+      });
+      chart.intervalStack().position('percent').color('education').label('percent', {
+        formatter: (v, item) => item.point.education + ': ' + v
+      }).tooltip('education*count', (education, count) => {
+        return {
+          name: education,
+          value: count
+        };
+      }).style({
+        lineWidth: 1,
+        stroke: '#fff'
+      });
+      
+      chart.render();
+    });
+  </script>
+{% endblock %}

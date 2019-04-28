@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}职位最多城市 Top10{% endblock %}
+
+{% block content %}
+  <nav aria-label='breadcrumb'>  <!-- 面包屑 -->
+    <ol class='breadcrumb'>
+      <li class='breadcrumb-item'><a href='/'>首页</a></li>
+      <li class='breadcrumb-item'><a href='/job'>拉勾网职位数据分析</a></li>
+      <li class='breadcrumb-item active' aria-current='page'>职位最多城市 Top10</li>
+    </ol>
+  </nav>
+  <div class='my-5' id='c1'></div>  <!-- 创建图表容器 -->
+  <table class='table table-striped my-5'>  <!-- 数据表格 -->
+    <thead>
+      <tr>
+        <th scope='col'>排名</th>
+        <th scope='col'>城市</th>
+        <th scope='col'>职位数</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in query %}
+        <tr>
+          <th scope='row'>{{ loop.index }}</th>
+          <td>{{ i.city }}</td>
+          <td>{{ i.count }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block js %}
+  <script>
+    const data = {{ query | tojson }};
+    const chart = new G2.Chart({
+      container: 'c1',
+      forceFit: true,
+      height: 500
+    });
+    chart.source(data);
+    chart.scale('count', {tickInterval: 10, alias: '职位数量'});
+    chart.interval().position('city*count');
+    chart.render();
+  </script>
+{% endblock %}

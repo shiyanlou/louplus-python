@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Seiya - 同等学历不同城市薪资对比{% endblock %}
+
+{% block content %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">首页</a></li>
+      <li class="breadcrumb-item"><a href="/job">拉勾网职位数据分析</a></li>
+      <li class="breadcrumb-item active" aria-current="page">同等学历不同城市薪资对比</li>
+    </ol>
+  </nav>
+  <div class="my-5" id="chart"></div>
+{% endblock %}
+
+{% block js %}
+  <script>
+    $.getJSON('/job/salary_by_city_and_edu.json', function (data) {
+      var chart = new G2.Chart({
+        container: 'chart',
+        forceFit: true,
+        height: 500
+      });
+      data.forEach(v => {
+        v.salary = +v.salary.toFixed(3);
+      });
+      chart.source(data);
+      chart.tooltip({
+        crosshairs: {
+          type: 'line'
+        }
+      });
+      chart.axis('salary', {
+        label: {
+          formatter: function formatter(val) {
+            return val + 'K';
+          }
+        }
+      });
+      chart.line().position('city*salary').color('education');
+      chart.point().position('city*salary').color('education').size(4).shape('circle').style({
+        stroke: '#fff',
+        lineWidth: 1
+      });
+      chart.render();
+    });
+  </script>
+{% endblock %}
