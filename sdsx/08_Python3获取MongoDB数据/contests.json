@@ -1,0 +1,141 @@
+[
+{
+"user_id": 1,
+"challenge_id": 2,
+"score": 10,
+"submit_time": 100
+}
+,
+{
+"user_id": 2,
+"challenge_id": 2,
+"score": 10,
+"submit_time": 112
+}
+,
+{
+"user_id": 3,
+"challenge_id": 2,
+"score": 10,
+"submit_time": 27
+}
+,
+{
+"user_id": 1,
+"challenge_id": 1,
+"score": 20,
+"submit_time": 90
+}
+,
+{
+"user_id": 5,
+"challenge_id": 2,
+"score": 10,
+"submit_time": 76
+}
+,
+{
+"user_id": 4,
+"challenge_id": 3,
+"score": 50,
+"submit_time": 170
+}
+,
+{
+"user_id": 2,
+"challenge_id": 3,
+"score": 50,
+"submit_time": 90
+}
+,
+{
+"user_id": 3,
+"challenge_id": 1,
+"score": 10,
+"submit_time": 70
+}
+,
+{
+"user_id": 4,
+"challenge_id": 2,
+"score": 10,
+"submit_time": 17
+}
+,
+{
+"user_id": 5,
+"challenge_id": 3,
+"score": 10,
+"submit_time": 20
+}
+,
+{
+"user_id": 6,
+"challenge_id": 1,
+"score": 10,
+"submit_time": 30
+}
+,
+{
+"user_id": 2,
+"challenge_id": 1,
+"score": 10,
+"submit_time": 100
+}
+,
+{
+"user_id": 3,
+"challenge_id": 3,
+"score": 20,
+"submit_time": 60
+}
+,
+{
+"user_id": 8,
+"challenge_id": 3,
+"score": 50,
+"submit_time": 80
+}
+,
+{
+"user_id": 6,
+"challenge_id": 2,
+"score": 10,
+"submit_time": 100
+}
+,
+{
+"user_id": 9,
+"challenge_id": 1,
+"score": 20,
+"submit_time": 171
+}
+,
+{
+"user_id": 7,
+"challenge_id": 2,
+"score": 10,
+"submit_time": 90
+}
+,
+{
+"user_id": 5,
+"challenge_id": 1,
+"score": 10,
+"submit_time": 78
+}
+,
+{
+"user_id": 8,
+"challenge_id": 2,
+"score": 10,
+"submit_time": 87
+}
+,
+{
+"user_id": 1,
+"challenge_id": 3,
+"score": 20,
+"submit_time": 31
+}
+]
